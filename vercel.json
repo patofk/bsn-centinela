@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/datos",
+      "dest": "/api/datos.js"
+    },
+    {
+      "src": "/(.*)",
+      "headers": { "Cache-Control": "no-cache, no-store, must-revalidate" },
+      "dest": "/$1"
+    }
+  ]
+}

@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSN Centinela — Control de Productos</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #05080f;
+  --bg2: #0b1120;
+  --bg3: #101828;
+  --sidebar-w: 220px;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --blue: #1a6cf0;
+  --blue-light: #4d8ff5;
+  --teal: #00c9a7;
+  --teal-dim: rgba(0,201,167,0.15);
+  --yellow: #f5a623;
+  --yellow-dim: rgba(245,166,35,0.15);
+  --red: #f05151;
+  --red-dim: rgba(240,81,81,0.15);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.12);
+  --text: #e8eaf0;
+  --text2: #8b93a8;
+  --text3: #555f75;
+  --rf1: #4d8ff5;
+  --zerosi: #00c9a7;
+  --c7: #f5a623;
+  --c8: #a78bfa;
+  --c10: #f472b6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ── LAYOUT ── */
+.shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.sidebar-logo {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logo-img {
+  height: 32px;
+  object-fit: contain;
+  object-position: left;
+  filter: brightness(0) invert(1);
+}
+
+.logo-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  padding: 14px 12px 4px;
+}
+
+.sidebar-section-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 0 8px;
+  margin-bottom: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  margin-bottom: 2px;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.04); }
+
+.nav-item.active {
+  background: rgba(26,108,240,0.12);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background: var(--teal);
+  border-radius: 2px;
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.nav-text {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.nav-item.active .nav-text { color: var(--text); }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+}
+
+.footer-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text3);
+  line-height: 1.8;
+}
+
+.footer-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--teal);
+  border-radius: 50%;
+  margin-right: 5px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.topbar-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.topbar-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+
+.topbar-date {
+  font-size: 11px;
+  color: var(--text2);
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* ALERT BAR */
+.alert-bar {
+  background: rgba(240,81,81,0.1);
+  border-bottom: 1px solid rgba(240,81,81,0.25);
+  padding: 7px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.alert-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--red);
+  font-weight: 500;
+}
+
+.alert-bar-sep {
+  width: 1px;
+  height: 14px;
+  background: rgba(240,81,81,0.3);
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 24px;
+  display: none;
+}
+
+.content.active { display: block; }
+
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ── KPI ROW ── */
+.kpi-row {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.kpi-row-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-row-5 { grid-template-columns: repeat(5, 1fr); }
+
+.kpi-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent, var(--blue));
+}
+
+.kpi-card.teal { --accent: var(--teal); }
+.kpi-card.yellow { --accent: var(--yellow); }
+.kpi-card.red { --accent: var(--red); }
+.kpi-card.green { --accent: var(--green); }
+.kpi-card.purple { --accent: #a78bfa; }
+.kpi-card.pink { --accent: #f472b6; }
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+
+.kpi-value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.kpi-unit {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text2);
+  margin-left: 3px;
+}
+
+.kpi-sub {
+  font-size: 10.5px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.kpi-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.kpi-badge.red { background: var(--red-dim); color: var(--red); }
+.kpi-badge.green { background: var(--green-dim); color: var(--green); }
+.kpi-badge.yellow { background: var(--yellow-dim); color: var(--yellow); }
+.kpi-badge.teal { background: var(--teal-dim); color: var(--teal); }
+
+/* ── GRID ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid-7-3 { display: grid; grid-template-columns: 7fr 3fr; gap: 14px; margin-bottom: 14px; }
+.grid-6-4 { display: grid; grid-template-columns: 6fr 4fr; gap: 14px; margin-bottom: 14px; }
+
+/* ── PANEL ── */
+.panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.panel-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+}
+
+.panel-body { padding: 14px 18px; }
+
+/* ── TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+
+.data-table th {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+.data-table tr:last-child td { border-bottom: none; }
+
+.data-table td.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* ── CHIPS ── */
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.chip.rf1 { background: rgba(77,143,245,0.15); color: var(--rf1); }
+.chip.zerosi { background: rgba(0,201,167,0.15); color: var(--zerosi); }
+.chip.ok { background: var(--teal-dim); color: var(--teal); }
+.chip.warn { background: var(--yellow-dim); color: var(--yellow); }
+.chip.red { background: var(--red-dim); color: var(--red); }
+.chip.c7 { background: rgba(245,166,35,0.15); color: var(--c7); }
+.chip.c8 { background: rgba(167,139,250,0.15); color: var(--c8); }
+.chip.c10 { background: rgba(244,114,182,0.15); color: var(--c10); }
+
+/* ── BAR CHART ── */
+.bar-chart { padding: 4px 0; }
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.bar-label { font-size: 11px; color: var(--text2); width: 120px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+.bar-val { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); width: 60px; text-align: right; flex-shrink: 0; }
+
+/* ── GAUGE ── */
+.gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
+.gauge-title { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
+.gauge-track { width: 100%; height: 10px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; position: relative; }
+.gauge-fill { height: 100%; border-radius: 5px; }
+.gauge-min-line { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--red); border-radius: 1px; }
+.gauge-labels { display: flex; justify-content: space-between; margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); }
+.gauge-val { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; margin-top: 6px; }
+.gauge-unit { font-size: 11px; color: var(--text3); }
+
+/* ── TK CARD ── */
+.tk-card {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.tk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.tk-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tk-level {
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.tk-level-fill { height: 100%; border-radius: 6px; }
+
+.tk-detail { font-size: 11px; color: var(--text2); margin-top: 4px; line-height: 1.7; }
+.tk-detail span { color: var(--text3); }
+
+/* ── TRAZABILIDAD CHAIN ── */
+.chain-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+.chain-step {
+  flex: 1;
+  text-align: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 6px;
+}
+.chain-icon { font-size: 20px; margin-bottom: 4px; }
+.chain-label { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text2); }
+.chain-arrow { color: var(--teal); font-size: 18px; padding: 0 8px; flex-shrink: 0; }
+
+/* ── SEMAFORO ── */
+.semaforo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.semaforo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--bg3);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.semaforo-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.semaforo-dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.semaforo-dot.yellow { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+.semaforo-dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+.semaforo-text { font-size: 11px; color: var(--text2); }
+
+/* ── ZONA BARS ── */
+.zona-row { margin-bottom: 12px; }
+.zona-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.zona-name { font-size: 11.5px; color: var(--text); }
+.zona-total { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text2); }
+.zona-stacked { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 1px; }
+.zona-s19 { background: var(--blue); }
+.zona-s20 { background: var(--teal); }
+
+/* ── RESUMEN EJECUTIVO SPECIAL ── */
+.exec-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 14px; margin-bottom: 14px; }
+
+/* ── PAGE TRANSITION ── */
+.content { animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── DAILY CHART ── */
+.daily-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 4px; }
+.daily-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+.daily-bar { width: 100%; background: var(--blue); border-radius: 3px 3px 0 0; min-height: 4px; transition: height 0.4s ease; }
+.daily-bar.zerosi { background: var(--teal); }
+.daily-label { font-size: 9px; color: var(--text3); margin-top: 4px; }
+.daily-val { font-size: 9px; color: var(--text2); }
+
+/* Scrollbar hide for TV */
+@media (min-width: 1400px) {
+  .content { scrollbar-width: none; }
+  .content::-webkit-scrollbar { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <!-- Logo BSN en texto SVG ya que no tenemos el PNG aquí -->
+      <svg width="100" height="30" viewBox="0 0 100 30">
+        <ellipse cx="8" cy="15" rx="7" ry="10" fill="#6b7280" opacity="0.8"/>
+        <ellipse cx="22" cy="15" rx="7" ry="10" fill="#1e3a5f" opacity="0.9"/>
+        <ellipse cx="36" cy="15" rx="7" ry="10" fill="#2a6fd4" opacity="0.9"/>
+        <text x="50" y="20" font-family="Rajdhani,sans-serif" font-size="18" font-weight="700" fill="white" letter-spacing="1">BSN</text>
+      </svg>
+      <div class="logo-sub">CENTINELA · CONTROL</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Operacional</div>
+      <div class="nav-item active" data-page="resumen" onclick="navTo('resumen')">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Resumen Ejecutivo</span>
+      </div>
+      <div class="nav-item" data-page="produccion" onclick="navTo('produccion')">
+        <span class="nav-icon">⚗️</span>
+        <span class="nav-text">Producción</span>
+      </div>
+      <div class="nav-item" data-page="inventario" onclick="navTo('inventario')">
+        <span class="nav-icon">📦</span>
+        <span class="nav-text">Inventario</span>
+        <span class="nav-badge">!</span>
+      </div>
+      <div class="nav-item" data-page="cargas" onclick="navTo('cargas')">
+        <span class="nav-icon">🚛</span>
+        <span class="nav-text">Carga y Despacho</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Trazabilidad</div>
+      <div class="nav-item" data-page="trazabilidad" onclick="navTo('trazabilidad')">
+        <span class="nav-icon">🔗</span>
+        <span class="nav-text">Trazabilidad</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Zonas</div>
+      <div class="nav-item" data-page="zonas" onclick="navTo('zonas')">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-text">Zonas / Plan Riego</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="footer-line"><span class="footer-dot"></span>EN VIVO · bsnchem.com</div>
+      <div class="footer-line" id="last-update">Actualizado: cargando...</div>
+      <div class="footer-line">Refresco: cada 60s</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Resumen Ejecutivo</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="top-date"></div>
+        <div class="topbar-time" id="top-time">--:--:--</div>
+      </div>
+    </div>
+
+    <!-- ALERT BAR -->
+    <div class="alert-bar" id="alert-bar">
+      <div class="alert-bar-item">⚠️ RF1 bajo mínimo operacional — 180 kg disponibles (mín: 200 kg)</div>
+      <div class="alert-bar-sep"></div>
+      <div class="alert-bar-item">⏳ 16.000 L en TK pendientes de despacho (RF1 + ZEROSI)</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PÁGINA 1 — RESUMEN EJECUTIVO               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="content active" id="page-resumen">
+      <div class="kpi-row kpi-row-4" style="margin-bottom:14px">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Total Producido</div>
+          <div class="kpi-value">80.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">10 lotes · Mayo 2026</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Total Despachado</div>
+          <div class="kpi-value">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">8 cargas completadas</div>
+          <span class="kpi-badge teal">80% despacho</span>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Stock RF1</div>
+          <div class="kpi-value">180<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub">Mínimo: 200 kg · 3.2 días</div>
+          <span class="kpi-badge red">⚠ BAJO MÍNIMO</span>
+        </div>
+        <div class="kpi-card yellow">
+          <div class="kpi-label">En TK (pendiente)</div>
+          <div class="kpi-value">16.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">RF1 TK3 · ZEROSI TK3</div>
+          <span class="kpi-badge yellow">Disponible</span>
+        </div>
+      </div>
+
+      <div class="exec-grid">
+        <!-- Producción vs Despacho -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Producción vs Despacho — Mayo 2026</div>
+            <div class="panel-tag">diario</div>
+          </div>
+          <div class="panel-body">
+            <div style="display:flex;gap:12px;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--blue);border-radius:2px"></div>Producción RF1</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--teal);border-radius:2px"></div>Producción ZEROSI</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--yellow);border-radius:2px"></div>Despacho</div>
+            </div>
+            <div class="daily-chart">
+              <div class="daily-bar-wrap">
+                <div class="daily-val">16k</div>
+                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
+                  <div class="daily-bar" style="height:60%;flex:1"></div>
+                  <div class="daily-bar" style="height:60%;flex:1;background:var(--yellow)"></div>
+                </div>
+                <div class="daily-label">06/05</div>
+              </div>
+              <div class="daily-bar-wrap">
+                <div class="daily-val">16k</div>
+                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
+                  <div class="daily-bar" style="height:60%;flex:1"></div>
+                  <div class="daily-bar" style="height:60%;flex:1;background:var(--yellow)"></div>
+                </div>
+                <div class="daily-label">07/05</div>
+              </div>
+              <div class="daily-bar-wrap">
+                <div class="daily-val">8k</div>
+                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
+                  <div class="daily-bar" style="height:30%;flex:1"></div>
+                  <div class="daily-bar" style="height:30%;flex:1;background:var(--yellow)"></div>
+                </div>
+                <div class="daily-label">08/05</div>
+              </div>
+              <div class="daily-bar-wrap">
+                <div class="daily-val">16k</div>
+                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
+                  <div class="daily-bar" style="height:30%;flex:1"></div>
+                  <div class="daily-bar zerosi" style="height:30%;flex:1"></div>
+                  <div class="daily-bar" style="height:60%;flex:1;background:var(--yellow)"></div>
+                </div>
+                <div class="daily-label">09/05</div>
+              </div>
+              <div class="daily-bar-wrap">
+                <div class="daily-val">8k</div>
+                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
+                  <div class="daily-bar" style="height:30%;flex:1"></div>
+                  <div class="daily-bar" style="height:30%;flex:1;background:var(--yellow)"></div>
+                </div>
+                <div class="daily-label">10/05</div>
+              </div>
+              <div class="daily-bar-wrap">
+                <div class="daily-val">16k</div>
+                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
+                  <div class="daily-bar" style="height:30%;flex:1"></div>
+                  <div class="daily-bar zerosi" style="height:30%;flex:1"></div>
+                </div>
+                <div class="daily-label">11/05</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Semáforo -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Estado Operacional</div>
+          </div>
+          <div class="panel-body">
+            <div class="semaforo-grid">
+              <div class="semaforo-item">
+                <div class="semaforo-dot green"></div>
+                <div class="semaforo-text">Trazabilidad<br><b style="color:var(--text)">8/10 lotes</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot red"></div>
+                <div class="semaforo-text">Stock RF1<br><b style="color:var(--red)">BAJO MÍNIMO</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot green"></div>
+                <div class="semaforo-text">Stock ZEROSI<br><b style="color:var(--text)">8.6 días</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot yellow"></div>
+                <div class="semaforo-text">Despacho<br><b style="color:var(--yellow)">16k L en TK</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot green"></div>
+                <div class="semaforo-text">Camiones<br><b style="color:var(--text)">3 activos</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot green"></div>
+                <div class="semaforo-text">Rendimiento<br><b style="color:var(--text)">37.1 kg/L</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Producción por producto -->
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">Producción por Producto</div></div>
+          <div class="panel-body bar-chart">
+            <div class="bar-row">
+              <div class="bar-label">RF1</div>
+              <div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--rf1)"></div></div>
+              <div class="bar-val">64.000 L</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">ZEROSI</div>
+              <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--zerosi)"></div></div>
+              <div class="bar-val">16.000 L</div>
+            </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:var(--text3)">
+              <span>RF1: 8 lotes · TK 1 y TK 3</span>
+              <span>ZEROSI: 2 lotes · TK 1 y TK 3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Despacho por camión -->
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">Despacho por Camión</div></div>
+          <div class="panel-body bar-chart">
+            <div class="bar-row">
+              <div class="bar-label">🚛 Camión N°7</div>
+              <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--c7)"></div></div>
+              <div class="bar-val">32.000 L</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">🚛 Camión N°8</div>
+              <div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c8)"></div></div>
+              <div class="bar-val">16.000 L</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">🚛 Camión N°10</div>
+              <div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c10)"></div></div>
+              <div class="bar-val">16.000 L</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /resumen -->
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PÁGINA 2 — PRODUCCIÓN                       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="content" id="page-produccion">
+      <div class="kpi-row kpi-row-5">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Total Producido</div>
+          <div class="kpi-value">80.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">10 lotes completos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Materia Prima Usada</div>
+          <div class="kpi-value">2.155<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub">RF1 + ZEROSI combinado</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Rendimiento Promedio</div>
+          <div class="kpi-value">37,1<span class="kpi-unit">kg/L</span></div>
+          <div class="kpi-sub">Estable en el período</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Duración Promedio</div>
+          <div class="kpi-value">47<span class="kpi-unit">min</span></div>
+          <div class="kpi-sub">Rango: 42–55 min</div>
+        </div>
+        <div class="kpi-card yellow">
+          <div class="kpi-label">Lotes sin Despachar</div>
+          <div class="kpi-value">2</div>
+          <div class="kpi-sub">En TK — pendientes</div>
+          <span class="kpi-badge yellow">⏳ En espera</span>
+        </div>
+      </div>
+
+      <div class="grid-7-3">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Registro de Lotes de Producción</div>
+            <div class="panel-tag">10 lotes · Mayo 2026</div>
+          </div>
+          <div class="panel-body" style="padding:0">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID Lote</th>
+                  <th>Fecha</th>
+                  <th>Producto</th>
+                  <th>Supervisor</th>
+                  <th>TK Destino</th>
+                  <th>Litros</th>
+                  <th>Kg usados</th>
+                  <th>Duración</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="mono">PRDRF12605060845</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>212 kg</td><td>43 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRDRF12605061115</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>45 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRDRF12605071015</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>42 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRDRF12605070930</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>217 kg</td><td>47 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRDRF12605081120</td><td>08/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>50 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRZEROSI260561100</td><td>09/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>J. Nuñez</td><td>TK 1</td><td>8.000 L</td><td>215 kg</td><td>52 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRDRF12605091030</td><td>09/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>48 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr><td class="mono">PRDRF12605101115</td><td>10/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>46 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
+                <tr style="opacity:0.7;background:rgba(245,166,35,0.04)"><td class="mono">PRDRF12605111130</td><td>11/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 3</td><td>8.000 L</td><td>216 kg</td><td>44 min</td><td><span class="chip warn">⏳ En TK</span></td></tr>
+                <tr style="opacity:0.7;background:rgba(245,166,35,0.04)"><td class="mono">PRZEROSI260568000</td><td>11/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>J. Nuñez</td><td>TK 3</td><td>8.000 L</td><td>215 kg</td><td>55 min</td><td><span class="chip warn">⏳ En TK</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Por Producto</div></div>
+            <div class="panel-body bar-chart">
+              <div class="bar-row">
+                <div class="bar-label">RF1 (8 lotes)</div>
+                <div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--rf1)"></div></div>
+                <div class="bar-val">64.000</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-label">ZEROSI (2)</div>
+                <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--zerosi)"></div></div>
+                <div class="bar-val">16.000</div>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Por Supervisor</div></div>
+            <div class="panel-body bar-chart">
+              <div class="bar-row">
+                <div class="bar-label">C. Bastias</div>
+                <div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--blue-light)"></div></div>
+                <div class="bar-val">8 lotes</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-label">J. Nuñez</div>
+                <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--teal)"></div></div>
+                <div class="bar-val">2 lotes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /produccion -->
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PÁGINA 3 — INVENTARIO                       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="content" id="page-inventario">
+      <div class="kpi-row kpi-row-5">
+        <div class="kpi-card red">
+          <div class="kpi-label">Stock RF1</div>
+          <div class="kpi-value">180<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub">Mín: 200 kg · 3.2 días</div>
+          <span class="kpi-badge red">⚠ BAJO MÍNIMO</span>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">Stock ZEROSI</div>
+          <div class="kpi-value">430<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub">Mín: 150 kg · 8.6 días</div>
+          <span class="kpi-badge green">✓ Normal</span>
+        </div>
+        <div class="kpi-card yellow">
+          <div class="kpi-label">En TK — Prod. Terminado</div>
+          <div class="kpi-value">16.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">2 lotes en TK 3</div>
+          <span class="kpi-badge yellow">Disponible</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Salidas del Período</div>
+          <div class="kpi-value">2.155<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub">10 movimientos de salida</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Autonomía ZEROSI</div>
+          <div class="kpi-value">8.6<span class="kpi-unit">días</span></div>
+          <div class="kpi-sub">Con consumo actual</div>
+        </div>
+      </div>
+
+      <!-- Producto terminado en TK -->
+      <div class="panel" style="margin-bottom:14px;border-color:rgba(0,201,167,0.3)">
+        <div class="panel-header" style="background:rgba(0,201,167,0.05)">
+          <div class="panel-title">📦 Producto Terminado en TK — Disponible para Despacho</div>
+          <div class="panel-tag">2 lotes · 16.000 L totales</div>
+        </div>
+        <div class="panel-body">
+          <div class="grid-2" style="margin-bottom:0">
+            <div class="tk-card" style="border-color:rgba(77,143,245,0.3)">
+              <div class="tk-header">
+                <div>
+                  <div class="tk-name">TK 3 — RF1</div>
+                  <div style="font-size:11px;color:var(--text3)">Lote: PRDRF12605111130</div>
+                </div>
+                <span class="chip ok" style="font-size:12px;padding:4px 10px">DISPONIBLE</span>
+              </div>
+              <div class="tk-level"><div class="tk-level-fill" style="width:100%;background:var(--rf1)"></div></div>
+              <div class="tk-detail">
+                <div><span>Volumen:</span> <b style="color:var(--text)">8.000 L</b></div>
+                <div><span>Supervisor:</span> Cristian Bastias</div>
+                <div><span>Producido:</span> 11/05/2026</div>
+                <div><span>Tiempo en TK:</span> <b style="color:var(--yellow)">1 día</b></div>
+              </div>
+            </div>
+            <div class="tk-card" style="border-color:rgba(0,201,167,0.3)">
+              <div class="tk-header">
+                <div>
+                  <div class="tk-name">TK 3 — ZEROSI</div>
+                  <div style="font-size:11px;color:var(--text3)">Lote: PRZEROSI260568000</div>
+                </div>
+                <span class="chip ok" style="font-size:12px;padding:4px 10px">DISPONIBLE</span>
+              </div>
+              <div class="tk-level"><div class="tk-level-fill" style="width:100%;background:var(--zerosi)"></div></div>
+              <div class="tk-detail">
+                <div><span>Volumen:</span> <b style="color:var(--text)">8.000 L</b></div>
+                <div><span>Supervisor:</span> Juan Nuñez</div>
+                <div><span>Producido:</span> 11/05/2026</div>
+                <div><span>Tiempo en TK:</span> <b style="color:var(--yellow)">1 día</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Materia prima -->
+      <div class="grid-6-4">
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">Movimientos de Materia Prima</div><div class="panel-tag">últimos 10</div></div>
+          <div class="panel-body" style="padding:0">
+            <table class="data-table">
+              <thead>
+                <tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Kg</th><th>Responsable</th><th>Stock Final</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>06/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">396 kg</td></tr>
+                <tr><td>06/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>212 kg</td><td>C. Bastias</td><td class="mono">184 kg</td></tr>
+                <tr><td>07/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">612 kg</td></tr>
+                <tr><td>07/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>217 kg</td><td>C. Bastias</td><td class="mono">395 kg</td></tr>
+                <tr><td>08/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">179 kg</td></tr>
+                <tr><td>09/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip ok">Entrada</span></td><td>500 kg</td><td>Administración</td><td class="mono" style="color:var(--teal)">679 kg</td></tr>
+                <tr><td>09/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">463 kg</td></tr>
+                <tr><td>09/05</td><td><span class="chip zerosi">ZEROSI</span></td><td><span class="chip red">Salida</span></td><td>215 kg</td><td>J. Nuñez</td><td class="mono">645 kg</td></tr>
+                <tr><td>10/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">247 kg</td></tr>
+                <tr style="background:var(--red-dim)"><td>11/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono" style="color:var(--red)">180 kg ⚠</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Stock RF1</div></div>
+            <div class="panel-body">
+              <div class="gauge-wrap">
+                <div class="gauge-title">RF1 — Actual vs Mínimo</div>
+                <div class="gauge-track">
+                  <div class="gauge-fill" style="width:36%;background:var(--red)"></div>
+                  <div class="gauge-min-line" style="left:40%"></div>
+                </div>
+                <div class="gauge-labels"><span>0</span><span>Mín 200</span><span>500 kg</span></div>
+                <div class="gauge-val" style="color:var(--red)">180 <span class="gauge-unit">kg</span></div>
+                <span class="kpi-badge red">3.2 días de autonomía</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Stock ZEROSI</div></div>
+            <div class="panel-body">
+              <div class="gauge-wrap">
+                <div class="gauge-title">ZEROSI — Actual vs Mínimo</div>
+                <div class="gauge-track">
+                  <div class="gauge-fill" style="width:86%;background:var(--teal)"></div>
+                  <div class="gauge-min-line" style="left:30%"></div>
+                </div>
+                <div class="gauge-labels"><span>0</span><span>Mín 150</span><span>500 kg</span></div>
+                <div class="gauge-val" style="color:var(--teal)">430 <span class="gauge-unit">kg</span></div>
+                <span class="kpi-badge green">8.6 días de autonomía</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /inventario -->
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PÁGINA 4 — CARGA Y DESPACHO                 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="content" id="page-cargas">
+      <div class="kpi-row kpi-row-5">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Total Cargado</div>
+          <div class="kpi-value">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">8 cargas completadas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Agua Utilizada</div>
+          <div class="kpi-value">600.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">9.4 L agua/L producto</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Camiones Activos</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-sub">N°7 · N°8 · N°10</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Duración Promedio</div>
+          <div class="kpi-value">21<span class="kpi-unit">min</span></div>
+          <div class="kpi-sub">Rango: 19–23 min</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Operadores</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-sub">B.Tapia · C.Bustos · F.Rojas</div>
+        </div>
+      </div>
+
+      <div class="grid-7-3">
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">Registro de Cargas</div><div class="panel-tag">8 cargas · Mayo 2026</div></div>
+          <div class="panel-body" style="padding:0">
+            <table class="data-table">
+              <thead>
+                <tr><th>ID Carga</th><th>Fecha</th><th>Hora</th><th>Prod.</th><th>TK</th><th>Camión</th><th>Operador</th><th>Litros</th><th>Agua</th><th>Durac.</th><th>Destino</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="mono" style="font-size:9px">CYD...0830</td><td>06/05</td><td>08:30</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>20 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYD...0915</td><td>06/05</td><td>09:15</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td>75.000</td><td>22 min</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYD...0915b</td><td>07/05</td><td>09:15</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>19 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYD...0930</td><td>07/05</td><td>09:30</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td>75.000</td><td>21 min</td><td style="font-size:10px;color:var(--text3)">BOT.F05 - CHANCADOR</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYD...0845</td><td>08/05</td><td>08:45</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>20 min</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYD...0900</td><td>09/05</td><td>09:00</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td>75.000</td><td>23 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYZ...0915</td><td>09/05</td><td>09:15</td><td><span class="chip zerosi">ZEROSI</span></td><td>TK 1</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td>75.000</td><td>22 min</td><td style="font-size:10px;color:var(--text3)">PISTA PRINC. - CHANCADOR</td></tr>
+                <tr><td class="mono" style="font-size:9px">CYD...0845b</td><td>10/05</td><td>08:45</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>20 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Por Camión</div></div>
+            <div class="panel-body bar-chart">
+              <div class="bar-row"><div class="bar-label">N°7 (4 cargas)</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--c7)"></div></div><div class="bar-val">32.000 L</div></div>
+              <div class="bar-row"><div class="bar-label">N°8 (2 cargas)</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c8)"></div></div><div class="bar-val">16.000 L</div></div>
+              <div class="bar-row"><div class="bar-label">N°10 (2 cargas)</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c10)"></div></div><div class="bar-val">16.000 L</div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Por Operador</div></div>
+            <div class="panel-body bar-chart">
+              <div class="bar-row"><div class="bar-label">B. Tapia</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--blue-light)"></div></div><div class="bar-val">4 cargas</div></div>
+              <div class="bar-row"><div class="bar-label">C. Bustos</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--teal)"></div></div><div class="bar-val">2 cargas</div></div>
+              <div class="bar-row"><div class="bar-label">F. Rojas</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--yellow)"></div></div><div class="bar-val">2 cargas</div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Despacho Diario</div></div>
+            <div class="panel-body">
+              <div class="daily-chart" style="height:70px">
+                <div class="daily-bar-wrap"><div class="daily-val">16k</div><div class="daily-bar" style="height:100%;background:var(--blue)"></div><div class="daily-label">06</div></div>
+                <div class="daily-bar-wrap"><div class="daily-val">16k</div><div class="daily-bar" style="height:100%;background:var(--blue)"></div><div class="daily-label">07</div></div>
+                <div class="daily-bar-wrap"><div class="daily-val">8k</div><div class="daily-bar" style="height:50%;background:var(--blue)"></div><div class="daily-label">08</div></div>
+                <div class="daily-bar-wrap"><div class="daily-val">16k</div><div class="daily-bar" style="height:100%;background:var(--blue)"></div><div class="daily-label">09</div></div>
+                <div class="daily-bar-wrap"><div class="daily-val">8k</div><div class="daily-bar" style="height:50%;background:var(--blue)"></div><div class="daily-label">10</div></div>
+                <div class="daily-bar-wrap"><div class="daily-val">—</div><div class="daily-bar" style="height:4px;background:var(--bg3)"></div><div class="daily-label">11</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /cargas -->
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PÁGINA 5 — TRAZABILIDAD                     -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="content" id="page-trazabilidad">
+      <div class="kpi-row kpi-row-4">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Trazabilidad Completa</div>
+          <div class="kpi-value">8<span class="kpi-unit">/10</span></div>
+          <div class="kpi-sub">2 lotes pendientes en TK</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Cargas con Lote Vinculado</div>
+          <div class="kpi-value">8<span class="kpi-unit">/8</span></div>
+          <div class="kpi-sub">100% integridad relacional</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Tiempo Prod. → Despacho</div>
+          <div class="kpi-value">1.8<span class="kpi-unit">días</span></div>
+          <div class="kpi-sub">Promedio · Rango: 0–6 días</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Responsables en Cadena</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-sub">Bastias · Nuñez · Cortes</div>
+        </div>
+      </div>
+
+      <!-- Chain header -->
+      <div class="chain-row">
+        <div class="chain-step"><div class="chain-icon">⚗️</div><div class="chain-label">Producción</div></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step"><div class="chain-icon">🛢️</div><div class="chain-label">TK Estiba</div></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step"><div class="chain-icon">🚛</div><div class="chain-label">Carga/Despacho</div></div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step"><div class="chain-icon">📍</div><div class="chain-label">Destino Rajo</div></div>
+      </div>
+
+      <div class="panel" style="margin-bottom:14px">
+        <div class="panel-header"><div class="panel-title">Cadena Completa por Lote</div><div class="panel-tag">10 lotes</div></div>
+        <div class="panel-body" style="padding:0">
+          <table class="data-table">
+            <thead>
+              <tr><th>ID Lote</th><th>F. Prod.</th><th>Producto</th><th>TK</th><th>Superv.</th><th>F. Carga</th><th>Camión</th><th>Operador</th><th>L Cargados</th><th>Destino</th><th>Días</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="mono" style="font-size:9px">PRDRF...0845</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>06/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--green)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRDRF...1115</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>06/05</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td><td style="color:var(--green)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRDRF...1015</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>07/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--green)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRDRF...0930</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>07/05</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">F05 CHANCADOR</td><td style="color:var(--green)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRDRF...1120</td><td>08/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>08/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td><td style="color:var(--teal)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRZEROSI...1100</td><td>09/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>TK 1</td><td>J. Nuñez</td><td>09/05</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">PISTA CHANCADOR</td><td style="color:var(--green)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRDRF...1030</td><td>09/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>09/05</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--green)">0</td></tr>
+              <tr><td class="mono" style="font-size:9px">PRDRF...1115</td><td>10/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>10/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--teal)">0</td></tr>
+              <tr style="background:rgba(245,166,35,0.06)"><td class="mono" style="font-size:9px">PRDRF...1130</td><td>11/05</td><td><span class="chip rf1">RF1</span></td><td>TK 3</td><td>C. Bastias</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td><span class="chip warn">En TK · Espera</span></td><td style="color:var(--yellow)">1</td></tr>
+              <tr style="background:rgba(245,166,35,0.06)"><td class="mono" style="font-size:9px">PRZEROSI...8000</td><td>11/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>TK 3</td><td>J. Nuñez</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td><span class="chip warn">En TK · Espera</span></td><td style="color:var(--yellow)">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /trazabilidad -->
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PÁGINA 6 — ZONAS / PLAN DE RIEGO            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="content" id="page-zonas">
+      <div class="kpi-row kpi-row-4">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Total Despachado</div>
+          <div class="kpi-value">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">Mayo 2026 · S19+S20</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Zonas Atendidas</div>
+          <div class="kpi-value">4</div>
+          <div class="kpi-sub">Distintos destinos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Litros S19 (sem. 19)</div>
+          <div class="kpi-value">48.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">06/05 al 10/05</div>
+        </div>
+        <div class="kpi-card yellow">
+          <div class="kpi-label">Litros S20 (en curso)</div>
+          <div class="kpi-value">16.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">11/05 en adelante</div>
+        </div>
+      </div>
+
+      <div class="grid-6-4">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Litros por Zona — S19 vs S20</div>
+            <div style="display:flex;gap:12px">
+              <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--blue);border-radius:2px"></div>S19</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--teal);border-radius:2px"></div>S20</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="zona-row">
+              <div class="zona-header">
+                <div class="zona-name">BOTADERO SUR - PISTA PRINCIPAL</div>
+                <div class="zona-total">32.000 L · 50%</div>
+              </div>
+              <div class="zona-stacked">
+                <div class="zona-s19" style="flex:3"></div>
+                <div class="zona-s20" style="flex:1"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
+                <span>S19: 24.000 L</span><span>S20: 8.000 L</span>
+              </div>
+            </div>
+            <div class="zona-row">
+              <div class="zona-header">
+                <div class="zona-name">SUR 1 - SUR 2</div>
+                <div class="zona-total">16.000 L · 25%</div>
+              </div>
+              <div class="zona-stacked">
+                <div class="zona-s19" style="flex:1"></div>
+                <div class="zona-s20" style="flex:1"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
+                <span>S19: 8.000 L</span><span>S20: 8.000 L</span>
+              </div>
+            </div>
+            <div class="zona-row">
+              <div class="zona-header">
+                <div class="zona-name">BOTADERO F05 - CHANCADOR</div>
+                <div class="zona-total">8.000 L · 12.5%</div>
+              </div>
+              <div class="zona-stacked">
+                <div class="zona-s19" style="flex:1"></div>
+                <div class="zona-s20" style="flex:0.1;background:transparent"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
+                <span>S19: 8.000 L</span><span>S20: — L</span>
+              </div>
+            </div>
+            <div class="zona-row">
+              <div class="zona-header">
+                <div class="zona-name">PISTA PRINCIPAL - CHANCADOR</div>
+                <div class="zona-total">8.000 L · 12.5%</div>
+              </div>
+              <div class="zona-stacked">
+                <div class="zona-s19" style="flex:1"></div>
+                <div class="zona-s20" style="flex:0.1;background:transparent"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
+                <span>S19: 8.000 L</span><span>S20: — L</span>
+              </div>
+            </div>
+
+            <div style="margin-top:14px;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:11px;color:var(--text3);border-left:3px solid var(--yellow)">
+              ⚠ Nota: litros por zona calculados con distribución proporcional cuando una carga cubre múltiples sectores. Implementar Opción A (una fila por zona) para mayor precisión.
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Distribución S19+S20</div></div>
+            <div class="panel-body bar-chart">
+              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">BOT.SUR-PISTA</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--blue)"></div></div><div class="bar-val">50%</div></div>
+              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">SUR 1 - SUR 2</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--teal)"></div></div><div class="bar-val">25%</div></div>
+              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">F05 CHANCADOR</div><div class="bar-track"><div class="bar-fill" style="width:12.5%;background:var(--yellow)"></div></div><div class="bar-val">12.5%</div></div>
+              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">PISTA-CHANCAD.</div><div class="bar-track"><div class="bar-fill" style="width:12.5%;background:var(--c10)"></div></div><div class="bar-val">12.5%</div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Evolución Semanal</div></div>
+            <div class="panel-body">
+              <div style="display:flex;gap:12px;align-items:flex-end;height:80px;padding:0 8px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                  <div style="font-size:11px;color:var(--text2)">48k L</div>
+                  <div style="width:100%;height:60px;background:var(--blue);border-radius:4px 4px 0 0;display:flex;align-items:flex-end;padding:4px;font-size:9px;color:rgba(255,255,255,0.6)">6 cargas</div>
+                  <div style="font-size:10px;color:var(--text3)">S19</div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                  <div style="font-size:11px;color:var(--text2)">16k L</div>
+                  <div style="width:100%;height:20px;background:var(--teal);border-radius:4px 4px 0 0;display:flex;align-items:flex-end;padding:4px;font-size:9px;color:rgba(0,0,0,0.6)">2 car.</div>
+                  <div style="font-size:10px;color:var(--text3)">S20 ⚡</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /zonas -->
+
+  </main>
+</div>
+
+<script>
+// ── DATOS (luego se reemplazan leyendo datos.json) ──
+const PAGES = {
+  resumen: 'Resumen Ejecutivo',
+  produccion: 'Producción',
+  inventario: 'Inventario',
+  cargas: 'Carga y Despacho',
+  trazabilidad: 'Trazabilidad',
+  zonas: 'Zonas / Plan de Riego'
+};
+
+// ── NAVEGACIÓN ──
+function navTo(page) {
+  // ocultar todos
+  document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+  // activar página
+  const pageEl = document.getElementById('page-' + page);
+  if (pageEl) pageEl.classList.add('active');
+
+  // activar nav
+  const navEl = document.querySelector('[data-page="' + page + '"]');
+  if (navEl) navEl.classList.add('active');
+
+  // actualizar título
+  document.getElementById('page-title').textContent = PAGES[page] || page;
+}
+
+// ── RELOJ ──
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('top-time').textContent = h + ':' + m + ':' + s;
+
+  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  document.getElementById('top-date').innerHTML =
+    days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear() +
+    '<br>BSN Centinela · Operación Minera';
+}
+
+// ── CARGAR DATOS DESDE API (lee Excel en tiempo real desde SharePoint) ──
+async function loadData() {
+  try {
+    document.getElementById('last-update').textContent = 'Actualizando...';
+    const res = await fetch('/api/datos?t=' + Date.now());
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+
+    // Actualizar timestamp
+    const upd = new Date(data.meta.ultima_actualizacion);
+    const h = String(upd.getHours()).padStart(2,'0');
+    const m = String(upd.getMinutes()).padStart(2,'0');
+    document.getElementById('last-update').textContent =
+      'Actualizado: ' + upd.getDate() + '/' + (upd.getMonth()+1) + ' ' + h + ':' + m;
+
+    // Actualizar KPIs dinámicamente con datos reales del Excel
+    actualizarDashboard(data);
+
+  } catch(e) {
+    console.warn('API no disponible — mostrando datos de ejemplo:', e.message);
+    document.getElementById('last-update').textContent = 'Sin conexión al Excel';
+  }
+}
+
+function actualizarDashboard(data) {
+  const p = data.produccion;
+  const inv = data.inventario;
+  const car = data.cargas;
+  const traz = data.trazabilidad;
+
+  // KPIs Resumen Ejecutivo
+  setKPI('kpi-total-prod', formatNum(p.total_litros) + ' L');
+  setKPI('kpi-total-desp', formatNum(car.total_litros) + ' L');
+
+  // Stock materia prima
+  const rf1 = inv.materia_prima.find(x => x.producto.includes('RF1'));
+  const zerosi = inv.materia_prima.find(x => x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi'));
+  if (rf1) setKPI('kpi-stock-rf1', rf1.stock_kg + ' kg');
+  if (zerosi) setKPI('kpi-stock-zerosi', zerosi.stock_kg + ' kg');
+
+  // Litros en TK
+  const litrajeEnTk = inv.producto_terminado_tk.reduce((s, t) => s + t.litros, 0);
+  setKPI('kpi-en-tk', formatNum(litrajeEnTk) + ' L');
+
+  // Alerta bar
+  const alertas = [];
+  if (rf1 && rf1.alerta) alertas.push('⚠️ RF1 bajo mínimo operacional — ' + rf1.stock_kg + ' kg disponibles (mín: ' + rf1.minimo_kg + ' kg)');
+  if (litrajeEnTk > 0) alertas.push('⏳ ' + formatNum(litrajeEnTk) + ' L en TK pendientes de despacho');
+  if (alertas.length > 0) {
+    const bar = document.getElementById('alert-bar');
+    bar.innerHTML = alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
+    bar.style.display = 'flex';
+  }
+}
+
+function setKPI(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function formatNum(n) {
+  return Number(n).toLocaleString('es-CL');
+}
+
+// ── INIT ──
+setInterval(updateClock, 1000);
+updateClock();
+loadData();
+setInterval(loadData, 60000); // refresca datos cada 60s
+</script>
+</body>
+</html>
