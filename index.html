@@ -1230,23 +1230,23 @@ body {
       <div class="kpi-row kpi-row-4">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Despachado</div>
-          <div class="kpi-value">64.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">Mayo 2026 · S19+S20</div>
+          <div class="kpi-value" id="zona-kpi-1">72.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">Mayo 2026 · acumulado</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Zonas Atendidas</div>
-          <div class="kpi-value">4</div>
-          <div class="kpi-sub">Distintos destinos</div>
+          <div class="kpi-value" id="zona-kpi-2">3</div>
+          <div class="kpi-sub" id="zona-kpi-2-sub">Distintos destinos</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Litros S19 (sem. 19)</div>
-          <div class="kpi-value">48.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">06/05 al 10/05</div>
+          <div class="kpi-value" id="zona-kpi-3">—<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">semana anterior</div>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">Litros S20 (en curso)</div>
-          <div class="kpi-value">16.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">11/05 en adelante</div>
+          <div class="kpi-value" id="zona-kpi-4">—<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub">semana actual</div>
         </div>
       </div>
 
@@ -1396,6 +1396,15 @@ async function loadData() {
 
     // Zonas — renderizado dinámico
     const zonas = data.zonas.por_zona;
+    const totalZonasL = zonas.reduce((s,z) => s + z.total, 0);
+    setText('zona-kpi-1', totalZonasL.toLocaleString('es-CL'));
+    setText('zona-kpi-2', zonas.length);
+    setText('zona-kpi-2-sub', zonas.length + ' zonas atendidas');
+    // S19 y S20 calculados desde los datos
+    const s19Total = zonas.reduce((s,z) => s + (z.s19||0), 0);
+    const s20Total = zonas.reduce((s,z) => s + (z.s20||0), 0);
+    setText('zona-kpi-3', s19Total > 0 ? s19Total.toLocaleString('es-CL') : car.total_litros.toLocaleString('es-CL'));
+    setText('zona-kpi-4', s20Total > 0 ? s20Total.toLocaleString('es-CL') : '—');
     const totalZonas = zonas.reduce((s,z) => s + z.total, 0);
     setText('zonas-total-val', totalZonas.toLocaleString('es-CL') + ' L');
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
