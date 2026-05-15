@@ -886,17 +886,8 @@ body {
                   <th>Estado</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr><td class="mono">PRDRF12605060845</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>212 kg</td><td>43 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRDRF12605061115</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>45 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRDRF12605071015</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>42 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRDRF12605070930</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>217 kg</td><td>47 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRDRF12605081120</td><td>08/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>50 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRZEROSI260561100</td><td>09/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>J. Nuñez</td><td>TK 1</td><td>8.000 L</td><td>215 kg</td><td>52 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRDRF12605091030</td><td>09/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>48 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr><td class="mono">PRDRF12605101115</td><td>10/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 1</td><td>8.000 L</td><td>216 kg</td><td>46 min</td><td><span class="chip ok">✓ Despachado</span></td></tr>
-                <tr style="opacity:0.7;background:rgba(245,166,35,0.04)"><td class="mono">PRDRF12605111130</td><td>11/05</td><td><span class="chip rf1">RF1</span></td><td>C. Bastias</td><td>TK 3</td><td>8.000 L</td><td>216 kg</td><td>44 min</td><td><span class="chip warn">⏳ En TK</span></td></tr>
-                <tr style="opacity:0.7;background:rgba(245,166,35,0.04)"><td class="mono">PRZEROSI260568000</td><td>11/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>J. Nuñez</td><td>TK 3</td><td>8.000 L</td><td>215 kg</td><td>55 min</td><td><span class="chip warn">⏳ En TK</span></td></tr>
+              <tbody id="prod-tabla-body">
+                <tr><td colspan="9" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1365,7 +1356,32 @@ async function loadData() {
     setText('sem-camiones', car.por_camion.length + ' activos');
     setText('sem-rend', p.rendimiento_promedio + ' kg/L');
 
-    // Producción
+    // Producción — tabla dinámica
+    const prodBody = document.getElementById('prod-tabla-body');
+    if (prodBody && p.lotes.length > 0) {
+      prodBody.innerHTML = p.lotes.map(l => {
+        const fecha = l.fecha ? l.fecha.slice(5).replace('-','/') : '—';
+        const prod = l.producto && l.producto.includes('RF1') ?
+          '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
+        const estado = l.estado === 'Despachado' ?
+          '<span class="chip ok">✓ Despachado</span>' :
+          '<span class="chip warn">⏳ En TK</span>';
+        const rowStyle = l.estado === 'En TK' ? ' style="opacity:0.7;background:rgba(245,166,35,0.04)"' : '';
+        return '<tr' + rowStyle + '>' +
+          '<td class="mono" style="font-size:10px">' + l.id + '</td>' +
+          '<td>' + fecha + '</td>' +
+          '<td>' + prod + '</td>' +
+          '<td>' + l.supervisor + '</td>' +
+          '<td>' + l.tk + '</td>' +
+          '<td>' + l.litros.toLocaleString('es-CL') + ' L</td>' +
+          '<td>' + l.kg.toLocaleString('es-CL') + ' kg</td>' +
+          '<td>—</td>' +
+          '<td>' + estado + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    // Producción KPIs
     setText('prod-kpi-1', p.total_litros.toLocaleString('es-CL'));
     setText('prod-kpi-2', p.total_kg.toLocaleString('es-CL'));
     setText('prod-kpi-3', p.rendimiento_promedio);
