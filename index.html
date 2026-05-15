@@ -1423,23 +1423,23 @@ async function loadData() {
     setText('car-kpi-5', car.por_operador.length);
 
     // Inventario KPIs
-    const rf1 = inv.materia_prima.find(x => x.producto && x.producto.includes('RF1'));
-    const zerosi = inv.materia_prima.find(x => x.producto && (x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi')));
+    const invRf1 = inv.materia_prima.find(x => x.producto && x.producto.includes('RF1'));
+    const invZerosi = inv.materia_prima.find(x => x.producto && (x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi')));
     const litrajeEnTkInv = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
     const totalSalidas = inv.movimientos.filter(m => m.tipo === 'Salida').reduce((s,m) => s + m.kg, 0);
 
-    if (rf1) {
-      setText('inv-kpi-rf1', rf1.stock_kg.toLocaleString('es-CL'));
-      setText('inv-kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg.toLocaleString('es-CL') + ' kg · ' + rf1.autonomia_dias + ' días');
+    if (invRf1) {
+      setText('inv-kpi-rf1', invRf1.stock_kg.toLocaleString('es-CL'));
+      setText('inv-kpi-rf1-sub', 'Mín: ' + invRf1.minimo_kg.toLocaleString('es-CL') + ' kg · ' + invRf1.autonomia_dias + ' días');
       const badgeRf1 = document.getElementById('inv-badge-rf1');
-      if (badgeRf1) { badgeRf1.textContent = rf1.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeRf1.className = rf1.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
+      if (badgeRf1) { badgeRf1.textContent = invRf1.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeRf1.className = invRf1.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
     }
-    if (zerosi) {
-      setText('inv-kpi-zerosi', zerosi.stock_kg.toLocaleString('es-CL'));
-      setText('inv-kpi-zerosi-sub', 'Mín: ' + zerosi.minimo_kg.toLocaleString('es-CL') + ' kg · ' + zerosi.autonomia_dias + ' días');
+    if (invZerosi) {
+      setText('inv-kpi-zerosi', invZerosi.stock_kg.toLocaleString('es-CL'));
+      setText('inv-kpi-zerosi-sub', 'Mín: ' + invZerosi.minimo_kg.toLocaleString('es-CL') + ' kg · ' + invZerosi.autonomia_dias + ' días');
       const badgeZ = document.getElementById('inv-badge-zerosi');
-      if (badgeZ) { badgeZ.textContent = zerosi.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeZ.className = zerosi.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
-      setText('inv-kpi-autonomia', zerosi.autonomia_dias);
+      if (badgeZ) { badgeZ.textContent = invZerosi.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeZ.className = invZerosi.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
+      setText('inv-kpi-autonomia', invZerosi.autonomia_dias);
     }
     setText('inv-kpi-tk', litrajeEnTkInv.toLocaleString('es-CL'));
     setText('inv-kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
