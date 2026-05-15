@@ -17,9 +17,11 @@ function safeStr(val, def = '') {
 function fechaStr(val) {
   if (!val) return '';
   if (typeof val === 'number') {
-    const date = XLSX.SSF.parse_date_code(val);
-    if (!date || date.y < 2000) return '';
-    return `${date.y}-${String(date.m).padStart(2,'0')}-${String(date.d).padStart(2,'0')}`;
+    // Convertir número de serie Excel a fecha
+    const epoch = new Date(Date.UTC(1899, 11, 30));
+    const d = new Date(epoch.getTime() + val * 86400000);
+    if (d.getFullYear() < 2000) return '';
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
   return safeStr(val);
 }
