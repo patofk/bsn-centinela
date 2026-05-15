@@ -1396,75 +1396,93 @@ function updateClock() {
     '<br>BSN Centinela · Operación Minera';
 }
 
-// ── CARGAR DATOS DESDE API (lee Excel en tiempo real desde SharePoint) ──
 async function loadData() {
   try {
-    document.getElementById('last-update').textContent = 'Actualizando...';
     const res = await fetch('/api/datos?t=' + Date.now());
-    if (!res.ok) throw new Error('API error ' + res.status);
+    if (!res.ok) throw new Error('API error');
     const data = await res.json();
 
-    // Actualizar timestamp
     const upd = new Date(data.meta.ultima_actualizacion);
     const h = String(upd.getHours()).padStart(2,'0');
     const m = String(upd.getMinutes()).padStart(2,'0');
     document.getElementById('last-update').textContent =
       'Actualizado: ' + upd.getDate() + '/' + (upd.getMonth()+1) + ' ' + h + ':' + m;
 
-    // Actualizar KPIs dinámicamente con datos reales del Excel
-    actualizarDashboard(data);
+    const p = data.produccion;
+    const inv = data.inventario;
+    const car = data.cargas;
+    const traz = data.trazabilidad;
+
+    // Alerta bar
+    const alertas = [];
+    inv.materia_prima.forEach(x => {
+      if (x.alerta) alertas.push('⚠️ ' + x.producto + ' bajo mínimo — ' + x.stock_kg + ' kg (mín: ' + x.minimo_kg + ' kg)');
+    });
+    const litrajeEnTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
+    if (litrajeEnTk > 0) alertas.push('⏳ ' + litrajeEnTk.toLocaleString('es-CL') + ' L en TK pendientes de despacho');
+    if (alertas.length > 0) {
+      document.getElementById('alert-bar').innerHTML =
+        alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
+    }
+
+    // Página 1 — Resumen Ejecutivo
+    setText('kpi-prod-val', p.total_litros.toLocaleString('es-CL'));
+    setText('kpi-desp-val', car.total_litros.toLocaleString('es-CL'));
+    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
+    setText('kpi-cargas-sub', car.cargas.length + ' cargas completadas');
+
+    const rf1 = inv.materia_prima.find(x => x.producto.includes('RF1'));
+    const zerosi = inv.materia_prima.find(x => x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi'));
+    if (rf1) {
+      setText('kpi-rf1-val', rf1.stock_kg.toLocaleString('es-CL'));
+      setText('kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg + ' kg · ' + rf1.autonomia_dias + ' días');
+    }
+    if (zerosi) {
+      setText('kpi-zerosi-val', zerosi.stock_kg.toLocaleString('es-CL'));
+    }
+    setText('kpi-tk-val', litrajeEnTk.toLocaleString('es-CL'));
+    setText('kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
+
+    // Semáforo
+    setText('sem-traz', traz.lotes_completos + '/' + traz.lotes_total + ' lotes');
+    setText('sem-rf1', rf1 ? (rf1.alerta ? 'BAJO MÍNIMO' : rf1.stock_kg + ' kg') : '—');
+    setText('sem-zerosi', zerosi ? zerosi.autonomia_dias + ' días' : '—');
+    setText('sem-desp', litrajeEnTk > 0 ? litrajeEnTk.toLocaleString('es-CL') + ' L en TK' : 'Al día');
+    setText('sem-camiones', car.por_camion.length + ' activos');
+    setText('sem-rend', p.rendimiento_promedio + ' kg/L');
+
+    // Página 2 — Producción KPIs
+    setText('prod-kpi-1', p.total_litros.toLocaleString('es-CL'));
+    setText('prod-kpi-2', p.total_kg.toLocaleString('es-CL'));
+    setText('prod-kpi-3', p.rendimiento_promedio);
+    setText('prod-kpi-4', p.duracion_promedio_min);
+    setText('prod-kpi-5', p.lotes_pendientes);
+
+    // Página 4 — Cargas KPIs
+    setText('car-kpi-1', car.total_litros.toLocaleString('es-CL'));
+    setText('car-kpi-2', car.agua_total.toLocaleString('es-CL'));
+    setText('car-kpi-3', car.por_camion.length);
+    setText('car-kpi-4', car.duracion_promedio_min);
+    setText('car-kpi-5', car.por_operador.length);
+
+    // Página 5 — Trazabilidad KPIs
+    setText('traz-kpi-1', traz.lotes_completos + '/' + traz.lotes_total);
+    setText('traz-kpi-2', traz.lotes_completos + '/8');
+    setText('traz-kpi-3', traz.tiempo_promedio_dias);
+    setText('traz-kpi-4', traz.responsables.length);
 
   } catch(e) {
-    console.warn('API no disponible — mostrando datos de ejemplo:', e.message);
-    document.getElementById('last-update').textContent = 'Sin conexión al Excel';
+    console.warn('Error cargando datos:', e.message);
+    document.getElementById('last-update').textContent = 'Sin conexión';
   }
 }
 
-function actualizarDashboard(data) {
-  const p = data.produccion;
-  const inv = data.inventario;
-  const car = data.cargas;
-  const traz = data.trazabilidad;
-
-  // KPIs Resumen Ejecutivo
-  setKPI('kpi-total-prod', formatNum(p.total_litros) + ' L');
-  setKPI('kpi-total-desp', formatNum(car.total_litros) + ' L');
-
-  // Stock materia prima
-  const rf1 = inv.materia_prima.find(x => x.producto.includes('RF1'));
-  const zerosi = inv.materia_prima.find(x => x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi'));
-  if (rf1) setKPI('kpi-stock-rf1', rf1.stock_kg + ' kg');
-  if (zerosi) setKPI('kpi-stock-zerosi', zerosi.stock_kg + ' kg');
-
-  // Litros en TK
-  const litrajeEnTk = inv.producto_terminado_tk.reduce((s, t) => s + t.litros, 0);
-  setKPI('kpi-en-tk', formatNum(litrajeEnTk) + ' L');
-
-  // Alerta bar
-  const alertas = [];
-  if (rf1 && rf1.alerta) alertas.push('⚠️ RF1 bajo mínimo operacional — ' + rf1.stock_kg + ' kg disponibles (mín: ' + rf1.minimo_kg + ' kg)');
-  if (litrajeEnTk > 0) alertas.push('⏳ ' + formatNum(litrajeEnTk) + ' L en TK pendientes de despacho');
-  if (alertas.length > 0) {
-    const bar = document.getElementById('alert-bar');
-    bar.innerHTML = alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
-    bar.style.display = 'flex';
-  }
-}
-
-function setKPI(id, val) {
+function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
 }
 
-function formatNum(n) {
-  return Number(n).toLocaleString('es-CL');
-}
-
-// ── INIT ──
 setInterval(updateClock, 1000);
 updateClock();
 loadData();
-setInterval(loadData, 60000); // refresca datos cada 60s
-</script>
-</body>
-</html>
+setInterval(loadData, 60000);
