@@ -1353,7 +1353,6 @@ body {
 </div>
 
 <script>
-// ── DATOS (luego se reemplazan leyendo datos.json) ──
 const PAGES = {
   resumen: 'Resumen Ejecutivo',
   produccion: 'Producción',
@@ -1363,32 +1362,22 @@ const PAGES = {
   zonas: 'Zonas / Plan de Riego'
 };
 
-// ── NAVEGACIÓN ──
 function navTo(page) {
-  // ocultar todos
   document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-
-  // activar página
   const pageEl = document.getElementById('page-' + page);
   if (pageEl) pageEl.classList.add('active');
-
-  // activar nav
   const navEl = document.querySelector('[data-page="' + page + '"]');
   if (navEl) navEl.classList.add('active');
-
-  // actualizar título
   document.getElementById('page-title').textContent = PAGES[page] || page;
 }
 
-// ── RELOJ ──
 function updateClock() {
   const now = new Date();
   const h = String(now.getHours()).padStart(2,'0');
   const m = String(now.getMinutes()).padStart(2,'0');
   const s = String(now.getSeconds()).padStart(2,'0');
   document.getElementById('top-time').textContent = h + ':' + m + ':' + s;
-
   const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
   const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   document.getElementById('top-date').innerHTML =
@@ -1396,24 +1385,31 @@ function updateClock() {
     '<br>BSN Centinela · Operación Minera';
 }
 
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
 async function loadData() {
   try {
     const res = await fetch('/api/datos?t=' + Date.now());
-    if (!res.ok) throw new Error('API error');
+    if (!res.ok) throw new Error('API ' + res.status);
     const data = await res.json();
-
-    const upd = new Date(data.meta.ultima_actualizacion);
-    const h = String(upd.getHours()).padStart(2,'0');
-    const m = String(upd.getMinutes()).padStart(2,'0');
-    document.getElementById('last-update').textContent =
-      'Actualizado: ' + upd.getDate() + '/' + (upd.getMonth()+1) + ' ' + h + ':' + m;
+    if (!data || !data.produccion) return;
 
     const p = data.produccion;
     const inv = data.inventario;
     const car = data.cargas;
     const traz = data.trazabilidad;
 
-    // Alerta bar
+    // Timestamp
+    const upd = new Date(data.meta.ultima_actualizacion);
+    const hh = String(upd.getHours()).padStart(2,'0');
+    const mm = String(upd.getMinutes()).padStart(2,'0');
+    document.getElementById('last-update').textContent =
+      'Actualizado: ' + upd.getDate() + '/' + (upd.getMonth()+1) + ' ' + hh + ':' + mm;
+
+    // Alertas
     const alertas = [];
     inv.materia_prima.forEach(x => {
       if (x.alerta) alertas.push('⚠️ ' + x.producto + ' bajo mínimo — ' + x.stock_kg + ' kg (mín: ' + x.minimo_kg + ' kg)');
@@ -1425,23 +1421,21 @@ async function loadData() {
         alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
     }
 
-    // Página 1 — Resumen Ejecutivo
+    // Resumen KPIs
     setText('kpi-prod-val', p.total_litros.toLocaleString('es-CL'));
     setText('kpi-desp-val', car.total_litros.toLocaleString('es-CL'));
     setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
     setText('kpi-cargas-sub', car.cargas.length + ' cargas completadas');
+    setText('kpi-tk-val', litrajeEnTk.toLocaleString('es-CL'));
+    setText('kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
 
-    const rf1 = inv.materia_prima.find(x => x.producto.includes('RF1'));
-    const zerosi = inv.materia_prima.find(x => x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi'));
+    const rf1 = inv.materia_prima.find(x => x.producto && x.producto.includes('RF1'));
+    const zerosi = inv.materia_prima.find(x => x.producto && (x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi')));
     if (rf1) {
       setText('kpi-rf1-val', rf1.stock_kg.toLocaleString('es-CL'));
       setText('kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg + ' kg · ' + rf1.autonomia_dias + ' días');
     }
-    if (zerosi) {
-      setText('kpi-zerosi-val', zerosi.stock_kg.toLocaleString('es-CL'));
-    }
-    setText('kpi-tk-val', litrajeEnTk.toLocaleString('es-CL'));
-    setText('kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
+    if (zerosi) setText('kpi-zerosi-val', zerosi.stock_kg.toLocaleString('es-CL'));
 
     // Semáforo
     setText('sem-traz', traz.lotes_completos + '/' + traz.lotes_total + ' lotes');
@@ -1451,38 +1445,36 @@ async function loadData() {
     setText('sem-camiones', car.por_camion.length + ' activos');
     setText('sem-rend', p.rendimiento_promedio + ' kg/L');
 
-    // Página 2 — Producción KPIs
+    // Producción
     setText('prod-kpi-1', p.total_litros.toLocaleString('es-CL'));
     setText('prod-kpi-2', p.total_kg.toLocaleString('es-CL'));
     setText('prod-kpi-3', p.rendimiento_promedio);
     setText('prod-kpi-4', p.duracion_promedio_min);
     setText('prod-kpi-5', p.lotes_pendientes);
 
-    // Página 4 — Cargas KPIs
+    // Cargas
     setText('car-kpi-1', car.total_litros.toLocaleString('es-CL'));
     setText('car-kpi-2', car.agua_total.toLocaleString('es-CL'));
     setText('car-kpi-3', car.por_camion.length);
     setText('car-kpi-4', car.duracion_promedio_min);
     setText('car-kpi-5', car.por_operador.length);
 
-    // Página 5 — Trazabilidad KPIs
+    // Trazabilidad
     setText('traz-kpi-1', traz.lotes_completos + '/' + traz.lotes_total);
     setText('traz-kpi-2', traz.lotes_completos + '/8');
     setText('traz-kpi-3', traz.tiempo_promedio_dias);
     setText('traz-kpi-4', traz.responsables.length);
 
   } catch(e) {
-    console.warn('Error cargando datos:', e.message);
+    console.warn('loadData error:', e.message);
     document.getElementById('last-update').textContent = 'Sin conexión';
   }
-}
-
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
 }
 
 setInterval(updateClock, 1000);
 updateClock();
 loadData();
 setInterval(loadData, 60000);
+</script>
+</body>
+</html>
