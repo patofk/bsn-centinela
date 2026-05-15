@@ -1253,96 +1253,25 @@ body {
       <div class="grid-6-4">
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Litros por Zona — S19 vs S20</div>
-            <div style="display:flex;gap:12px">
-              <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--blue);border-radius:2px"></div>S19</div>
-              <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--teal);border-radius:2px"></div>S20</div>
-            </div>
+            <div class="panel-title">Litros por Zona — Total</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--blue);border-radius:2px"></div>Acumulado</div>
           </div>
-          <div class="panel-body">
-            <div class="zona-row">
-              <div class="zona-header">
-                <div class="zona-name">BOTADERO SUR - PISTA PRINCIPAL</div>
-                <div class="zona-total">32.000 L · 50%</div>
-              </div>
-              <div class="zona-stacked">
-                <div class="zona-s19" style="flex:3"></div>
-                <div class="zona-s20" style="flex:1"></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
-                <span>S19: 24.000 L</span><span>S20: 8.000 L</span>
-              </div>
-            </div>
-            <div class="zona-row">
-              <div class="zona-header">
-                <div class="zona-name">SUR 1 - SUR 2</div>
-                <div class="zona-total">16.000 L · 25%</div>
-              </div>
-              <div class="zona-stacked">
-                <div class="zona-s19" style="flex:1"></div>
-                <div class="zona-s20" style="flex:1"></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
-                <span>S19: 8.000 L</span><span>S20: 8.000 L</span>
-              </div>
-            </div>
-            <div class="zona-row">
-              <div class="zona-header">
-                <div class="zona-name">BOTADERO F05 - CHANCADOR</div>
-                <div class="zona-total">8.000 L · 12.5%</div>
-              </div>
-              <div class="zona-stacked">
-                <div class="zona-s19" style="flex:1"></div>
-                <div class="zona-s20" style="flex:0.1;background:transparent"></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
-                <span>S19: 8.000 L</span><span>S20: — L</span>
-              </div>
-            </div>
-            <div class="zona-row">
-              <div class="zona-header">
-                <div class="zona-name">PISTA PRINCIPAL - CHANCADOR</div>
-                <div class="zona-total">8.000 L · 12.5%</div>
-              </div>
-              <div class="zona-stacked">
-                <div class="zona-s19" style="flex:1"></div>
-                <div class="zona-s20" style="flex:0.1;background:transparent"></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:var(--text3)">
-                <span>S19: 8.000 L</span><span>S20: — L</span>
-              </div>
-            </div>
-
-            <div style="margin-top:14px;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:11px;color:var(--text3);border-left:3px solid var(--yellow)">
-              ⚠ Nota: litros por zona calculados con distribución proporcional cuando una carga cubre múltiples sectores. Implementar Opción A (una fila por zona) para mayor precisión.
-            </div>
+          <div class="panel-body" id="zonas-lista">
+            <div style="color:var(--text3);font-size:12px">Cargando zonas...</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <div class="panel">
-            <div class="panel-header"><div class="panel-title">Distribución S19+S20</div></div>
-            <div class="panel-body bar-chart">
-              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">BOT.SUR-PISTA</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--blue)"></div></div><div class="bar-val">50%</div></div>
-              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">SUR 1 - SUR 2</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--teal)"></div></div><div class="bar-val">25%</div></div>
-              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">F05 CHANCADOR</div><div class="bar-track"><div class="bar-fill" style="width:12.5%;background:var(--yellow)"></div></div><div class="bar-val">12.5%</div></div>
-              <div class="bar-row"><div class="bar-label" style="width:90px;font-size:10px">PISTA-CHANCAD.</div><div class="bar-track"><div class="bar-fill" style="width:12.5%;background:var(--c10)"></div></div><div class="bar-val">12.5%</div></div>
+            <div class="panel-header"><div class="panel-title">Distribución por Zona</div></div>
+            <div class="panel-body bar-chart" id="zonas-barras">
+              <div style="color:var(--text3);font-size:12px">Cargando...</div>
             </div>
           </div>
           <div class="panel">
-            <div class="panel-header"><div class="panel-title">Evolución Semanal</div></div>
-            <div class="panel-body">
-              <div style="display:flex;gap:12px;align-items:flex-end;height:80px;padding:0 8px">
-                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
-                  <div style="font-size:11px;color:var(--text2)">48k L</div>
-                  <div style="width:100%;height:60px;background:var(--blue);border-radius:4px 4px 0 0;display:flex;align-items:flex-end;padding:4px;font-size:9px;color:rgba(255,255,255,0.6)">6 cargas</div>
-                  <div style="font-size:10px;color:var(--text3)">S19</div>
-                </div>
-                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
-                  <div style="font-size:11px;color:var(--text2)">16k L</div>
-                  <div style="width:100%;height:20px;background:var(--teal);border-radius:4px 4px 0 0;display:flex;align-items:flex-end;padding:4px;font-size:9px;color:rgba(0,0,0,0.6)">2 car.</div>
-                  <div style="font-size:10px;color:var(--text3)">S20 ⚡</div>
-                </div>
-              </div>
+            <div class="panel-header"><div class="panel-title">Total Despachado</div></div>
+            <div class="panel-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">
+              <div style="font-family:Rajdhani,sans-serif;font-size:40px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:4px" id="zonas-total-sub">litros totales</div>
             </div>
           </div>
         </div>
@@ -1464,6 +1393,41 @@ async function loadData() {
     setText('traz-kpi-2', traz.lotes_completos + '/8');
     setText('traz-kpi-3', traz.tiempo_promedio_dias);
     setText('traz-kpi-4', traz.responsables.length);
+
+    // Zonas — renderizado dinámico
+    const zonas = data.zonas.por_zona;
+    const totalZonas = zonas.reduce((s,z) => s + z.total, 0);
+    setText('zonas-total-val', totalZonas.toLocaleString('es-CL') + ' L');
+    setText('zonas-total-sub', zonas.length + ' zonas atendidas');
+
+    const colores = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
+    
+    const listaEl = document.getElementById('zonas-lista');
+    if (listaEl && zonas.length > 0) {
+      listaEl.innerHTML = zonas.map((z, i) => {
+        const pct = totalZonas > 0 ? Math.round(z.total/totalZonas*100) : 0;
+        return '<div class="zona-row">' +
+          '<div class="zona-header">' +
+          '<div class="zona-name">' + z.zona + '</div>' +
+          '<div class="zona-total">' + z.total.toLocaleString('es-CL') + ' L · ' + pct + '%</div>' +
+          '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colores[i % colores.length] + '"></div></div>' +
+          '</div>';
+      }).join('');
+    }
+
+    const barrasEl = document.getElementById('zonas-barras');
+    if (barrasEl && zonas.length > 0) {
+      barrasEl.innerHTML = zonas.map((z, i) => {
+        const pct = totalZonas > 0 ? Math.round(z.total/totalZonas*100) : 0;
+        const label = z.zona.length > 15 ? z.zona.substring(0,15) + '…' : z.zona;
+        return '<div class="bar-row">' +
+          '<div class="bar-label" style="width:100px;font-size:10px">' + label + '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colores[i % colores.length] + '"></div></div>' +
+          '<div class="bar-val">' + pct + '%</div>' +
+          '</div>';
+      }).join('');
+    }
 
   } catch(e) {
     console.warn('loadData error:', e.message);
