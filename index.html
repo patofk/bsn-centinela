@@ -1019,22 +1019,13 @@ body {
       <div class="grid-6-4">
         <div class="panel">
           <div class="panel-header"><div class="panel-title">Movimientos de Materia Prima</div><div class="panel-tag">últimos 10</div></div>
-          <div class="panel-body" style="padding:0">
+          <div class="panel-body" style="padding:0" id="inv-movimientos-tabla">
             <table class="data-table">
               <thead>
                 <tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Kg</th><th>Responsable</th><th>Stock Final</th></tr>
               </thead>
-              <tbody>
-                <tr><td>06/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">396 kg</td></tr>
-                <tr><td>06/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>212 kg</td><td>C. Bastias</td><td class="mono">184 kg</td></tr>
-                <tr><td>07/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">612 kg</td></tr>
-                <tr><td>07/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>217 kg</td><td>C. Bastias</td><td class="mono">395 kg</td></tr>
-                <tr><td>08/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">179 kg</td></tr>
-                <tr><td>09/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip ok">Entrada</span></td><td>500 kg</td><td>Administración</td><td class="mono" style="color:var(--teal)">679 kg</td></tr>
-                <tr><td>09/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">463 kg</td></tr>
-                <tr><td>09/05</td><td><span class="chip zerosi">ZEROSI</span></td><td><span class="chip red">Salida</span></td><td>215 kg</td><td>J. Nuñez</td><td class="mono">645 kg</td></tr>
-                <tr><td>10/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono">247 kg</td></tr>
-                <tr style="background:var(--red-dim)"><td>11/05</td><td><span class="chip rf1">RF1</span></td><td><span class="chip red">Salida</span></td><td>216 kg</td><td>C. Bastias</td><td class="mono" style="color:var(--red)">180 kg ⚠</td></tr>
+              <tbody id="inv-movimientos-body">
+                <tr><td colspan="6" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1043,30 +1034,30 @@ body {
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Stock RF1</div></div>
             <div class="panel-body">
-              <div class="gauge-wrap">
+              <div class="gauge-wrap" id="gauge-rf1-wrap">
                 <div class="gauge-title">RF1 — Actual vs Mínimo</div>
                 <div class="gauge-track">
-                  <div class="gauge-fill" style="width:36%;background:var(--red)"></div>
-                  <div class="gauge-min-line" style="left:40%"></div>
+                  <div class="gauge-fill" id="gauge-rf1-fill" style="width:36%;background:var(--red)"></div>
+                  <div class="gauge-min-line" id="gauge-rf1-min" style="left:40%"></div>
                 </div>
-                <div class="gauge-labels"><span>0</span><span>Mín 200</span><span>500 kg</span></div>
-                <div class="gauge-val" style="color:var(--red)">180 <span class="gauge-unit">kg</span></div>
-                <span class="kpi-badge red">3.2 días de autonomía</span>
+                <div class="gauge-labels"><span>0</span><span id="gauge-rf1-min-label">Mín 200</span><span>500 kg</span></div>
+                <div class="gauge-val" id="gauge-rf1-val" style="color:var(--red)">— <span class="gauge-unit">kg</span></div>
+                <span class="kpi-badge red" id="gauge-rf1-badge">cargando...</span>
               </div>
             </div>
           </div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Stock ZEROSI</div></div>
             <div class="panel-body">
-              <div class="gauge-wrap">
+              <div class="gauge-wrap" id="gauge-zerosi-wrap">
                 <div class="gauge-title">ZEROSI — Actual vs Mínimo</div>
                 <div class="gauge-track">
-                  <div class="gauge-fill" style="width:86%;background:var(--teal)"></div>
-                  <div class="gauge-min-line" style="left:30%"></div>
+                  <div class="gauge-fill" id="gauge-zerosi-fill" style="width:86%;background:var(--teal)"></div>
+                  <div class="gauge-min-line" id="gauge-zerosi-min" style="left:30%"></div>
                 </div>
-                <div class="gauge-labels"><span>0</span><span>Mín 150</span><span>500 kg</span></div>
-                <div class="gauge-val" style="color:var(--teal)">430 <span class="gauge-unit">kg</span></div>
-                <span class="kpi-badge green">8.6 días de autonomía</span>
+                <div class="gauge-labels"><span>0</span><span id="gauge-zerosi-min-label">Mín 150</span><span>500 kg</span></div>
+                <div class="gauge-val" id="gauge-zerosi-val" style="color:var(--teal)">— <span class="gauge-unit">kg</span></div>
+                <span class="kpi-badge green" id="gauge-zerosi-badge">cargando...</span>
               </div>
             </div>
           </div>
@@ -1387,6 +1378,48 @@ async function loadData() {
     setText('car-kpi-3', car.por_camion.length);
     setText('car-kpi-4', car.duracion_promedio_min);
     setText('car-kpi-5', car.por_operador.length);
+
+    // Inventario — tabla movimientos
+    const tbody = document.getElementById('inv-movimientos-body');
+    if (tbody && inv.movimientos.length > 0) {
+      const ultimos = inv.movimientos.slice(-10).reverse();
+      tbody.innerHTML = ultimos.map(m => {
+        const fecha = m.fecha ? m.fecha.slice(5).replace('-','/') : '—';
+        const prod = m.producto.includes('RF1') ? 
+          '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
+        const tipo = m.tipo === 'Salida' ? 
+          '<span class="chip red">Salida</span>' : '<span class="chip ok">Entrada</span>';
+        const isAlerta = m.stock_final < 5000;
+        const sfColor = m.tipo === 'Entrada' ? 'color:var(--teal)' : (isAlerta ? 'color:var(--red)' : '');
+        const alerta = isAlerta ? ' ⚠' : '';
+        return '<tr' + (isAlerta ? ' style="background:var(--red-dim)"' : '') + '>' +
+          '<td>' + fecha + '</td><td>' + prod + '</td><td>' + tipo + '</td>' +
+          '<td>' + m.kg.toLocaleString('es-CL') + ' kg</td>' +
+          '<td>' + m.responsable + '</td>' +
+          '<td class="mono" style="' + sfColor + '">' + m.stock_final.toLocaleString('es-CL') + ' kg' + alerta + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    // Inventario — gauges dinámicos
+    const maxGauge = 20000;
+    inv.materia_prima.forEach(x => {
+      const prod = x.producto.includes('RF1') ? 'rf1' : 'zerosi';
+      const pct = Math.min(Math.round(x.stock_kg / maxGauge * 100), 100);
+      const minPct = Math.min(Math.round(x.minimo_kg / maxGauge * 100), 100);
+      const color = x.alerta ? 'var(--red)' : 'var(--teal)';
+      const fillEl = document.getElementById('gauge-' + prod + '-fill');
+      const minEl = document.getElementById('gauge-' + prod + '-min');
+      const valEl = document.getElementById('gauge-' + prod + '-val');
+      const badgeEl = document.getElementById('gauge-' + prod + '-badge');
+      const minLbl = document.getElementById('gauge-' + prod + '-min-label');
+      if (fillEl) { fillEl.style.width = pct + '%'; fillEl.style.background = color; }
+      if (minEl) minEl.style.left = minPct + '%';
+      if (valEl) valEl.textContent = x.stock_kg.toLocaleString('es-CL') + ' kg';
+      if (valEl) valEl.style.color = color;
+      if (badgeEl) badgeEl.textContent = x.autonomia_dias + ' días de autonomía';
+      if (minLbl && x.minimo_kg > 0) minLbl.textContent = 'Mín ' + x.minimo_kg.toLocaleString('es-CL');
+    });
 
     // Trazabilidad
     setText('traz-kpi-1', traz.lotes_completos + '/' + traz.lotes_total);
