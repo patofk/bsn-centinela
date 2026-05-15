@@ -934,30 +934,30 @@ body {
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card red">
           <div class="kpi-label">Stock RF1</div>
-          <div class="kpi-value">180<span class="kpi-unit">kg</span></div>
-          <div class="kpi-sub">Mín: 200 kg · 3.2 días</div>
-          <span class="kpi-badge red">⚠ BAJO MÍNIMO</span>
+          <div class="kpi-value" id="inv-kpi-rf1">—<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub" id="inv-kpi-rf1-sub">cargando...</div>
+          <span class="kpi-badge red" id="inv-badge-rf1">⚠ BAJO MÍNIMO</span>
         </div>
         <div class="kpi-card teal">
           <div class="kpi-label">Stock ZEROSI</div>
-          <div class="kpi-value">430<span class="kpi-unit">kg</span></div>
-          <div class="kpi-sub">Mín: 150 kg · 8.6 días</div>
-          <span class="kpi-badge green">✓ Normal</span>
+          <div class="kpi-value" id="inv-kpi-zerosi">—<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub" id="inv-kpi-zerosi-sub">cargando...</div>
+          <span class="kpi-badge green" id="inv-badge-zerosi">✓ Normal</span>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">En TK — Prod. Terminado</div>
-          <div class="kpi-value">16.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">2 lotes en TK 3</div>
+          <div class="kpi-value" id="inv-kpi-tk">—<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub" id="inv-kpi-tk-sub">cargando...</div>
           <span class="kpi-badge yellow">Disponible</span>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Salidas del Período</div>
-          <div class="kpi-value">2.155<span class="kpi-unit">kg</span></div>
-          <div class="kpi-sub">10 movimientos de salida</div>
+          <div class="kpi-value" id="inv-kpi-salidas">—<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub" id="inv-kpi-salidas-sub">cargando...</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Autonomía ZEROSI</div>
-          <div class="kpi-value">8.6<span class="kpi-unit">días</span></div>
+          <div class="kpi-value" id="inv-kpi-autonomia">—<span class="kpi-unit">días</span></div>
           <div class="kpi-sub">Con consumo actual</div>
         </div>
       </div>
@@ -1096,15 +1096,8 @@ body {
               <thead>
                 <tr><th>ID Carga</th><th>Fecha</th><th>Hora</th><th>Prod.</th><th>TK</th><th>Camión</th><th>Operador</th><th>Litros</th><th>Agua</th><th>Durac.</th><th>Destino</th></tr>
               </thead>
-              <tbody>
-                <tr><td class="mono" style="font-size:9px">CYD...0830</td><td>06/05</td><td>08:30</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>20 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYD...0915</td><td>06/05</td><td>09:15</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td>75.000</td><td>22 min</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYD...0915b</td><td>07/05</td><td>09:15</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>19 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYD...0930</td><td>07/05</td><td>09:30</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td>75.000</td><td>21 min</td><td style="font-size:10px;color:var(--text3)">BOT.F05 - CHANCADOR</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYD...0845</td><td>08/05</td><td>08:45</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>20 min</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYD...0900</td><td>09/05</td><td>09:00</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td>75.000</td><td>23 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYZ...0915</td><td>09/05</td><td>09:15</td><td><span class="chip zerosi">ZEROSI</span></td><td>TK 1</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td>75.000</td><td>22 min</td><td style="font-size:10px;color:var(--text3)">PISTA PRINC. - CHANCADOR</td></tr>
-                <tr><td class="mono" style="font-size:9px">CYD...0845b</td><td>10/05</td><td>08:45</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td>75.000</td><td>20 min</td><td style="font-size:10px;color:var(--text3)">BOT.SUR - PISTA PRINC.</td></tr>
+              <tbody id="cargas-tabla-body">
+                <tr><td colspan="11" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1113,17 +1106,13 @@ body {
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Por Camión</div></div>
             <div class="panel-body bar-chart">
-              <div class="bar-row"><div class="bar-label">N°7 (4 cargas)</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--c7)"></div></div><div class="bar-val">32.000 L</div></div>
-              <div class="bar-row"><div class="bar-label">N°8 (2 cargas)</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c8)"></div></div><div class="bar-val">16.000 L</div></div>
-              <div class="bar-row"><div class="bar-label">N°10 (2 cargas)</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c10)"></div></div><div class="bar-val">16.000 L</div></div>
+              <div id="cargas-barras-camion"><div style="color:var(--text3);font-size:12px">Cargando...</div></div>
             </div>
           </div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Por Operador</div></div>
             <div class="panel-body bar-chart">
-              <div class="bar-row"><div class="bar-label">B. Tapia</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--blue-light)"></div></div><div class="bar-val">4 cargas</div></div>
-              <div class="bar-row"><div class="bar-label">C. Bustos</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--teal)"></div></div><div class="bar-val">2 cargas</div></div>
-              <div class="bar-row"><div class="bar-label">F. Rojas</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--yellow)"></div></div><div class="bar-val">2 cargas</div></div>
+              <div id="cargas-barras-oper"><div style="color:var(--text3);font-size:12px">Cargando...</div></div>
             </div>
           </div>
           <div class="panel">
@@ -1188,17 +1177,8 @@ body {
             <thead>
               <tr><th>ID Lote</th><th>F. Prod.</th><th>Producto</th><th>TK</th><th>Superv.</th><th>F. Carga</th><th>Camión</th><th>Operador</th><th>L Cargados</th><th>Destino</th><th>Días</th></tr>
             </thead>
-            <tbody>
-              <tr><td class="mono" style="font-size:9px">PRDRF...0845</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>06/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--green)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRDRF...1115</td><td>06/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>06/05</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td><td style="color:var(--green)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRDRF...1015</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>07/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--green)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRDRF...0930</td><td>07/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>07/05</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">F05 CHANCADOR</td><td style="color:var(--green)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRDRF...1120</td><td>08/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>08/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">SUR 1 - SUR 2</td><td style="color:var(--teal)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRZEROSI...1100</td><td>09/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>TK 1</td><td>J. Nuñez</td><td>09/05</td><td><span class="chip c10">N°10</span></td><td>F. Rojas</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">PISTA CHANCADOR</td><td style="color:var(--green)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRDRF...1030</td><td>09/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>09/05</td><td><span class="chip c8">N°8</span></td><td>C. Bustos</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--green)">0</td></tr>
-              <tr><td class="mono" style="font-size:9px">PRDRF...1115</td><td>10/05</td><td><span class="chip rf1">RF1</span></td><td>TK 1</td><td>C. Bastias</td><td>10/05</td><td><span class="chip c7">N°7</span></td><td>B. Tapia</td><td>8.000</td><td style="font-size:10px;color:var(--text3)">BOT.SUR PISTA</td><td style="color:var(--teal)">0</td></tr>
-              <tr style="background:rgba(245,166,35,0.06)"><td class="mono" style="font-size:9px">PRDRF...1130</td><td>11/05</td><td><span class="chip rf1">RF1</span></td><td>TK 3</td><td>C. Bastias</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td><span class="chip warn">En TK · Espera</span></td><td style="color:var(--yellow)">1</td></tr>
-              <tr style="background:rgba(245,166,35,0.06)"><td class="mono" style="font-size:9px">PRZEROSI...8000</td><td>11/05</td><td><span class="chip zerosi">ZEROSI</span></td><td>TK 3</td><td>J. Nuñez</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td><span class="chip warn">En TK · Espera</span></td><td style="color:var(--yellow)">1</td></tr>
+            <tbody id="traz-tabla-body">
+              <tr><td colspan="11" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
             </tbody>
           </table>
         </div>
@@ -1388,12 +1368,83 @@ async function loadData() {
     setText('prod-kpi-4', p.duracion_promedio_min);
     setText('prod-kpi-5', p.lotes_pendientes);
 
-    // Cargas
+    // Cargas — tabla dinámica
+    const cargasBody = document.getElementById('cargas-tabla-body');
+    const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','10':'var(--c10)'};
+    if (cargasBody && car.cargas.length > 0) {
+      cargasBody.innerHTML = car.cargas.map(c => {
+        const fecha = c.fecha ? c.fecha.slice(5).replace('-','/') : '—';
+        const prod = c.producto && c.producto.includes('RF1') ?
+          '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
+        const colorC = coloresCamion[c.camion] || 'var(--blue)';
+        return '<tr>' +
+          '<td class="mono" style="font-size:9px">' + c.id.slice(0,12) + '...</td>' +
+          '<td>' + fecha + '</td><td>' + (c.hora||'—') + '</td><td>' + prod + '</td>' +
+          '<td>' + c.tk + '</td>' +
+          '<td><span class="chip" style="background:rgba(255,255,255,0.1);color:' + colorC + '">N°' + c.camion + '</span></td>' +
+          '<td>' + c.operador + '</td>' +
+          '<td>' + c.litros.toLocaleString('es-CL') + '</td>' +
+          '<td>' + c.agua.toLocaleString('es-CL') + '</td>' +
+          '<td>—</td>' +
+          '<td style="font-size:10px;color:var(--text3)">' + (c.destino||'—').slice(0,20) + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    // Barras camión
+    const barrasCamion = document.getElementById('cargas-barras-camion');
+    if (barrasCamion && car.por_camion.length > 0) {
+      barrasCamion.innerHTML = car.por_camion.map(c => {
+        const col = coloresCamion[c.camion] || 'var(--blue)';
+        return '<div class="bar-row"><div class="bar-label">N°' + c.camion + ' (' + c.cargas + ' c.)</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + c.pct + '%;background:' + col + '"></div></div>' +
+          '<div class="bar-val">' + c.litros.toLocaleString('es-CL') + ' L</div></div>';
+      }).join('');
+    }
+
+    // Barras operador
+    const barrasOper = document.getElementById('cargas-barras-oper');
+    const colOper = ['var(--blue-light)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)'];
+    if (barrasOper && car.por_operador.length > 0) {
+      const maxOper = Math.max(...car.por_operador.map(o=>o.litros));
+      barrasOper.innerHTML = car.por_operador.map((o,i) => {
+        const pct = Math.round(o.litros/maxOper*100);
+        return '<div class="bar-row"><div class="bar-label">' + o.operador.split(' ')[0] + '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colOper[i%colOper.length] + '"></div></div>' +
+          '<div class="bar-val">' + o.cargas + ' cargas</div></div>';
+      }).join('');
+    }
+
+    // Cargas KPIs
     setText('car-kpi-1', car.total_litros.toLocaleString('es-CL'));
     setText('car-kpi-2', car.agua_total.toLocaleString('es-CL'));
     setText('car-kpi-3', car.por_camion.length);
     setText('car-kpi-4', car.duracion_promedio_min);
     setText('car-kpi-5', car.por_operador.length);
+
+    // Inventario KPIs
+    const rf1 = inv.materia_prima.find(x => x.producto && x.producto.includes('RF1'));
+    const zerosi = inv.materia_prima.find(x => x.producto && (x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi')));
+    const litrajeEnTkInv = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
+    const totalSalidas = inv.movimientos.filter(m => m.tipo === 'Salida').reduce((s,m) => s + m.kg, 0);
+
+    if (rf1) {
+      setText('inv-kpi-rf1', rf1.stock_kg.toLocaleString('es-CL'));
+      setText('inv-kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg.toLocaleString('es-CL') + ' kg · ' + rf1.autonomia_dias + ' días');
+      const badgeRf1 = document.getElementById('inv-badge-rf1');
+      if (badgeRf1) { badgeRf1.textContent = rf1.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeRf1.className = rf1.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
+    }
+    if (zerosi) {
+      setText('inv-kpi-zerosi', zerosi.stock_kg.toLocaleString('es-CL'));
+      setText('inv-kpi-zerosi-sub', 'Mín: ' + zerosi.minimo_kg.toLocaleString('es-CL') + ' kg · ' + zerosi.autonomia_dias + ' días');
+      const badgeZ = document.getElementById('inv-badge-zerosi');
+      if (badgeZ) { badgeZ.textContent = zerosi.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeZ.className = zerosi.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
+      setText('inv-kpi-autonomia', zerosi.autonomia_dias);
+    }
+    setText('inv-kpi-tk', litrajeEnTkInv.toLocaleString('es-CL'));
+    setText('inv-kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
+    setText('inv-kpi-salidas', totalSalidas.toLocaleString('es-CL'));
+    setText('inv-kpi-salidas-sub', inv.movimientos.filter(m=>m.tipo==='Salida').length + ' movimientos de salida');
 
     // Inventario — tabla movimientos
     const tbody = document.getElementById('inv-movimientos-body');
@@ -1437,7 +1488,42 @@ async function loadData() {
       if (minLbl && x.minimo_kg > 0) minLbl.textContent = 'Mín ' + x.minimo_kg.toLocaleString('es-CL');
     });
 
-    // Trazabilidad
+    // Trazabilidad — tabla dinámica
+    const trazBody = document.getElementById('traz-tabla-body');
+    if (trazBody && p.lotes.length > 0) {
+      trazBody.innerHTML = p.lotes.map(l => {
+        const fecha = l.fecha ? l.fecha.slice(5).replace('-','/') : '—';
+        const prod = l.producto && l.producto.includes('RF1') ?
+          '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
+        const carga = car.cargas.find(c => c.lote === l.id);
+        const rowStyle = l.estado === 'En TK' ? ' style="background:rgba(245,166,35,0.06)"' : '';
+        if (carga) {
+          const fechaCarga = carga.fecha ? carga.fecha.slice(5).replace('-','/') : '—';
+          const colorC = coloresCamion[carga.camion] || 'var(--blue)';
+          return '<tr' + rowStyle + '>' +
+            '<td class="mono" style="font-size:9px">' + l.id.slice(0,14) + '</td>' +
+            '<td>' + fecha + '</td><td>' + prod + '</td><td>' + l.tk + '</td>' +
+            '<td>' + l.supervisor.split(' ').pop() + '</td>' +
+            '<td>' + fechaCarga + '</td>' +
+            '<td><span class="chip" style="background:rgba(255,255,255,0.1);color:' + colorC + '">N°' + carga.camion + '</span></td>' +
+            '<td>' + carga.operador.split(' ').pop() + '</td>' +
+            '<td>' + carga.litros.toLocaleString('es-CL') + '</td>' +
+            '<td style="font-size:9px;color:var(--text3)">' + (carga.destino||'—').slice(0,15) + '</td>' +
+            '<td style="color:var(--green)">0</td></tr>';
+        } else {
+          return '<tr' + rowStyle + '>' +
+            '<td class="mono" style="font-size:9px">' + l.id.slice(0,14) + '</td>' +
+            '<td>' + fecha + '</td><td>' + prod + '</td><td>' + l.tk + '</td>' +
+            '<td>' + l.supervisor.split(' ').pop() + '</td>' +
+            '<td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td>' +
+            '<td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td>' +
+            '<td><span class="chip warn">En TK · Espera</span></td>' +
+            '<td style="color:var(--yellow)">1</td></tr>';
+        }
+      }).join('');
+    }
+
+    // Trazabilidad KPIs
     setText('traz-kpi-1', traz.lotes_completos + '/' + traz.lotes_total);
     setText('traz-kpi-2', traz.lotes_completos + '/8');
     setText('traz-kpi-3', traz.tiempo_promedio_dias);
