@@ -1369,8 +1369,8 @@ async function loadData() {
     setText('prod-kpi-5', p.lotes_pendientes);
 
     // Cargas — tabla dinámica
-    const cargasBody = document.getElementById('cargas-tabla-body');
     const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','10':'var(--c10)'};
+    const cargasBody = document.getElementById('cargas-tabla-body');
     if (cargasBody && car.cargas.length > 0) {
       cargasBody.innerHTML = car.cargas.map(c => {
         const fecha = c.fecha ? c.fecha.slice(5).replace('-','/') : '—';
