@@ -660,25 +660,25 @@ body {
       <div class="kpi-row kpi-row-4" style="margin-bottom:14px">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
-          <div class="kpi-value">80.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">10 lotes · Mayo 2026</div>
+          <div class="kpi-value" id="kpi-prod-val">80.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub" id="kpi-lotes-sub">10 lotes · Mayo 2026</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Total Despachado</div>
-          <div class="kpi-value">64.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">8 cargas completadas</div>
+          <div class="kpi-value" id="kpi-desp-val">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub" id="kpi-cargas-sub">8 cargas completadas</div>
           <span class="kpi-badge teal">80% despacho</span>
         </div>
         <div class="kpi-card red">
           <div class="kpi-label">Stock RF1</div>
-          <div class="kpi-value">180<span class="kpi-unit">kg</span></div>
-          <div class="kpi-sub">Mínimo: 200 kg · 3.2 días</div>
+          <div class="kpi-value" id="kpi-rf1-val">180<span class="kpi-unit">kg</span></div>
+          <div class="kpi-sub" id="kpi-rf1-sub">Mínimo: 200 kg · 3.2 días</div>
           <span class="kpi-badge red">⚠ BAJO MÍNIMO</span>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">En TK (pendiente)</div>
-          <div class="kpi-value">16.000<span class="kpi-unit">L</span></div>
-          <div class="kpi-sub">RF1 TK3 · ZEROSI TK3</div>
+          <div class="kpi-value" id="kpi-tk-val">16.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-sub" id="kpi-tk-sub">RF1 TK3 · ZEROSI TK3</div>
           <span class="kpi-badge yellow">Disponible</span>
         </div>
       </div>
@@ -759,27 +759,27 @@ body {
             <div class="semaforo-grid">
               <div class="semaforo-item">
                 <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Trazabilidad<br><b style="color:var(--text)">8/10 lotes</b></div>
+                <div class="semaforo-text">Trazabilidad<br><b style="color:var(--text)" id="sem-traz">8/10 lotes</b></div>
               </div>
               <div class="semaforo-item">
                 <div class="semaforo-dot red"></div>
-                <div class="semaforo-text">Stock RF1<br><b style="color:var(--red)">BAJO MÍNIMO</b></div>
+                <div class="semaforo-text">Stock RF1<br><b style="color:var(--red)" id="sem-rf1">BAJO MÍNIMO</b></div>
               </div>
               <div class="semaforo-item">
                 <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Stock ZEROSI<br><b style="color:var(--text)">8.6 días</b></div>
+                <div class="semaforo-text">Stock ZEROSI<br><b style="color:var(--text)" id="sem-zerosi">8.6 días</b></div>
               </div>
               <div class="semaforo-item">
                 <div class="semaforo-dot yellow"></div>
-                <div class="semaforo-text">Despacho<br><b style="color:var(--yellow)">16k L en TK</b></div>
+                <div class="semaforo-text">Despacho<br><b style="color:var(--yellow)" id="sem-desp">16k L en TK</b></div>
               </div>
               <div class="semaforo-item">
                 <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Camiones<br><b style="color:var(--text)">3 activos</b></div>
+                <div class="semaforo-text">Camiones<br><b style="color:var(--text)" id="sem-camiones">3 activos</b></div>
               </div>
               <div class="semaforo-item">
                 <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Rendimiento<br><b style="color:var(--text)">37.1 kg/L</b></div>
+                <div class="semaforo-text">Rendimiento<br><b style="color:var(--text)" id="sem-rend">37.1 kg/L</b></div>
               </div>
             </div>
           </div>
@@ -839,27 +839,27 @@ body {
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
-          <div class="kpi-value">80.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value" id="prod-kpi-1">80.000<span class="kpi-unit">L</span></div>
           <div class="kpi-sub">10 lotes completos</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Materia Prima Usada</div>
-          <div class="kpi-value">2.155<span class="kpi-unit">kg</span></div>
+          <div class="kpi-value" id="prod-kpi-2">2.155<span class="kpi-unit">kg</span></div>
           <div class="kpi-sub">RF1 + ZEROSI combinado</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Rendimiento Promedio</div>
-          <div class="kpi-value">37,1<span class="kpi-unit">kg/L</span></div>
+          <div class="kpi-value" id="prod-kpi-3">37,1<span class="kpi-unit">kg/L</span></div>
           <div class="kpi-sub">Estable en el período</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Duración Promedio</div>
-          <div class="kpi-value">47<span class="kpi-unit">min</span></div>
+          <div class="kpi-value" id="prod-kpi-4">47<span class="kpi-unit">min</span></div>
           <div class="kpi-sub">Rango: 42–55 min</div>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">Lotes sin Despachar</div>
-          <div class="kpi-value">2</div>
+          <div class="kpi-value" id="prod-kpi-5">2</div>
           <div class="kpi-sub">En TK — pendientes</div>
           <span class="kpi-badge yellow">⏳ En espera</span>
         </div>
@@ -1081,27 +1081,27 @@ body {
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Cargado</div>
-          <div class="kpi-value">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value" id="car-kpi-1">64.000<span class="kpi-unit">L</span></div>
           <div class="kpi-sub">8 cargas completadas</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Agua Utilizada</div>
-          <div class="kpi-value">600.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value" id="car-kpi-2">600.000<span class="kpi-unit">L</span></div>
           <div class="kpi-sub">9.4 L agua/L producto</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Camiones Activos</div>
-          <div class="kpi-value">3</div>
+          <div class="kpi-value" id="car-kpi-3">3</div>
           <div class="kpi-sub">N°7 · N°8 · N°10</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Duración Promedio</div>
-          <div class="kpi-value">21<span class="kpi-unit">min</span></div>
+          <div class="kpi-value" id="car-kpi-4">21<span class="kpi-unit">min</span></div>
           <div class="kpi-sub">Rango: 19–23 min</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-label">Operadores</div>
-          <div class="kpi-value">3</div>
+          <div class="kpi-value" id="car-kpi-5">3</div>
           <div class="kpi-sub">B.Tapia · C.Bustos · F.Rojas</div>
         </div>
       </div>
@@ -1168,22 +1168,22 @@ body {
       <div class="kpi-row kpi-row-4">
         <div class="kpi-card teal">
           <div class="kpi-label">Trazabilidad Completa</div>
-          <div class="kpi-value">8<span class="kpi-unit">/10</span></div>
+          <div class="kpi-value" id="traz-kpi-1">8<span class="kpi-unit">/10</span></div>
           <div class="kpi-sub">2 lotes pendientes en TK</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Cargas con Lote Vinculado</div>
-          <div class="kpi-value">8<span class="kpi-unit">/8</span></div>
+          <div class="kpi-value" id="traz-kpi-2">8<span class="kpi-unit">/8</span></div>
           <div class="kpi-sub">100% integridad relacional</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Tiempo Prod. → Despacho</div>
-          <div class="kpi-value">1.8<span class="kpi-unit">días</span></div>
+          <div class="kpi-value" id="traz-kpi-3">1.8<span class="kpi-unit">días</span></div>
           <div class="kpi-sub">Promedio · Rango: 0–6 días</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-label">Responsables en Cadena</div>
-          <div class="kpi-value">3</div>
+          <div class="kpi-value" id="traz-kpi-4">3</div>
           <div class="kpi-sub">Bastias · Nuñez · Cortes</div>
         </div>
       </div>
