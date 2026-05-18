@@ -1628,28 +1628,7 @@ async function loadData() {
       semanHead.innerHTML = '<tr><th>Zona</th>' + semanas.map(s => '<th>' + s + '</th>').join('') + '<th>Total L</th><th>Total kg</th></tr>';
     }
     // Tabla diaria RF1 vs ZEROSI
-    const diarioDias = data.zonas.dias || [];
-    const diarioBody = document.getElementById('zonas-diario-body');
-    if (diarioBody && diarioDias.length > 0) {
-      const filas = [];
-      for (const dia of diarioDias.slice(-30).reverse()) {
-        for (const z of zonas) {
-          const d = z.dias && z.dias[dia];
-          if (d && (d.litros > 0)) {
-            const fechaCorta = dia.slice(5).replace('-','/');
-            filas.push('<tr>' +
-              '<td>' + fechaCorta + '</td>' +
-              '<td style="font-size:10px;color:var(--text2)">' + z.zona.slice(0,25) + '</td>' +
-              '<td class="mono" style="color:var(--blue)">' + (d.rf1||0).toLocaleString('es-CL') + '</td>' +
-              '<td class="mono" style="color:var(--teal)">' + (d.zerosi||0).toLocaleString('es-CL') + '</td>' +
-              '<td class="mono">' + d.kg.toLocaleString('es-CL') + '</td>' +
-              '<td class="mono">' + d.litros.toLocaleString('es-CL') + '</td>' +
-              '</tr>');
-          }
-        }
-      }
-      diarioBody.innerHTML = filas.length > 0 ? filas.join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text3)">Sin datos</td></tr>';
-    }
+    // tabla diaria eliminada
 
     if (semanBody && zonas.length > 0) {
       semanBody.innerHTML = zonas.map(z => {
@@ -1700,7 +1679,7 @@ async function loadData() {
     setText('zonas-total-val', totalZonas.toLocaleString('es-CL') + ' L');
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
 
-    const colores = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
+    const coloresK'var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
     
     const listaEl = document.getElementById('zonas-lista');
     if (listaEl && zonas.length > 0) {
