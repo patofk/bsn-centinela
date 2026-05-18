@@ -1302,29 +1302,24 @@ body {
           </div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Resumen Total</div></div>
-            <div class="panel-body" style="padding:12px">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">
-                <span style="font-size:11px;color:var(--text3)">Total Litros</span>
-                <span style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</span>
+            <div class="panel-body" style="padding:16px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border)">
+                <span style="font-size:12px;color:var(--text3)">Total Litros</span>
+                <span style="font-family:Rajdhani,sans-serif;font-size:28px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</span>
               </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--border)">
-                <span style="font-size:11px;color:var(--text3)">Total Kg</span>
-                <span style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:var(--yellow)" id="zonas-total-kg">—</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid var(--border)">
+                <span style="font-size:12px;color:var(--text3)">Total Kg</span>
+                <span style="font-family:Rajdhani,sans-serif;font-size:28px;font-weight:700;color:var(--yellow)" id="zonas-total-kg">—</span>
               </div>
-              <div id="zonas-resumen-detalle">
-                <div style="color:var(--text3);font-size:11px">Cargando zonas...</div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:13px;color:var(--blue);font-weight:600">● RF1</span>
+                <span style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:var(--blue)" id="zonas-total-rf1">—</span>
               </div>
-              <div style="margin-top:10px;padding-top:10px;border-top:2px solid var(--border)">
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:var(--blue);font-weight:600">RF1 Total</span>
-                  <span style="font-family:Rajdhani,sans-serif;font-size:15px;font-weight:700;color:var(--blue)" id="zonas-total-rf1">—</span>
-                </div>
-                <div style="display:flex;justify-content:space-between">
-                  <span style="font-size:11px;color:var(--teal);font-weight:600">ZEROSI Total</span>
-                  <span style="font-family:Rajdhani,sans-serif;font-size:15px;font-weight:700;color:var(--teal)" id="zonas-total-zerosi">—</span>
-                </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:13px;color:var(--teal);font-weight:600">● ZEROSI</span>
+                <span style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:var(--teal)" id="zonas-total-zerosi">—</span>
               </div>
-              <div style="font-size:10px;color:var(--text3);text-align:center;margin-top:8px" id="zonas-total-sub">cargando...</div>
+              <div style="font-size:10px;color:var(--text3);text-align:center" id="zonas-total-sub">cargando...</div>
             </div>
           </div>
         </div>
@@ -1648,30 +1643,6 @@ async function loadData() {
     setText('zonas-total-zerosi', totalZerosiZ.toLocaleString('es-CL') + ' kg');
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
 
-    // Desglose por zona en resumen
-    const detalleEl = document.getElementById('zonas-resumen-detalle');
-    if (detalleEl && zonas.length > 0) {
-      const cols = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)'];
-      detalleEl.innerHTML = zonas.map((z, i) => {
-        const col = cols[i % cols.length];
-        const nombre = z.zona.length > 22 ? z.zona.slice(0,22) + '…' : z.zona;
-        return '<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">' +
-          '<div style="font-size:10px;font-weight:600;color:' + col + ';margin-bottom:4px">' + nombre + '</div>' +
-          '<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px">' +
-            '<span style="color:var(--text3)">Litros</span>' +
-            '<span style="color:var(--text);font-family:JetBrains Mono,monospace">' + z.litros.toLocaleString('es-CL') + ' L</span>' +
-          '</div>' +
-          '<div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px">' +
-            '<span style="color:var(--blue)">RF1</span>' +
-            '<span style="color:var(--blue);font-family:JetBrains Mono,monospace">' + (z.kg_rf1||0).toLocaleString('es-CL') + ' kg</span>' +
-          '</div>' +
-          '<div style="display:flex;justify-content:space-between;font-size:10px">' +
-            '<span style="color:var(--teal)">ZEROSI</span>' +
-            '<span style="color:var(--teal);font-family:JetBrains Mono,monospace">' + (z.kg_zerosi||0).toLocaleString('es-CL') + ' kg</span>' +
-          '</div>' +
-          '</div>';
-      }).join('');
-    }
 
     // Grid kg/m² por producto y zona
     const kgm2Grid = document.getElementById('zonas-kgm2-grid');
