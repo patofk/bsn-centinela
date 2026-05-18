@@ -1690,23 +1690,12 @@ async function loadData() {
           '<div class="zona-name">' + z.zona + '</div>' +
           '<div class="zona-total">' + z.total.toLocaleString('es-CL') + ' L · ' + pct + '%</div>' +
           '</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colores[i % colores.length] + '"></div></div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + coloresK[i % coloresK.length] + '"></div></div>' +
           '</div>';
       }).join('');
     }
 
-    const barrasEl = document.getElementById('zonas-barras');
-    if (barrasEl && zonas.length > 0) {
-      barrasEl.innerHTML = zonas.map((z, i) => {
-        const pct = totalZonas > 0 ? Math.round(z.total/totalZonas*100) : 0;
-        const label = z.zona.length > 15 ? z.zona.substring(0,15) + '…' : z.zona;
-        return '<div class="bar-row">' +
-          '<div class="bar-label" style="width:100px;font-size:10px">' + label + '</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colores[i % colores.length] + '"></div></div>' +
-          '<div class="bar-val">' + pct + '%</div>' +
-          '</div>';
-      }).join('');
-    }
+        // zonas-barras eliminado
 
   } catch(e) {
     console.warn('loadData error:', e.message);
