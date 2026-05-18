@@ -928,6 +928,9 @@ body {
     <!-- PÁGINA 3 — INVENTARIO                       -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="content" id="page-inventario">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;padding:0 2px 8px;margin-top:4px">
+        📦 Materia Prima en Bodega
+      </div>
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card red">
           <div class="kpi-label">Stock RF1</div>
@@ -962,6 +965,9 @@ body {
       </div>
 
       <!-- Producto terminado en TK -->
+      <div style="font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;padding:0 2px 8px;margin-top:16px">
+        🏭 Producto Terminado en Estanque
+      </div>
       <div class="panel" style="margin-bottom:14px;border-color:rgba(0,201,167,0.3)">
         <div class="panel-header" style="background:rgba(0,201,167,0.05)">
           <div class="panel-title">📦 Producto Terminado en TK — Disponible para Despacho</div>
@@ -1192,7 +1198,7 @@ body {
       <div class="kpi-row kpi-row-4">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Despachado</div>
-          <div class="kpi-value" id="zona-kpi-1">72.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="zona-kpi-1">72.000</span><span class="kpi-unit"> L</span></div>
           <div class="kpi-sub">Mayo 2026 · acumulado</div>
         </div>
         <div class="kpi-card">
@@ -1224,7 +1230,9 @@ body {
                 <tr>
                   <th>Zona</th>
                   <th>Litros</th>
-                  <th>Kg</th>
+                  <th>Kg Total</th>
+                  <th>RF1 (kg)</th>
+                  <th>ZEROSI (kg)</th>
                   <th>Sup. (m²)</th>
                   <th>L/m²</th>
                   <th>kg/m²</th>
@@ -1250,6 +1258,23 @@ body {
                 </thead>
                 <tbody id="zonas-semanal-body">
                   <tr><td colspan="3" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:14px">
+            <div class="panel-header">
+              <div class="panel-title">Seguimiento Diario RF1 vs ZEROSI</div>
+              <div style="display:flex;gap:12px;font-size:10px">
+                <span style="color:var(--blue)">● RF1</span>
+                <span style="color:var(--teal)">● ZEROSI</span>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0">
+              <table class="data-table">
+                <thead><tr><th>Fecha</th><th>Zona</th><th>RF1 (kg)</th><th>ZEROSI (kg)</th><th>Total kg</th><th>Total L</th></tr></thead>
+                <tbody id="zonas-diario-body">
+                  <tr><td colspan="6" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1587,6 +1612,30 @@ async function loadData() {
     if (semanHead && semanas.length > 0) {
       semanHead.innerHTML = '<tr><th>Zona</th>' + semanas.map(s => '<th>' + s + '</th>').join('') + '<th>Total L</th><th>Total kg</th></tr>';
     }
+    // Tabla diaria RF1 vs ZEROSI
+    const diarioDias = data.zonas.dias || [];
+    const diarioBody = document.getElementById('zonas-diario-body');
+    if (diarioBody && diarioDias.length > 0) {
+      const filas = [];
+      for (const dia of diarioDias.slice(-30).reverse()) {
+        for (const z of zonas) {
+          const d = z.dias && z.dias[dia];
+          if (d && (d.litros > 0)) {
+            const fechaCorta = dia.slice(5).replace('-','/');
+            filas.push('<tr>' +
+              '<td>' + fechaCorta + '</td>' +
+              '<td style="font-size:10px;color:var(--text2)">' + z.zona.slice(0,25) + '</td>' +
+              '<td class="mono" style="color:var(--blue)">' + (d.rf1||0).toLocaleString('es-CL') + '</td>' +
+              '<td class="mono" style="color:var(--teal)">' + (d.zerosi||0).toLocaleString('es-CL') + '</td>' +
+              '<td class="mono">' + d.kg.toLocaleString('es-CL') + '</td>' +
+              '<td class="mono">' + d.litros.toLocaleString('es-CL') + '</td>' +
+              '</tr>');
+          }
+        }
+      }
+      diarioBody.innerHTML = filas.length > 0 ? filas.join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text3)">Sin datos</td></tr>';
+    }
+
     if (semanBody && zonas.length > 0) {
       semanBody.innerHTML = zonas.map(z => {
         const cols = semanas.map(s => {
@@ -1614,6 +1663,8 @@ async function loadData() {
           '<td style="color:var(--text);font-size:11px"><span style="display:inline-block;width:8px;height:8px;background:' + col + ';border-radius:50%;margin-right:6px"></span>' + z.zona + '</td>' +
           '<td class="mono">' + z.litros.toLocaleString('es-CL') + ' L</td>' +
           '<td class="mono">' + (z.kg||0).toLocaleString('es-CL') + ' kg</td>' +
+          '<td class="mono" style="color:var(--blue)">' + ((z.kg_rf1||0).toLocaleString('es-CL')) + ' kg</td>' +
+          '<td class="mono" style="color:var(--teal)">' + ((z.kg_zerosi||0).toLocaleString('es-CL')) + ' kg</td>' +
           '<td class="mono">' + sup + '</td>' +
           '<td class="mono" style="color:var(--teal)">' + lm2 + '</td>' +
           '<td class="mono" style="color:var(--yellow)">' + km2 + '</td>' +

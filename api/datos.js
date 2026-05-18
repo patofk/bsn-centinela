@@ -214,31 +214,54 @@ function procesarExcel(buffer) {
   // Zonas con desglose semanal
   const zonaStats = {};
   const semanasSet = new Set();
+  const diasSet = new Set();
   for (const c of cargas) {
     if (!c.destino) continue;
     const semana = semanaISO(c.fecha);
     if (semana) semanasSet.add(semana);
-    if (!zonaStats[c.destino]) zonaStats[c.destino] = { litros:0, kg:0, agua:0, semanas:{} };
+    if (c.fecha) diasSet.add(c.fecha);
+    if (!zonaStats[c.destino]) zonaStats[c.destino] = { litros:0, kg:0, agua:0, semanas:{}, dias:{}, productos:{} };
     zonaStats[c.destino].litros += c.litros;
     zonaStats[c.destino].kg    += c.kg;
     zonaStats[c.destino].agua  += c.agua;
+    // Por semana
     if (semana) {
       if (!zonaStats[c.destino].semanas[semana]) zonaStats[c.destino].semanas[semana] = {litros:0, kg:0};
       zonaStats[c.destino].semanas[semana].litros += c.litros;
       zonaStats[c.destino].semanas[semana].kg += c.kg;
     }
+    // Por día
+    if (c.fecha) {
+      if (!zonaStats[c.destino].dias[c.fecha]) zonaStats[c.destino].dias[c.fecha] = {litros:0, kg:0, rf1:0, zerosi:0};
+      zonaStats[c.destino].dias[c.fecha].litros += c.litros;
+      zonaStats[c.destino].dias[c.fecha].kg += c.kg;
+      const esRf1 = c.producto && c.producto.toUpperCase().includes('RF1');
+      const esZerosi = c.producto && c.producto.toUpperCase().includes('ZEROSI');
+      if (esRf1) zonaStats[c.destino].dias[c.fecha].rf1 += c.kg;
+      if (esZerosi) zonaStats[c.destino].dias[c.fecha].zerosi += c.kg;
+      // Totales por producto
+      if (!zonaStats[c.destino].productos[c.producto]) zonaStats[c.destino].productos[c.producto] = {litros:0, kg:0};
+      zonaStats[c.destino].productos[c.producto].litros += c.litros;
+      zonaStats[c.destino].productos[c.producto].kg += c.kg;
+    }
   }
+  const dias = [...diasSet].sort();
   const semanas = [...semanasSet].sort();
   const totalZonasL = Object.values(zonaStats).reduce((s,v)=>s+v.litros, 0);
   const porZona = Object.entries(zonaStats).map(([k,v]) => {
     const sup = buscarSuperficie(k);
+    // Calcular kg RF1 y ZEROSI totales
+    const kgRf1Total = Object.values(v.dias).reduce((s,d)=>s+(d.rf1||0),0);
+    const kgZerosiTotal = Object.values(v.dias).reduce((s,d)=>s+(d.zerosi||0),0);
     return {
       zona: k, litros: v.litros, kg: v.kg, agua: v.agua,
+      kg_rf1: kgRf1Total, kg_zerosi: kgZerosiTotal,
       pct: Math.round(totalZonasL ? v.litros/totalZonasL*100 : 0),
       superficie_m2: sup,
       litros_m2: sup > 0 ? Math.round(v.litros/sup*100)/100 : null,
       kg_m2: sup > 0 ? Math.round(v.kg/sup*1000)/1000 : null,
-      semanas: v.semanas
+      semanas: v.semanas,
+      dias: v.dias
     };
   }).sort((a,b)=>b.litros-a.litros);
 
@@ -257,7 +280,7 @@ function procesarExcel(buffer) {
       cargas_vinculadas: cargasConLote, total_cargas: cargas.length,
       lotes_pendientes:lotesPend, tiempo_promedio_dias:1.8,
       responsables:[...new Set(lotes.map(l=>l.supervisor).filter(Boolean))] },
-    zonas:{ semanas, por_zona:porZona }
+    zonas:{ semanas, dias: [...diasSet].sort(), por_zona:porZona }
   };
 }
 
