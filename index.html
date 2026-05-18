@@ -790,17 +790,8 @@ body {
         <!-- Producción por producto -->
         <div class="panel">
           <div class="panel-header"><div class="panel-title">Producción por Producto</div></div>
-          <div class="panel-body bar-chart">
-            <div class="bar-row">
-              <div class="bar-label">RF1</div>
-              <div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--rf1)"></div></div>
-              <div class="bar-val">64.000 L</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-label">ZEROSI</div>
-              <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--zerosi)"></div></div>
-              <div class="bar-val">16.000 L</div>
-            </div>
+          <div class="panel-body bar-chart" id="resumen-barras-producto">
+            <div style="color:var(--text3);font-size:12px">Cargando...</div>
             <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:var(--text3)">
               <span>RF1: 8 lotes · TK 1 y TK 3</span>
               <span>ZEROSI: 2 lotes · TK 1 y TK 3</span>
@@ -811,22 +802,8 @@ body {
         <!-- Despacho por camión -->
         <div class="panel">
           <div class="panel-header"><div class="panel-title">Despacho por Camión</div></div>
-          <div class="panel-body bar-chart">
-            <div class="bar-row">
-              <div class="bar-label">🚛 Camión N°7</div>
-              <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--c7)"></div></div>
-              <div class="bar-val">32.000 L</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-label">🚛 Camión N°8</div>
-              <div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c8)"></div></div>
-              <div class="bar-val">16.000 L</div>
-            </div>
-            <div class="bar-row">
-              <div class="bar-label">🚛 Camión N°10</div>
-              <div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--c10)"></div></div>
-              <div class="bar-val">16.000 L</div>
-            </div>
+          <div class="panel-body bar-chart" id="resumen-barras-camion">
+            <div style="color:var(--text3);font-size:12px">Cargando...</div>
           </div>
         </div>
       </div>
@@ -841,7 +818,7 @@ body {
           <div class="kpi-label">Total Producido</div>
           <div class="kpi-value"><span id="prod-kpi-1">80.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="prod-kpi-1-kg">— kg</div>
-          <div class="kpi-sub">10 lotes completos</div>
+          <div class="kpi-sub" id="prod-kpi-1-sub">— lotes completos</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Materia Prima Usada</div>
@@ -856,7 +833,7 @@ body {
         <div class="kpi-card">
           <div class="kpi-label">Duración Promedio</div>
           <div class="kpi-value"><span id="prod-kpi-4">47</span><span class="kpi-unit"> min</span></div>
-          <div class="kpi-sub">Rango: 42–55 min</div>
+          <div class="kpi-sub" id="prod-kpi-4-sub">Rango: — min</div>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">Lotes sin Despachar</div>
@@ -897,30 +874,16 @@ body {
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Por Producto</div></div>
             <div class="panel-body bar-chart">
-              <div class="bar-row">
-                <div class="bar-label">RF1 (8 lotes)</div>
-                <div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--rf1)"></div></div>
-                <div class="bar-val">64.000</div>
-              </div>
-              <div class="bar-row">
-                <div class="bar-label">ZEROSI (2)</div>
-                <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--zerosi)"></div></div>
-                <div class="bar-val">16.000</div>
+              <div id="prod-barras-producto" style="width:100%">
+                <div style="color:var(--text3);font-size:12px">Cargando...</div>
               </div>
             </div>
           </div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Por Supervisor</div></div>
             <div class="panel-body bar-chart">
-              <div class="bar-row">
-                <div class="bar-label">C. Bastias</div>
-                <div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--blue-light)"></div></div>
-                <div class="bar-val">8 lotes</div>
-              </div>
-              <div class="bar-row">
-                <div class="bar-label">J. Nuñez</div>
-                <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--teal)"></div></div>
-                <div class="bar-val">2 lotes</div>
+              <div id="prod-barras-supervisor" style="width:100%">
+                <div style="color:var(--text3);font-size:12px">Cargando...</div>
               </div>
             </div>
           </div>
@@ -1074,22 +1037,22 @@ body {
           <div class="kpi-label">Total Cargado</div>
           <div class="kpi-value"><span id="car-kpi-1">64.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="car-kpi-1-kg">— kg</div>
-          <div class="kpi-sub">8 cargas completadas</div>
+          <div class="kpi-sub" id="kpi-cargas-sub">— cargas completadas</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Agua Utilizada</div>
           <div class="kpi-value"><span id="car-kpi-2">600.000</span><span class="kpi-unit"> L</span></div>
-          <div class="kpi-sub">9.4 L agua/L producto</div>
+          <div class="kpi-sub" id="car-kpi-2-sub">cargando...</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Camiones Activos</div>
           <div class="kpi-value" id="car-kpi-3">3</div>
-          <div class="kpi-sub">N°7 · N°8 · N°10</div>
+          <div class="kpi-sub" id="car-kpi-3-sub">cargando...</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Duración Promedio</div>
           <div class="kpi-value"><span id="car-kpi-4">21</span><span class="kpi-unit"> min</span></div>
-          <div class="kpi-sub">Rango: 19–23 min</div>
+          <div class="kpi-sub" id="car-kpi-4-sub">cargando...</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-label">Operadores</div>
@@ -1150,17 +1113,17 @@ body {
         <div class="kpi-card teal">
           <div class="kpi-label">Trazabilidad Completa</div>
           <div class="kpi-value"><span id="traz-kpi-1">8</span><span class="kpi-unit">/10</span></div>
-          <div class="kpi-sub">2 lotes pendientes en TK</div>
+          <div class="kpi-sub" id="traz-kpi-1-sub">cargando...</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Cargas con Lote Vinculado</div>
           <div class="kpi-value"><span id="traz-kpi-2">8</span><span class="kpi-unit">/8</span></div>
-          <div class="kpi-sub">100% integridad relacional</div>
+          <div class="kpi-sub" id="traz-kpi-2-sub">100% integridad relacional</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Tiempo Prod. → Despacho</div>
           <div class="kpi-value"><span id="traz-kpi-3">1.8</span><span class="kpi-unit"> días</span></div>
-          <div class="kpi-sub">Promedio · Rango: 0–6 días</div>
+          <div class="kpi-sub" id="traz-kpi-3-sub">Promedio</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-label">Responsables en Cadena</div>
@@ -1424,6 +1387,72 @@ async function loadData() {
     setText('sem-camiones', car.por_camion.length + ' activos');
     setText('sem-rend', p.rendimiento_promedio + ' kg/L');
 
+    // Producción — barras por producto
+    const prodBarrasProd = document.getElementById('prod-barras-producto');
+    const prodBarrasSuperv = document.getElementById('prod-barras-supervisor');
+    if (prodBarrasProd && p.lotes.length > 0) {
+      const porProd = {};
+      p.lotes.forEach(l => {
+        if (!porProd[l.producto]) porProd[l.producto] = {litros:0, lotes:0};
+        porProd[l.producto].litros += l.litros;
+        porProd[l.producto].lotes++;
+      });
+      const maxL = Math.max(...Object.values(porProd).map(v=>v.litros));
+      const colProd = {'RF1':'var(--blue)','ZEROSI':'var(--teal)'};
+      prodBarrasProd.innerHTML = Object.entries(porProd).map(([prod,v]) => {
+        const pct = Math.round(v.litros/maxL*100);
+        const col = colProd[prod] || 'var(--blue)';
+        return '<div class="bar-row"><div class="bar-label">' + prod + ' (' + v.lotes + ' lotes)</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+          '<div class="bar-val">' + v.litros.toLocaleString('es-CL') + ' L</div></div>';
+      }).join('');
+    }
+    // Barras por supervisor
+    if (prodBarrasSuperv && p.lotes.length > 0) {
+      const porSuperv = {};
+      p.lotes.forEach(l => {
+        if (!porSuperv[l.supervisor]) porSuperv[l.supervisor] = {lotes:0, litros:0};
+        porSuperv[l.supervisor].lotes++;
+        porSuperv[l.supervisor].litros += l.litros;
+      });
+      const maxS = Math.max(...Object.values(porSuperv).map(v=>v.lotes));
+      const colSuperv = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)'];
+      prodBarrasSuperv.innerHTML = Object.entries(porSuperv).map(([superv,v],i) => {
+        const pct = Math.round(v.lotes/maxS*100);
+        const nombre = superv.split(' ').pop();
+        return '<div class="bar-row"><div class="bar-label">' + nombre + '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colSuperv[i%colSuperv.length] + '"></div></div>' +
+          '<div class="bar-val">' + v.lotes + ' lotes</div></div>';
+      }).join('');
+    }
+    // Resumen — barras por producto
+    const resumenBarrasProd = document.getElementById('resumen-barras-producto');
+    if (resumenBarrasProd && p.lotes.length > 0) {
+      const porProdR = {};
+      p.lotes.forEach(l => {
+        if (!porProdR[l.producto]) porProdR[l.producto] = 0;
+        porProdR[l.producto] += l.litros;
+      });
+      const maxLR = Math.max(...Object.values(porProdR));
+      const colProdR = {'RF1':'var(--blue)','ZEROSI':'var(--teal)'};
+      resumenBarrasProd.innerHTML = Object.entries(porProdR).map(([prod,litros]) => {
+        const pct = Math.round(litros/maxLR*100);
+        return '<div class="bar-row"><div class="bar-label">' + prod + '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + (colProdR[prod]||'var(--blue)') + '"></div></div>' +
+          '<div class="bar-val">' + litros.toLocaleString('es-CL') + ' L</div></div>';
+      }).join('');
+    }
+
+    // kpi-subs dinámicos
+    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
+    setText('kpi-cargas-sub', car.cargas.length + ' cargas completadas');
+    setText('prod-kpi-1-sub', p.lotes_despachados + ' lotes completos');
+    setText('traz-kpi-1-sub', traz.lotes_pendientes + ' lotes pendientes en TK');
+    const camionesStr = car.por_camion.map(c => 'N°'+c.camion).join(' · ');
+    setText('car-kpi-3-sub', camionesStr || '—');
+    const ratioAgua = car.total_litros > 0 ? Math.round(car.agua_total/car.total_litros*10)/10 : 0;
+    setText('car-kpi-2-sub', ratioAgua + ' L agua/L producto');
+
     // Producción — tabla dinámica
     const prodBody = document.getElementById('prod-tabla-body');
     if (prodBody && p.lotes.length > 0) {
@@ -1458,7 +1487,7 @@ async function loadData() {
     setText('prod-kpi-5', p.lotes_pendientes);
 
     // Cargas — tabla dinámica
-    const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','10':'var(--c10)'};
+    const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','9':'var(--c9)','10':'var(--c10)'};
     const cargasBody = document.getElementById('cargas-tabla-body');
     if (cargasBody && car.cargas.length > 0) {
       cargasBody.innerHTML = car.cargas.map(c => {
@@ -1480,7 +1509,20 @@ async function loadData() {
       }).join('');
     }
 
-    // Barras camión
+    // Barras camión — Carga y Despacho Y Resumen Ejecutivo
+    const coloresCamionFn = (c) => ({'7':'var(--c7)','8':'var(--c8)','9':'var(--c9)','10':'var(--c10)'}[c] || 'var(--blue)');
+    const renderBarrasCamion = (elId) => {
+      const el = document.getElementById(elId);
+      if (el && car.por_camion.length > 0) {
+        el.innerHTML = car.por_camion.map(c => {
+          const col = coloresCamionFn(c.camion);
+          return '<div class="bar-row"><div class="bar-label">🚛 Camión N°' + c.camion + '</div>' +
+            '<div class="bar-track"><div class="bar-fill" style="width:' + c.pct + '%;background:' + col + '"></div></div>' +
+            '<div class="bar-val">' + c.litros.toLocaleString('es-CL') + ' L</div></div>';
+        }).join('');
+      }
+    };
+    renderBarrasCamion('resumen-barras-camion');
     const barrasCamion = document.getElementById('cargas-barras-camion');
     if (barrasCamion && car.por_camion.length > 0) {
       barrasCamion.innerHTML = car.por_camion.map(c => {
