@@ -655,11 +655,13 @@ body {
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
           <div class="kpi-value" id="kpi-prod-val">80.000<span class="kpi-unit">L</span></div>
+          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="kpi-prod-kg">— kg</div>
           <div class="kpi-sub" id="kpi-lotes-sub">10 lotes · Mayo 2026</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Total Despachado</div>
           <div class="kpi-value" id="kpi-desp-val">64.000<span class="kpi-unit">L</span></div>
+          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="kpi-desp-kg">— kg</div>
           <div class="kpi-sub" id="kpi-cargas-sub">8 cargas completadas</div>
           <span class="kpi-badge teal">80% despacho</span>
         </div>
@@ -834,6 +836,7 @@ body {
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
           <div class="kpi-value" id="prod-kpi-1">80.000<span class="kpi-unit">L</span></div>
+          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="prod-kpi-1-kg">— kg</div>
           <div class="kpi-sub">10 lotes completos</div>
         </div>
         <div class="kpi-card">
@@ -1058,6 +1061,7 @@ body {
         <div class="kpi-card teal">
           <div class="kpi-label">Total Cargado</div>
           <div class="kpi-value" id="car-kpi-1">64.000<span class="kpi-unit">L</span></div>
+          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="car-kpi-1-kg">— kg</div>
           <div class="kpi-sub">8 cargas completadas</div>
         </div>
         <div class="kpi-card">
@@ -1169,7 +1173,7 @@ body {
         <div class="panel-body" style="padding:0">
           <table class="data-table">
             <thead>
-              <tr><th>ID Lote</th><th>F. Prod.</th><th>Producto</th><th>TK</th><th>Superv.</th><th>F. Carga</th><th>Camión</th><th>Operador</th><th>L Cargados</th><th>Destino</th><th>Días</th></tr>
+              <tr><th>ID Lote</th><th>F. Prod.</th><th>Producto</th><th>TK</th><th>Superv.</th><th>F. Carga</th><th>Camión</th><th>Operador</th><th>Kg Cargados</th><th>Destino</th><th>Días</th></tr>
             </thead>
             <tbody id="traz-tabla-body">
               <tr><td colspan="11" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
@@ -1209,11 +1213,26 @@ body {
       <div class="grid-6-4">
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Litros por Zona — Total</div>
-            <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--blue);border-radius:2px"></div>Acumulado</div>
+            <div class="panel-title">Litros y Kg por Zona</div>
+            <div style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text3)">L/m² · kg/m²</div>
           </div>
-          <div class="panel-body" id="zonas-lista">
-            <div style="color:var(--text3);font-size:12px">Cargando zonas...</div>
+          <div class="panel-body" style="padding:0">
+            <table class="data-table" id="zonas-tabla">
+              <thead>
+                <tr>
+                  <th>Zona</th>
+                  <th>Litros</th>
+                  <th>Kg</th>
+                  <th>Sup. (m²)</th>
+                  <th>L/m²</th>
+                  <th>kg/m²</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="zonas-lista">
+                <tr><td colspan="7" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -1308,6 +1327,8 @@ async function loadData() {
 
     // Resumen KPIs
     setText('kpi-prod-val', p.total_litros.toLocaleString('es-CL'));
+    setText('kpi-prod-kg', p.total_kg.toLocaleString('es-CL') + ' kg');
+    setText('kpi-desp-kg', car.total_kg ? car.total_kg.toLocaleString('es-CL') + ' kg' : '—');
     setText('kpi-desp-val', car.total_litros.toLocaleString('es-CL'));
     setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
     setText('kpi-cargas-sub', car.cargas.length + ' cargas completadas');
@@ -1357,6 +1378,7 @@ async function loadData() {
 
     // Producción KPIs
     setText('prod-kpi-1', p.total_litros.toLocaleString('es-CL'));
+    setText('prod-kpi-1-kg', p.total_kg.toLocaleString('es-CL') + ' kg');
     setText('prod-kpi-2', p.total_kg.toLocaleString('es-CL'));
     setText('prod-kpi-3', p.rendimiento_promedio);
     setText('prod-kpi-4', p.duracion_promedio_min);
@@ -1411,6 +1433,7 @@ async function loadData() {
 
     // Cargas KPIs
     setText('car-kpi-1', car.total_litros.toLocaleString('es-CL'));
+    setText('car-kpi-1-kg', car.total_kg ? car.total_kg.toLocaleString('es-CL') + ' kg' : '—');
     setText('car-kpi-2', car.agua_total.toLocaleString('es-CL'));
     setText('car-kpi-3', car.por_camion.length);
     setText('car-kpi-4', car.duracion_promedio_min);
@@ -1501,7 +1524,7 @@ async function loadData() {
             '<td>' + fechaCarga + '</td>' +
             '<td><span class="chip" style="background:rgba(255,255,255,0.1);color:' + colorC + '">N°' + carga.camion + '</span></td>' +
             '<td>' + carga.operador.split(' ').pop() + '</td>' +
-            '<td>' + carga.litros.toLocaleString('es-CL') + '</td>' +
+            '<td>' + (carga.kg ? carga.kg.toLocaleString('es-CL') + ' kg' : carga.litros.toLocaleString('es-CL') + ' L') + '</td>' +
             '<td style="font-size:9px;color:var(--text3)">' + (carga.destino||'—').slice(0,15) + '</td>' +
             '<td style="color:var(--green)">0</td></tr>';
         } else {
@@ -1525,6 +1548,31 @@ async function loadData() {
 
     // Zonas — renderizado dinámico
     const zonas = data.zonas.por_zona;
+    const totalZonasL2 = zonas.reduce((s,z) => s + z.litros, 0);
+    setText('zonas-total-val', totalZonasL2.toLocaleString('es-CL') + ' L');
+    setText('zonas-total-sub', zonas.length + ' zonas atendidas');
+    setText('zona-kpi-1', totalZonasL2.toLocaleString('es-CL'));
+    const totalKgZonas = zonas.reduce((s,z) => s + (z.kg||0), 0);
+
+    const zonasBody = document.getElementById('zonas-lista');
+    if (zonasBody && zonas.length > 0) {
+      zonasBody.innerHTML = zonas.map((z, i) => {
+        const colores = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
+        const col = colores[i % colores.length];
+        const lm2 = z.litros_m2 !== null ? z.litros_m2.toLocaleString('es-CL') : '—';
+        const km2 = z.kg_m2 !== null ? z.kg_m2.toFixed(3) : '—';
+        const sup = z.superficie_m2 > 0 ? z.superficie_m2.toLocaleString('es-CL') : '—';
+        return '<tr>' +
+          '<td style="color:var(--text);font-size:11px"><span style="display:inline-block;width:8px;height:8px;background:' + col + ';border-radius:50%;margin-right:6px"></span>' + z.zona + '</td>' +
+          '<td class="mono">' + z.litros.toLocaleString('es-CL') + ' L</td>' +
+          '<td class="mono">' + (z.kg||0).toLocaleString('es-CL') + ' kg</td>' +
+          '<td class="mono">' + sup + '</td>' +
+          '<td class="mono" style="color:var(--teal)">' + lm2 + '</td>' +
+          '<td class="mono" style="color:var(--yellow)">' + km2 + '</td>' +
+          '<td class="mono">' + z.pct + '%</td>' +
+          '</tr>';
+      }).join('');
+    }
     const totalZonasL = zonas.reduce((s,z) => s + z.total, 0);
     setText('zona-kpi-1', totalZonasL.toLocaleString('es-CL'));
     setText('zona-kpi-2', zonas.length);
