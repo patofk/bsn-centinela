@@ -240,15 +240,7 @@ body {
 }
 
 /* ALERT BAR */
-.alert-bar {
-  background: rgba(240,81,81,0.1);
-  border-bottom: 1px solid rgba(240,81,81,0.25);
-  padding: 7px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-shrink: 0;
-}
+.alert-bar { display:none !important; height:0 !important; padding:0 !important; }
 
 .alert-bar-item {
   display: flex;
@@ -798,8 +790,10 @@ body {
         <!-- Despacho por camión -->
         <div class="panel">
           <div class="panel-header"><div class="panel-title">Despacho por Camión</div></div>
-          <div class="panel-body bar-chart" id="resumen-barras-camion">
-            <div style="color:var(--text3);font-size:12px">Cargando...</div>
+          <div class="panel-body bar-chart">
+            <div id="resumen-barras-camion">
+              <div style="color:var(--text3);font-size:12px">Cargando...</div>
+            </div>
           </div>
         </div>
       </div>
@@ -843,7 +837,7 @@ body {
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title">Registro de Lotes de Producción</div>
-            <div class="panel-tag">10 lotes · Mayo 2026</div>
+            <div class="panel-tag" id="prod-panel-tag">— lotes · Mayo 2026</div>
           </div>
           <div class="panel-body" style="padding:0">
             <table class="data-table">
@@ -934,46 +928,14 @@ body {
       <div class="panel" style="margin-bottom:14px;border-color:rgba(0,201,167,0.3)">
         <div class="panel-header" style="background:rgba(0,201,167,0.05)">
           <div class="panel-title">📦 Producto Terminado en TK — Disponible para Despacho</div>
-          <div class="panel-tag">2 lotes · 16.000 L totales</div>
+          <div class="panel-tag" id="inv-tk-resumen">cargando...</div>
         </div>
         <div class="panel-body">
-          <div class="grid-2" style="margin-bottom:0">
-            <div class="tk-card" style="border-color:rgba(77,143,245,0.3)">
-              <div class="tk-header">
-                <div>
-                  <div class="tk-name">TK 3 — RF1</div>
-                  <div style="font-size:11px;color:var(--text3)">Lote: PRDRF12605111130</div>
-                </div>
-                <span class="chip ok" style="font-size:12px;padding:4px 10px">DISPONIBLE</span>
-              </div>
-              <div class="tk-level"><div class="tk-level-fill" style="width:100%;background:var(--rf1)"></div></div>
-              <div class="tk-detail">
-                <div><span>Volumen:</span> <b style="color:var(--text)">8.000 L</b></div>
-                <div><span>Supervisor:</span> Cristian Bastias</div>
-                <div><span>Producido:</span> 11/05/2026</div>
-                <div><span>Tiempo en TK:</span> <b style="color:var(--yellow)">1 día</b></div>
-              </div>
-            </div>
-            <div class="tk-card" style="border-color:rgba(0,201,167,0.3)">
-              <div class="tk-header">
-                <div>
-                  <div class="tk-name">TK 3 — ZEROSI</div>
-                  <div style="font-size:11px;color:var(--text3)">Lote: PRZEROSI260568000</div>
-                </div>
-                <span class="chip ok" style="font-size:12px;padding:4px 10px">DISPONIBLE</span>
-              </div>
-              <div class="tk-level"><div class="tk-level-fill" style="width:100%;background:var(--zerosi)"></div></div>
-              <div class="tk-detail">
-                <div><span>Volumen:</span> <b style="color:var(--text)">8.000 L</b></div>
-                <div><span>Supervisor:</span> Juan Nuñez</div>
-                <div><span>Producido:</span> 11/05/2026</div>
-                <div><span>Tiempo en TK:</span> <b style="color:var(--yellow)">1 día</b></div>
-              </div>
-            </div>
+          <div id="inv-tk-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
+            <div style="color:var(--text3);font-size:12px">Cargando...</div>
           </div>
         </div>
       </div>
-
       <!-- Materia prima -->
       <div class="grid-6-4">
         <div class="panel">
@@ -1033,7 +995,7 @@ body {
           <div class="kpi-label">Total Cargado</div>
           <div class="kpi-value"><span id="car-kpi-1">64.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="car-kpi-1-kg">— kg</div>
-          <div class="kpi-sub" id="kpi-cargas-sub">— cargas completadas</div>
+          <div class="kpi-sub" id="car-kpi-1-sub">— cargas completadas</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Agua Utilizada</div>
@@ -1059,7 +1021,7 @@ body {
 
       <div class="grid-7-3">
         <div class="panel">
-          <div class="panel-header"><div class="panel-title">Registro de Cargas</div><div class="panel-tag">8 cargas · Mayo 2026</div></div>
+          <div class="panel-header"><div class="panel-title">Registro de Cargas</div><div class="panel-tag" id="car-panel-tag">— cargas · Mayo 2026</div></div>
           <div class="panel-body" style="padding:0">
             <table class="data-table">
               <thead>
@@ -1114,12 +1076,12 @@ body {
         <div class="kpi-card green">
           <div class="kpi-label">Cargas con Lote Vinculado</div>
           <div class="kpi-value"><span id="traz-kpi-2">8</span><span class="kpi-unit">/8</span></div>
-          <div class="kpi-sub" id="traz-kpi-2-sub">100% integridad relacional</div>
+          <div class="kpi-sub">100% integridad relacional</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Tiempo Prod. → Despacho</div>
           <div class="kpi-value"><span id="traz-kpi-3">1.8</span><span class="kpi-unit"> días</span></div>
-          <div class="kpi-sub" id="traz-kpi-3-sub">Promedio</div>
+          <div class="kpi-sub">Promedio · Rango: 0–6 días</div>
         </div>
         <div class="kpi-card purple">
           <div class="kpi-label">Responsables en Cadena</div>
@@ -1140,7 +1102,7 @@ body {
       </div>
 
       <div class="panel" style="margin-bottom:14px">
-        <div class="panel-header"><div class="panel-title">Cadena Completa por Lote</div><div class="panel-tag">10 lotes</div></div>
+        <div class="panel-header"><div class="panel-title">Cadena Completa por Lote</div><div class="panel-tag" id="traz-panel-tag">— lotes</div></div>
         <div class="panel-body" style="padding:0">
           <table class="data-table">
             <thead>
@@ -1171,12 +1133,12 @@ body {
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Litros S19 (sem. 19)</div>
-          <div class="kpi-value"><span id="zona-kpi-3">—</span><span class="kpi-unit"> L</span></div>
+          <div class="kpi-value" id="zona-kpi-3">—<span class="kpi-unit">L</span></div>
           <div class="kpi-sub">semana anterior</div>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">Litros S20 (en curso)</div>
-          <div class="kpi-value"><span id="zona-kpi-4">—</span><span class="kpi-unit"> L</span></div>
+          <div class="kpi-value" id="zona-kpi-4">—<span class="kpi-unit">L</span></div>
           <div class="kpi-sub">semana actual</div>
         </div>
       </div>
@@ -1208,25 +1170,6 @@ body {
             </table>
           </div>
         </div>
-      </div>
-
-      <!-- KPIs kg/m² por producto y zona -->
-      <div class="panel" style="margin-top:14px">
-        <div class="panel-header">
-          <div class="panel-title">Kg/m² por Producto y Zona</div>
-          <div style="display:flex;gap:12px;font-size:10px">
-            <span style="color:var(--blue)">● RF1</span>
-            <span style="color:var(--teal)">● ZEROSI</span>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div id="zonas-kgm2-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
-            <div style="color:var(--text3);font-size:12px">Cargando...</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-6-4" style="margin-top:14px">
         <div style="display:flex;flex-direction:column;gap:14px">
           <div class="panel">
             <div class="panel-header">
@@ -1246,6 +1189,23 @@ body {
           </div>
           <div class="panel" style="margin-top:14px">
             <div class="panel-header">
+              <div class="panel-title">Seguimiento Diario RF1 vs ZEROSI</div>
+              <div style="display:flex;gap:12px;font-size:10px">
+                <span style="color:var(--blue)">● RF1</span>
+                <span style="color:var(--teal)">● ZEROSI</span>
+              </div>
+            </div>
+            <div class="panel-body" style="padding:0">
+              <table class="data-table">
+                <thead><tr><th>Fecha</th><th>Zona</th><th>RF1 (kg)</th><th>ZEROSI (kg)</th><th>Total kg</th><th>Total L</th></tr></thead>
+                <tbody id="zonas-diario-body">
+                  <tr><td colspan="6" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel" style="margin-top:0">
+            <div class="panel-header">
               <div class="panel-title">Despacho Diario — RF1 vs ZEROSI (kg)</div>
               <div style="display:flex;gap:12px;font-size:10px">
                 <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;background:var(--blue);border-radius:2px"></span>RF1</span>
@@ -1253,32 +1213,19 @@ body {
               </div>
             </div>
             <div class="panel-body">
-              <div id="zonas-diario-chart" style="display:flex;align-items:flex-end;gap:6px;height:140px;padding:0 4px">
+              <div id="zonas-diario-chart" style="display:flex;align-items:flex-end;gap:4px;height:140px;padding:0 4px">
                 <div style="color:var(--text3);font-size:12px">Cargando...</div>
               </div>
-              <div id="zonas-diario-labels" style="display:flex;gap:6px;margin-top:6px;padding:0 4px"></div>
+              <div id="zonas-diario-labels" style="display:flex;gap:4px;margin-top:4px;padding:0 4px"></div>
             </div>
           </div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">Resumen Total</div></div>
-            <div class="panel-body" style="padding:16px;display:flex;flex-direction:column;gap:14px">
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border)">
-                <span style="font-size:12px;color:var(--text3)">Total Litros</span>
-                <span style="font-family:Rajdhani,sans-serif;font-size:28px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid var(--border)">
-                <span style="font-size:12px;color:var(--text3)">Total Kg</span>
-                <span style="font-family:Rajdhani,sans-serif;font-size:28px;font-weight:700;color:var(--yellow)" id="zonas-total-kg">—</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <span style="font-size:13px;color:var(--blue);font-weight:600">● RF1</span>
-                <span style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:var(--blue)" id="zonas-total-rf1">—</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <span style="font-size:13px;color:var(--teal);font-weight:600">● ZEROSI</span>
-                <span style="font-family:Rajdhani,sans-serif;font-size:22px;font-weight:700;color:var(--teal)" id="zonas-total-zerosi">—</span>
-              </div>
-              <div style="font-size:10px;color:var(--text3);text-align:center" id="zonas-total-sub">cargando...</div>
+            <div class="panel-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px">
+              <div style="font-family:Rajdhani,sans-serif;font-size:36px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:2px">litros totales</div>
+              <div style="font-family:Rajdhani,sans-serif;font-size:24px;font-weight:700;color:var(--yellow);margin-top:8px" id="zonas-total-kg">—</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:2px" id="zonas-total-sub">kg totales</div>
             </div>
           </div>
         </div>
@@ -1346,22 +1293,8 @@ async function loadData() {
       'Actualizado: ' + upd.getDate() + '/' + (upd.getMonth()+1) + ' ' + hh + ':' + mm;
 
     // Alertas
-    const alertas = [];
-    inv.materia_prima.forEach(x => {
-      if (x.alerta) alertas.push('⚠️ ' + x.producto + ' bajo mínimo operacional — ' + x.stock_kg.toLocaleString('es-CL') + ' kg disponibles (mín: ' + x.minimo_kg.toLocaleString('es-CL') + ' kg)');
-    });
+    // Alertas desactivadas
     const litrajeEnTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
-    if (litrajeEnTk > 0) {
-      const prodsTk = [...new Set(inv.producto_terminado_tk.map(t=>t.producto))].join(' + ');
-      alertas.push('⏳ ' + litrajeEnTk.toLocaleString('es-CL') + ' L en TK pendientes de despacho (' + prodsTk + ')');
-    }
-    const alertBar = document.getElementById('alert-bar');
-    if (alertas.length > 0) {
-      alertBar.style.display = '';
-      alertBar.innerHTML = alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
-    } else {
-      alertBar.style.display = 'none';
-    }
 
     // Resumen KPIs
     setText('kpi-prod-val', p.total_litros.toLocaleString('es-CL'));
@@ -1388,72 +1321,6 @@ async function loadData() {
     setText('sem-desp', litrajeEnTk > 0 ? litrajeEnTk.toLocaleString('es-CL') + ' L en TK' : 'Al día');
     setText('sem-camiones', car.por_camion.length + ' activos');
     setText('sem-rend', p.rendimiento_promedio + ' kg/L');
-
-    // Producción — barras por producto
-    const prodBarrasProd = document.getElementById('prod-barras-producto');
-    const prodBarrasSuperv = document.getElementById('prod-barras-supervisor');
-    if (prodBarrasProd && p.lotes.length > 0) {
-      const porProd = {};
-      p.lotes.forEach(l => {
-        if (!porProd[l.producto]) porProd[l.producto] = {litros:0, lotes:0};
-        porProd[l.producto].litros += l.litros;
-        porProd[l.producto].lotes++;
-      });
-      const maxL = Math.max(...Object.values(porProd).map(v=>v.litros));
-      const colProd = {'RF1':'var(--blue)','ZEROSI':'var(--teal)'};
-      prodBarrasProd.innerHTML = Object.entries(porProd).map(([prod,v]) => {
-        const pct = Math.round(v.litros/maxL*100);
-        const col = colProd[prod] || 'var(--blue)';
-        return '<div class="bar-row"><div class="bar-label">' + prod + ' (' + v.lotes + ' lotes)</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
-          '<div class="bar-val">' + v.litros.toLocaleString('es-CL') + ' L</div></div>';
-      }).join('');
-    }
-    // Barras por supervisor
-    if (prodBarrasSuperv && p.lotes.length > 0) {
-      const porSuperv = {};
-      p.lotes.forEach(l => {
-        if (!porSuperv[l.supervisor]) porSuperv[l.supervisor] = {lotes:0, litros:0};
-        porSuperv[l.supervisor].lotes++;
-        porSuperv[l.supervisor].litros += l.litros;
-      });
-      const maxS = Math.max(...Object.values(porSuperv).map(v=>v.lotes));
-      const colSuperv = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)'];
-      prodBarrasSuperv.innerHTML = Object.entries(porSuperv).map(([superv,v],i) => {
-        const pct = Math.round(v.lotes/maxS*100);
-        const nombre = superv.split(' ').pop();
-        return '<div class="bar-row"><div class="bar-label">' + nombre + '</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colSuperv[i%colSuperv.length] + '"></div></div>' +
-          '<div class="bar-val">' + v.lotes + ' lotes</div></div>';
-      }).join('');
-    }
-    // Resumen — barras por producto
-    const resumenBarrasProd = document.getElementById('resumen-barras-producto');
-    if (resumenBarrasProd && p.lotes.length > 0) {
-      const porProdR = {};
-      p.lotes.forEach(l => {
-        if (!porProdR[l.producto]) porProdR[l.producto] = 0;
-        porProdR[l.producto] += l.litros;
-      });
-      const maxLR = Math.max(...Object.values(porProdR));
-      const colProdR = {'RF1':'var(--blue)','ZEROSI':'var(--teal)'};
-      resumenBarrasProd.innerHTML = Object.entries(porProdR).map(([prod,litros]) => {
-        const pct = Math.round(litros/maxLR*100);
-        return '<div class="bar-row"><div class="bar-label">' + prod + '</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + (colProdR[prod]||'var(--blue)') + '"></div></div>' +
-          '<div class="bar-val">' + litros.toLocaleString('es-CL') + ' L</div></div>';
-      }).join('');
-    }
-
-    // kpi-subs dinámicos
-    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
-    setText('kpi-cargas-sub', car.cargas.length + ' cargas completadas');
-    setText('prod-kpi-1-sub', p.lotes_despachados + ' lotes completos');
-    setText('traz-kpi-1-sub', traz.lotes_pendientes + ' lotes pendientes en TK');
-    const camionesStr = car.por_camion.map(c => 'N°'+c.camion).join(' · ');
-    setText('car-kpi-3-sub', camionesStr || '—');
-    const ratioAgua = car.total_litros > 0 ? Math.round(car.agua_total/car.total_litros*10)/10 : 0;
-    setText('car-kpi-2-sub', ratioAgua + ' L agua/L producto');
 
     // Producción — tabla dinámica
     const prodBody = document.getElementById('prod-tabla-body');
@@ -1489,7 +1356,7 @@ async function loadData() {
     setText('prod-kpi-5', p.lotes_pendientes);
 
     // Cargas — tabla dinámica
-    const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','9':'var(--c9)','10':'var(--c10)'};
+    const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','10':'var(--c10)'};
     const cargasBody = document.getElementById('cargas-tabla-body');
     if (cargasBody && car.cargas.length > 0) {
       cargasBody.innerHTML = car.cargas.map(c => {
@@ -1511,20 +1378,7 @@ async function loadData() {
       }).join('');
     }
 
-    // Barras camión — Carga y Despacho Y Resumen Ejecutivo
-    const coloresCamionFn = (c) => ({'7':'var(--c7)','8':'var(--c8)','9':'var(--c9)','10':'var(--c10)'}[c] || 'var(--blue)');
-    const renderBarrasCamion = (elId) => {
-      const el = document.getElementById(elId);
-      if (el && car.por_camion.length > 0) {
-        el.innerHTML = car.por_camion.map(c => {
-          const col = coloresCamionFn(c.camion);
-          return '<div class="bar-row"><div class="bar-label">🚛 Camión N°' + c.camion + '</div>' +
-            '<div class="bar-track"><div class="bar-fill" style="width:' + c.pct + '%;background:' + col + '"></div></div>' +
-            '<div class="bar-val">' + c.litros.toLocaleString('es-CL') + ' L</div></div>';
-        }).join('');
-      }
-    };
-    renderBarrasCamion('resumen-barras-camion');
+    // Barras camión
     const barrasCamion = document.getElementById('cargas-barras-camion');
     if (barrasCamion && car.por_camion.length > 0) {
       barrasCamion.innerHTML = car.por_camion.map(c => {
@@ -1547,6 +1401,20 @@ async function loadData() {
           '<div class="bar-val">' + o.cargas + ' cargas</div></div>';
       }).join('');
     }
+
+    // Panel tags dinámicos
+    setText('prod-panel-tag', p.lotes_total + ' lotes · Mayo 2026');
+    setText('car-panel-tag', car.cargas.length + ' cargas · Mayo 2026');
+    setText('traz-panel-tag', traz.lotes_total + ' lotes');
+
+    // kpi-subs dinámicos
+    setText('prod-kpi-1-sub', p.lotes_despachados + ' lotes completos');
+    setText('car-kpi-1-sub', car.cargas.length + ' cargas completadas');
+    const ratioAgua = car.total_litros > 0 ? Math.round(car.agua_total/car.total_litros*10)/10 : 0;
+    setText('car-kpi-2-sub', ratioAgua + ' L agua/L producto');
+    const camionesStr = car.por_camion.map(c=>'N°'+c.camion).join(' · ');
+    setText('car-kpi-3-sub', camionesStr || '—');
+    setText('traz-kpi-1-sub', traz.lotes_pendientes + ' lotes pendientes en TK');
 
     // Cargas KPIs
     setText('car-kpi-1', car.total_litros.toLocaleString('es-CL'));
@@ -1590,6 +1458,40 @@ async function loadData() {
     const litrosTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
     setText('inv-kpi-tk', litrosTk > 0 ? litrosTk.toLocaleString('es-CL') : '0');
     setText('inv-kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
+
+    // TK Cards dinámicos
+    const tkCards = document.getElementById('inv-tk-cards');
+    const tkResumen = document.getElementById('inv-tk-resumen');
+    if (tkCards) {
+      if (inv.producto_terminado_tk.length === 0) {
+        tkCards.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:20px">Sin producto en TK actualmente</div>';
+        if (tkResumen) tkResumen.textContent = '0 lotes · 0 L totales';
+      } else {
+        if (tkResumen) tkResumen.textContent = inv.producto_terminado_tk.length + ' lotes · ' + litrosTk.toLocaleString('es-CL') + ' L totales';
+        tkCards.innerHTML = inv.producto_terminado_tk.map(t => {
+          const prod = t.producto && t.producto.includes('RF1') ? 'RF1' : 'ZEROSI';
+          const color = prod === 'RF1' ? 'var(--rf1,var(--blue))' : 'var(--zerosi,var(--teal))';
+          const borderColor = prod === 'RF1' ? 'rgba(77,143,245,0.3)' : 'rgba(0,201,167,0.3)';
+          const pct = litrosTk > 0 ? Math.round(t.litros/litrosTk*100) : 100;
+          return '<div style="background:var(--bg3);border:1px solid ' + borderColor + ';border-radius:10px;padding:16px">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">' +
+              '<div>' +
+                '<div style="font-family:Rajdhani,sans-serif;font-size:18px;font-weight:700;color:var(--text)">' + t.tk + ' — ' + prod + '</div>' +
+                '<div style="font-size:11px;color:var(--text3)">Lote: ' + t.lote + '</div>' +
+              '</div>' +
+              '<span style="background:rgba(0,201,167,0.15);color:var(--teal);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px">DISPONIBLE</span>' +
+            '</div>' +
+            '<div style="height:6px;background:var(--bg2);border-radius:3px;margin-bottom:12px">' +
+              '<div style="height:100%;width:' + pct + '%;background:' + color + ';border-radius:3px"></div>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:var(--text3)">' +
+              '<div>Volumen: <b style="color:var(--text)">' + t.litros.toLocaleString('es-CL') + ' L</b></div>' +
+              '<div>Supervisor: <b style="color:var(--text)">' + (t.supervisor||'—') + '</b></div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+    }
     setText('inv-kpi-salidas', totalSalidas.toLocaleString('es-CL'));
     setText('inv-kpi-salidas-sub', inv.movimientos.filter(m=>m.tipo==='Salida').length + ' movimientos de salida');
 
@@ -1679,54 +1581,16 @@ async function loadData() {
     // Zonas — renderizado dinámico
     const zonas = data.zonas.por_zona;
     const totalZonasL2 = zonas.reduce((s,z) => s + z.litros, 0);
-    setText('zonas-total-val', totalZonasL2.toLocaleString('es-CL') + ' L');
+    setText('zonas-total-val', totalZonasL2.toLocaleString('es-CL'));
     const totalKgZ = zonas.reduce((s,z) => s + (z.kg||0), 0);
-    const totalRf1Z = zonas.reduce((s,z) => s + (z.kg_rf1||0), 0);
-    const totalZerosiZ = zonas.reduce((s,z) => s + (z.kg_zerosi||0), 0);
-    setText('zonas-total-kg', totalKgZ.toLocaleString('es-CL') + ' kg');
-    setText('zonas-total-rf1', totalRf1Z.toLocaleString('es-CL') + ' kg');
-    setText('zonas-total-zerosi', totalZerosiZ.toLocaleString('es-CL') + ' kg');
-    setText('zonas-total-sub', zonas.length + ' zonas atendidas');
+    setText('zonas-total-kg', totalKgZ.toLocaleString('es-CL'));
+    setText('zonas-total-sub', zonas.length + ' zonas · ' + totalKgZ.toLocaleString('es-CL') + ' kg');
 
-
-    // Grid kg/m² por producto y zona
-    const kgm2Grid = document.getElementById('zonas-kgm2-grid');
-    if (kgm2Grid && zonas.length > 0) {
-      const colores = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)'];
-      kgm2Grid.innerHTML = zonas.map((z, i) => {
-        const col = colores[i % colores.length];
-        const sup = z.superficie_m2 > 0 ? z.superficie_m2 : 0;
-        const rf1m2 = sup > 0 ? (z.kg_rf1/sup).toFixed(3) : '—';
-        const zerosiM2 = sup > 0 ? (z.kg_zerosi/sup).toFixed(3) : '—';
-        const zonaNombre = z.zona.length > 25 ? z.zona.slice(0,25) + '…' : z.zona;
-        return '<div style="background:var(--bg3);border-radius:8px;padding:12px;border-left:3px solid ' + col + '">' +
-          '<div style="font-size:10px;color:var(--text3);margin-bottom:8px;font-weight:600">' + zonaNombre + '</div>' +
-          '<div style="display:flex;justify-content:space-between;margin-bottom:6px">' +
-            '<span style="font-size:11px;color:var(--text2)">RF1</span>' +
-            '<span style="font-size:14px;font-weight:700;color:var(--blue);font-family:Rajdhani,sans-serif">' + rf1m2 + '<span style="font-size:10px;color:var(--text3)"> kg/m²</span></span>' +
-          '</div>' +
-          '<div style="display:flex;justify-content:space-between">' +
-            '<span style="font-size:11px;color:var(--text2)">ZEROSI</span>' +
-            '<span style="font-size:14px;font-weight:700;color:var(--teal);font-family:Rajdhani,sans-serif">' + zerosiM2 + '<span style="font-size:10px;color:var(--text3)"> kg/m²</span></span>' +
-          '</div>' +
-          (sup > 0 ? '<div style="font-size:9px;color:var(--text3);margin-top:6px">Sup: ' + sup.toLocaleString('es-CL') + ' m²</div>' : '') +
-          '</div>';
-      }).join('');
-    }
-
-    // Tabla semanal
-    const semanas = data.zonas.semanas || [];
-    const semanHead = document.getElementById('zonas-semanal-head');
-    const semanBody = document.getElementById('zonas-semanal-body');
-    if (semanHead && semanas.length > 0) {
-      semanHead.innerHTML = '<tr><th>Zona</th>' + semanas.map(s => '<th>' + s + '</th>').join('') + '<th>Total L</th><th>Total kg</th></tr>';
-    }
     // Gráfico diario RF1 vs ZEROSI
     const diarioDias = data.zonas.dias || [];
     const chartEl = document.getElementById('zonas-diario-chart');
     const labelsEl = document.getElementById('zonas-diario-labels');
     if (chartEl && diarioDias.length > 0) {
-      // Consolidar kg por día sumando todas las zonas
       const datosDia = {};
       for (const z of zonas) {
         if (!z.dias) continue;
@@ -1736,27 +1600,55 @@ async function loadData() {
           datosDia[dia].zerosi += d.zerosi||0;
         }
       }
-      const dias = diarioDias.slice(-14); // últimos 14 días
+      const dias = diarioDias.slice(-14);
       const maxVal = Math.max(...dias.map(d => (datosDia[d]?.rf1||0) + (datosDia[d]?.zerosi||0)), 1);
-      const barW = Math.floor(100 / dias.length);
-
       chartEl.innerHTML = dias.map(dia => {
         const d = datosDia[dia] || {rf1:0, zerosi:0};
         const total = d.rf1 + d.zerosi;
         const hRf1 = Math.round((d.rf1/maxVal)*120);
         const hZerosi = Math.round((d.zerosi/maxVal)*120);
         const totalKgLabel = total > 0 ? (total >= 1000 ? Math.round(total/100)/10 + 'k' : total) : '';
-        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0;justify-content:flex-end;height:140px;cursor:pointer;position:relative">' +
-          (total > 0 ? '<div style="font-size:8px;color:var(--text3);margin-bottom:2px;text-align:center">' + totalKgLabel + '</div>' : '') +
+        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0;justify-content:flex-end;height:140px;cursor:pointer">' +
+          (total > 0 ? '<div style="font-size:8px;color:var(--text3);margin-bottom:2px">' + totalKgLabel + '</div>' : '') +
           (hZerosi > 0 ? '<div style="width:100%;height:' + hZerosi + 'px;background:var(--teal);border-radius:3px 3px 0 0;opacity:0.85" title="ZEROSI: ' + d.zerosi.toLocaleString() + ' kg"></div>' : '') +
           (hRf1 > 0 ? '<div style="width:100%;height:' + hRf1 + 'px;background:var(--blue);' + (hZerosi > 0 ? '' : 'border-radius:3px 3px 0 0;') + 'opacity:0.9" title="RF1: ' + d.rf1.toLocaleString() + ' kg"></div>' : '') +
           (total === 0 ? '<div style="width:100%;height:3px;background:var(--border);border-radius:2px"></div>' : '') +
           '</div>';
       }).join('');
+      if (labelsEl) labelsEl.innerHTML = dias.map(dia =>
+        '<div style="flex:1;text-align:center;font-size:9px;color:var(--text3)">' + dia.slice(5).replace('-','/') + '</div>'
+      ).join('');
+    }
 
-      labelsEl.innerHTML = dias.map(dia => {
-        return '<div style="flex:1;text-align:center;font-size:9px;color:var(--text3)">' + dia.slice(5).replace('-','/') + '</div>';
-      }).join('');
+    // Tabla semanal
+    const semanas = data.zonas.semanas || [];
+    const semanHead = document.getElementById('zonas-semanal-head');
+    const semanBody = document.getElementById('zonas-semanal-body');
+    if (semanHead && semanas.length > 0) {
+      semanHead.innerHTML = '<tr><th>Zona</th>' + semanas.map(s => '<th>' + s + '</th>').join('') + '<th>Total L</th><th>Total kg</th></tr>';
+    }
+    // Tabla diaria RF1 vs ZEROSI
+    const diarioDias = data.zonas.dias || [];
+    const diarioBody = document.getElementById('zonas-diario-body');
+    if (diarioBody && diarioDias.length > 0) {
+      const filas = [];
+      for (const dia of diarioDias.slice(-30).reverse()) {
+        for (const z of zonas) {
+          const d = z.dias && z.dias[dia];
+          if (d && (d.litros > 0)) {
+            const fechaCorta = dia.slice(5).replace('-','/');
+            filas.push('<tr>' +
+              '<td>' + fechaCorta + '</td>' +
+              '<td style="font-size:10px;color:var(--text2)">' + z.zona.slice(0,25) + '</td>' +
+              '<td class="mono" style="color:var(--blue)">' + (d.rf1||0).toLocaleString('es-CL') + '</td>' +
+              '<td class="mono" style="color:var(--teal)">' + (d.zerosi||0).toLocaleString('es-CL') + '</td>' +
+              '<td class="mono">' + d.kg.toLocaleString('es-CL') + '</td>' +
+              '<td class="mono">' + d.litros.toLocaleString('es-CL') + '</td>' +
+              '</tr>');
+          }
+        }
+      }
+      diarioBody.innerHTML = filas.length > 0 ? filas.join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text3)">Sin datos</td></tr>';
     }
 
     if (semanBody && zonas.length > 0) {
@@ -1795,9 +1687,18 @@ async function loadData() {
           '</tr>';
       }).join('');
     }
-
+    const totalZonasL = zonas.reduce((s,z) => s + z.total, 0);
+    setText('zona-kpi-1', totalZonasL.toLocaleString('es-CL'));
+    setText('zona-kpi-2', zonas.length);
+    setText('zona-kpi-2-sub', zonas.length + ' zonas atendidas');
+    // S19 y S20 calculados desde los datos
+    const s19Total = zonas.reduce((s,z) => s + (z.s19||0), 0);
+    const s20Total = zonas.reduce((s,z) => s + (z.s20||0), 0);
+    setText('zona-kpi-3', s19Total > 0 ? s19Total.toLocaleString('es-CL') : car.total_litros.toLocaleString('es-CL'));
+    setText('zona-kpi-4', s20Total > 0 ? s20Total.toLocaleString('es-CL') : '—');
     const totalZonas = zonas.reduce((s,z) => s + z.total, 0);
-
+    setText('zonas-total-val', totalZonas.toLocaleString('es-CL') + ' L');
+    setText('zonas-total-sub', zonas.length + ' zonas atendidas');
 
     const colores = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
     

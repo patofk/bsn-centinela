@@ -24,6 +24,29 @@ function fechaStr(val) {
   }
   return safeStr(val);
 }
+
+// Convierte valor de hora Excel (fracción del día o string HH:MM) a minutos desde medianoche
+function horaAMinutos(val) {
+  if (!val && val !== 0) return null;
+  // Número Excel: fracción del día (ej: 0.5 = 12:00)
+  if (typeof val === 'number') {
+    return Math.round(val * 24 * 60);
+  }
+  // String HH:MM o H:MM
+  const str = String(val).trim();
+  const match = str.match(/^(\d{1,2}):(\d{2})/);
+  if (match) return parseInt(match[1]) * 60 + parseInt(match[2]);
+  return null;
+}
+
+function calcDuracion(horaInicio, horaFin) {
+  const ini = horaAMinutos(horaInicio);
+  const fin = horaAMinutos(horaFin);
+  if (ini === null || fin === null) return 0;
+  let diff = fin - ini;
+  if (diff < 0) diff += 24 * 60; // cruza medianoche
+  return diff;
+}
 function getCol(row, ...partials) {
   for (const partial of partials)
     for (const k of Object.keys(row))
@@ -77,12 +100,17 @@ function procesarExcel(buffer) {
     const tieneCarga = factCargas.some(c =>
       Object.entries(c).some(([k,v]) => k.toLowerCase().includes('lote') && safeStr(v) === idLote)
     );
+    const horaInicioProd = getCol(r,'Hora inicio','hora inicio','inicio');
+    const horaFinProd    = getCol(r,'Hora fin','hora fin','fin');
+    const duracionProd   = calcDuracion(horaInicioProd, horaFinProd);
     lotes.push({ id:idLote, producto, supervisor:superv, tk, litros, kg,
-      duracion:0, fecha:fechaProd, estado: tieneCarga ? 'Despachado' : 'En TK' });
+      duracion:duracionProd, fecha:fechaProd, estado: tieneCarga ? 'Despachado' : 'En TK' });
   }
   const lotesPend = lotes.filter(l=>l.estado==='En TK').length;
   const lotesDesp = lotes.length - lotesPend;
   const rendProm = totalLitrosProd > 0 ? Math.round(totalKgProd/totalLitrosProd*10)/10 : 0;
+  const durProd = lotes.filter(l=>l.duracion>0).map(l=>l.duracion);
+  const durProdProm = durProd.length > 0 ? Math.round(durProd.reduce((a,b)=>a+b,0)/durProd.length) : 0;
 
   // ── INVENTARIO ──
   const minimos = {};
@@ -186,9 +214,17 @@ function procesarExcel(buffer) {
     aguaTotal += agua;
     if (camion) { if(!camionStats[camion]) camionStats[camion]={cargas:0,litros:0,kg:0}; camionStats[camion].cargas++; camionStats[camion].litros+=litros; camionStats[camion].kg+=kgCarga; }
     if (oper)   { if(!operStats[oper])   operStats[oper]={cargas:0,litros:0,kg:0};   operStats[oper].cargas++;   operStats[oper].litros+=litros; operStats[oper].kg+=kgCarga; }
-    cargas.push({ id:idC, fecha, hora:'', producto:prod, tk, lote, camion, operador:oper,
-      litros, kg:kgCarga, agua, duracion:0, destino });
+    const horaInicioC = getCol(r,'Hora inicio','hora inicio','inicio');
+    const horaFinC    = getCol(r,'Hora fin','hora fin','fin');
+    const duracionC   = calcDuracion(horaInicioC, horaFinC);
+    const horaStr     = horaInicioC ? (horaAMinutos(horaInicioC) !== null ?
+      String(Math.floor(horaAMinutos(horaInicioC)/60)).padStart(2,'0') + ':' +
+      String(horaAMinutos(horaInicioC)%60).padStart(2,'0') : '') : '';
+    cargas.push({ id:idC, fecha, hora:horaStr, producto:prod, tk, lote, camion, operador:oper,
+      litros, kg:kgCarga, agua, duracion:duracionC, destino });
   }
+  const durCargas = cargas.filter(c=>c.duracion>0).map(c=>c.duracion);
+  const durCargaProm = durCargas.length > 0 ? Math.round(durCargas.reduce((a,b)=>a+b,0)/durCargas.length) : 0;
   const porCamion = Object.entries(camionStats).map(([k,v])=>({
     camion:k, ...v, pct:Math.round(totalLitrosCarga?v.litros/totalLitrosCarga*100:0)
   }));
@@ -275,7 +311,7 @@ function procesarExcel(buffer) {
       lotes_pendientes:lotesPend, lotes },
     inventario:{ materia_prima:materiaPrima, producto_terminado_tk:prodTerminado, movimientos },
     cargas:{ total_litros:totalLitrosCarga, total_kg:totalKgCarga, agua_total:aguaTotal,
-      duracion_promedio_min:0, cargas, por_camion:porCamion, por_operador:porOperador },
+      duracion_promedio_min:durCargaProm, cargas, por_camion:porCamion, por_operador:porOperador },
     trazabilidad:{ lotes_completos:lotesDesp, lotes_total:lotes.length,
       cargas_vinculadas: cargasConLote, total_cargas: cargas.length,
       lotes_pendientes:lotesPend, tiempo_promedio_dias:1.8,
