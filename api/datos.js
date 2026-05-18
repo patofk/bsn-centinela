@@ -39,18 +39,19 @@ function leerHoja(wb, nombre) {
   range.s.r = 3;
   ws['!ref'] = XLSX.utils.encode_range(range);
   const rows = XLSX.utils.sheet_to_json(ws, { defval: null, raw: true });
-  console.log(`Hoja ${nombre}: ${rows.length} filas`);
   return rows;
 }
 
 function procesarExcel(buffer) {
   const wb = XLSX.read(buffer, { type: 'buffer', cellDates: false });
+
   const factProd   = leerHoja(wb, 'FACT_PRODUCCION');
   const factCargas = leerHoja(wb, 'FACT_CARGAS');
   const factInv    = leerHoja(wb, 'FACT_INVENTARIO');
   const dimProd    = leerHoja(wb, 'DIM_PRODUCTO');
+  const dimZona    = leerHoja(wb, 'DIM_ZONA');
 
-  // PRODUCCION
+  // ── PRODUCCIÓN ──
   const lotes = [];
   let totalLitrosProd = 0, totalKgProd = 0;
   for (const r of factProd) {
@@ -74,13 +75,12 @@ function procesarExcel(buffer) {
   const lotesDesp = lotes.length - lotesPend;
   const rendProm = totalLitrosProd > 0 ? Math.round(totalKgProd/totalLitrosProd*10)/10 : 0;
 
-  // INVENTARIO
+  // ── INVENTARIO ──
   const minimos = {};
   for (const d of dimProd) {
     const prod = safeStr(getCol(d,'Producto','nombre','ID'));
     if (prod) minimos[prod] = safeFloat(getCol(d,'Mínimo','Minimo','min','mínimo'));
   }
-
   const movimientos = [];
   for (const r of factInv) {
     const prod = safeStr(getCol(r,'Producto'));
@@ -88,7 +88,8 @@ function procesarExcel(buffer) {
     const kgPorEnvase = safeFloat(getCol(r,'Cantidad por envase','envase','(ke)'), 750);
     const salidas  = safeFloat(getCol(r,'Salidas','salida','(-)')) * kgPorEnvase;
     const entradas = safeFloat(getCol(r,'Entradas','entrada','(+)')) * kgPorEnvase;
-    const stockFinal = safeFloat(getCol(r,'Stock Final (kg)','Stock final (kg)')) || safeFloat(getCol(r,'Stock final','stock final','final')) * kgPorEnvase;
+    const stockFinal = safeFloat(getCol(r,'Stock Final (kg)','Stock final (kg)')) ||
+                       safeFloat(getCol(r,'Stock final','stock final','final')) * kgPorEnvase;
     const fecha = fechaStr(getCol(r,'Fecha'));
     movimientos.push({
       fecha, producto: prod,
@@ -98,7 +99,6 @@ function procesarExcel(buffer) {
       stock_final: stockFinal
     });
   }
-
   const stockPorProd = {};
   for (const m of movimientos) if (m.producto) stockPorProd[m.producto] = m.stock_final;
   const materiaPrima = Object.entries(stockPorProd).map(([prod, stock]) => ({
@@ -111,12 +111,12 @@ function procesarExcel(buffer) {
     supervisor:l.supervisor, dias_en_tk:1, estado:'Disponible'
   }));
 
-  // CARGAS
+  // ── CARGAS ──
   const cargas = [];
-  let totalLitrosCarga=0, aguaTotal=0;
+  let totalLitrosCarga=0, totalKgCarga=0, aguaTotal=0;
   const camionStats={}, operStats={};
   for (const r of factCargas) {
-    const idC = safeStr(getCol(r,'ID Carga','único'));
+    const idC    = safeStr(getCol(r,'ID Carga','único'));
     if (!idC || idC.length < 3) continue;
     const litros  = safeFloat(getCol(r,'cargada','Litros','Cantidad'));
     const agua    = safeFloat(getCol(r,'agua','Agua','Volumen agua'));
@@ -127,27 +127,74 @@ function procesarExcel(buffer) {
     const tk      = safeStr(getCol(r,'TK','Estiba'));
     const fecha   = fechaStr(getCol(r,'Fecha'));
     const prod    = safeStr(getCol(r,'Producto'));
+    // Buscar kg del lote asociado
+    const loteData = lotes.find(l => l.id === lote);
+    const kgCarga  = loteData ? loteData.kg : 0;
     totalLitrosCarga += litros;
+    totalKgCarga += kgCarga;
     aguaTotal += agua;
-    if (camion) { if(!camionStats[camion]) camionStats[camion]={cargas:0,litros:0}; camionStats[camion].cargas++; camionStats[camion].litros+=litros; }
-    if (oper)   { if(!operStats[oper])   operStats[oper]={cargas:0,litros:0};   operStats[oper].cargas++;   operStats[oper].litros+=litros; }
-    cargas.push({ id:idC, fecha, hora:'', producto:prod, tk, lote, camion, operador:oper, litros, agua, duracion:0, destino });
+    if (camion) { if(!camionStats[camion]) camionStats[camion]={cargas:0,litros:0,kg:0}; camionStats[camion].cargas++; camionStats[camion].litros+=litros; camionStats[camion].kg+=kgCarga; }
+    if (oper)   { if(!operStats[oper])   operStats[oper]={cargas:0,litros:0,kg:0};   operStats[oper].cargas++;   operStats[oper].litros+=litros; operStats[oper].kg+=kgCarga; }
+    cargas.push({ id:idC, fecha, hora:'', producto:prod, tk, lote, camion, operador:oper,
+      litros, kg:kgCarga, agua, duracion:0, destino });
   }
-  const porCamion = Object.entries(camionStats).map(([k,v])=>({camion:k,...v,pct:Math.round(totalLitrosCarga?v.litros/totalLitrosCarga*100:0)}));
+  const porCamion = Object.entries(camionStats).map(([k,v])=>({
+    camion:k, ...v, pct:Math.round(totalLitrosCarga?v.litros/totalLitrosCarga*100:0)
+  }));
   const porOperador = Object.entries(operStats).map(([k,v])=>({operador:k,...v}));
 
-  // ZONAS
+  // ── ZONAS con superficie desde DIM_ZONA ──
+  // DIM_ZONA: col A = "Destino (Rajo + Zona)", col F = "Superficie (m2)"
+  const superficies = {};
+  const zonaDestinos = {}; // mapa nombre_dim → nombre_cargas
+  for (const d of dimZona) {
+    const nombre = safeStr(getCol(d,'Destino','Rajo','destino'));
+    const sup    = safeFloat(getCol(d,'Superficie','m2','superficie'));
+    if (nombre && sup > 0) superficies[nombre] = sup;
+  }
+
+  // Función para buscar superficie haciendo match flexible entre nombres
+  function buscarSuperficie(destino) {
+    // Match exacto
+    if (superficies[destino]) return superficies[destino];
+    // Match parcial — buscar zona que contenga palabras clave del destino
+    for (const [k, v] of Object.entries(superficies)) {
+      const kLow = k.toLowerCase();
+      const dLow = destino.toLowerCase();
+      // Extraer número de zona para comparar
+      const zonaNumK = kLow.match(/zona\s*(\d+)/)?.[1];
+      const zonaNumD = dLow.match(/zona\s*(\d+)/)?.[1];
+      if (zonaNumK && zonaNumD && zonaNumK === zonaNumD) return v;
+    }
+    return 0;
+  }
+
   const zonaStats = {};
   for (const c of cargas) {
     if (!c.destino) continue;
-    if (!zonaStats[c.destino]) zonaStats[c.destino] = {s19:0, s20:0};
-    zonaStats[c.destino].s19 += c.litros;
+    if (!zonaStats[c.destino]) zonaStats[c.destino] = { litros:0, kg:0, agua:0 };
+    zonaStats[c.destino].litros += c.litros;
+    zonaStats[c.destino].kg    += c.kg;
+    zonaStats[c.destino].agua  += c.agua;
   }
-  const totalZonasL = Object.values(zonaStats).reduce((s,v)=>s+v.s19+v.s20, 0);
+  const totalZonasL = Object.values(zonaStats).reduce((s,v)=>s+v.litros, 0);
   const porZona = Object.entries(zonaStats)
-    .map(([k,v])=>({zona:k, s19:v.s19, s20:v.s20, total:v.s19+v.s20,
-      pct:Math.round(totalZonasL?(v.s19+v.s20)/totalZonasL*100:0)}))
-    .sort((a,b)=>b.total-a.total);
+    .map(([k,v]) => {
+      const sup = buscarSuperficie(k);
+      return {
+        zona: k,
+        litros: v.litros,
+        kg: v.kg,
+        agua: v.agua,
+        total: v.litros,
+        pct: Math.round(totalZonasL ? v.litros/totalZonasL*100 : 0),
+        superficie_m2: sup,
+        litros_m2: sup > 0 ? Math.round(v.litros/sup*100)/100 : null,
+        kg_m2: sup > 0 ? Math.round(v.kg/sup*1000)/1000 : null,
+        agua_m2: sup > 0 ? Math.round(v.agua/sup*100)/100 : null
+      };
+    })
+    .sort((a,b)=>b.litros-a.litros);
 
   return {
     meta:{ ultima_actualizacion:new Date().toISOString().slice(0,19), periodo:'Mayo 2026', operacion:'BSN Centinela' },
@@ -155,12 +202,12 @@ function procesarExcel(buffer) {
       duracion_promedio_min:0, lotes_total:lotes.length, lotes_despachados:lotesDesp,
       lotes_pendientes:lotesPend, lotes },
     inventario:{ materia_prima:materiaPrima, producto_terminado_tk:prodTerminado, movimientos },
-    cargas:{ total_litros:totalLitrosCarga, agua_total:aguaTotal, duracion_promedio_min:0,
-      cargas, por_camion:porCamion, por_operador:porOperador },
+    cargas:{ total_litros:totalLitrosCarga, total_kg:totalKgCarga, agua_total:aguaTotal,
+      duracion_promedio_min:0, cargas, por_camion:porCamion, por_operador:porOperador },
     trazabilidad:{ lotes_completos:lotesDesp, lotes_total:lotes.length,
       lotes_pendientes:lotesPend, tiempo_promedio_dias:1.8,
       responsables:[...new Set(lotes.map(l=>l.supervisor).filter(Boolean))] },
-    zonas:{ semanas:['S19','S20'], por_zona:porZona }
+    zonas:{ por_zona:porZona }
   };
 }
 
