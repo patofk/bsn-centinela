@@ -654,26 +654,26 @@ body {
       <div class="kpi-row kpi-row-4" style="margin-bottom:14px">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
-          <div class="kpi-value" id="kpi-prod-val">80.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="kpi-prod-val">80.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="kpi-prod-kg">— kg</div>
           <div class="kpi-sub" id="kpi-lotes-sub">10 lotes · Mayo 2026</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Total Despachado</div>
-          <div class="kpi-value" id="kpi-desp-val">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="kpi-desp-val">64.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="kpi-desp-kg">— kg</div>
           <div class="kpi-sub" id="kpi-cargas-sub">8 cargas completadas</div>
           <span class="kpi-badge teal">80% despacho</span>
         </div>
         <div class="kpi-card red">
           <div class="kpi-label">Stock RF1</div>
-          <div class="kpi-value" id="kpi-rf1-val">180<span class="kpi-unit">kg</span></div>
+          <div class="kpi-value"><span id="kpi-rf1-val">180</span><span class="kpi-unit"> kg</span></div>
           <div class="kpi-sub" id="kpi-rf1-sub">Mínimo: 200 kg · 3.2 días</div>
           <span class="kpi-badge red">⚠ BAJO MÍNIMO</span>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">En TK (pendiente)</div>
-          <div class="kpi-value" id="kpi-tk-val">16.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="kpi-tk-val">16.000</span><span class="kpi-unit"> L</span></div>
           <div class="kpi-sub" id="kpi-tk-sub">RF1 TK3 · ZEROSI TK3</div>
           <span class="kpi-badge yellow">Disponible</span>
         </div>
@@ -835,23 +835,23 @@ body {
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
-          <div class="kpi-value" id="prod-kpi-1">80.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="prod-kpi-1">80.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="prod-kpi-1-kg">— kg</div>
           <div class="kpi-sub">10 lotes completos</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Materia Prima Usada</div>
-          <div class="kpi-value" id="prod-kpi-2">2.155<span class="kpi-unit">kg</span></div>
+          <div class="kpi-value"><span id="prod-kpi-2">2.155</span><span class="kpi-unit"> kg</span></div>
           <div class="kpi-sub">RF1 + ZEROSI combinado</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Rendimiento Promedio</div>
-          <div class="kpi-value" id="prod-kpi-3">37,1<span class="kpi-unit">kg/L</span></div>
+          <div class="kpi-value"><span id="prod-kpi-3">37,1</span><span class="kpi-unit"> kg/L</span></div>
           <div class="kpi-sub">Estable en el período</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Duración Promedio</div>
-          <div class="kpi-value" id="prod-kpi-4">47<span class="kpi-unit">min</span></div>
+          <div class="kpi-value"><span id="prod-kpi-4">47</span><span class="kpi-unit"> min</span></div>
           <div class="kpi-sub">Rango: 42–55 min</div>
         </div>
         <div class="kpi-card yellow">
@@ -931,14 +931,16 @@ body {
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card red">
           <div class="kpi-label">Stock RF1</div>
-          <div class="kpi-value" id="inv-kpi-rf1">—<span class="kpi-unit">kg</span></div>
+          <div class="kpi-value"><span id="inv-kpi-rf1">—</span><span class="kpi-unit"> kg</span></div>
           <div class="kpi-sub" id="inv-kpi-rf1-sub">cargando...</div>
+          <div id="inv-rf1-bodegas" style="margin-top:4px;font-size:10px;color:var(--text3)"></div>
           <span class="kpi-badge red" id="inv-badge-rf1">⚠ BAJO MÍNIMO</span>
         </div>
         <div class="kpi-card teal">
           <div class="kpi-label">Stock ZEROSI</div>
-          <div class="kpi-value" id="inv-kpi-zerosi">—<span class="kpi-unit">kg</span></div>
+          <div class="kpi-value"><span id="inv-kpi-zerosi">—</span><span class="kpi-unit"> kg</span></div>
           <div class="kpi-sub" id="inv-kpi-zerosi-sub">cargando...</div>
+          <div id="inv-zerosi-bodegas" style="margin-top:4px;font-size:10px;color:var(--text3)"></div>
           <span class="kpi-badge green" id="inv-badge-zerosi">✓ Normal</span>
         </div>
         <div class="kpi-card yellow">
@@ -1060,13 +1062,13 @@ body {
       <div class="kpi-row kpi-row-5">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Cargado</div>
-          <div class="kpi-value" id="car-kpi-1">64.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="car-kpi-1">64.000</span><span class="kpi-unit"> L</span></div>
           <div style="font-size:11px;color:var(--teal);margin-top:2px" id="car-kpi-1-kg">— kg</div>
           <div class="kpi-sub">8 cargas completadas</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Agua Utilizada</div>
-          <div class="kpi-value" id="car-kpi-2">600.000<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="car-kpi-2">600.000</span><span class="kpi-unit"> L</span></div>
           <div class="kpi-sub">9.4 L agua/L producto</div>
         </div>
         <div class="kpi-card">
@@ -1076,7 +1078,7 @@ body {
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Duración Promedio</div>
-          <div class="kpi-value" id="car-kpi-4">21<span class="kpi-unit">min</span></div>
+          <div class="kpi-value"><span id="car-kpi-4">21</span><span class="kpi-unit"> min</span></div>
           <div class="kpi-sub">Rango: 19–23 min</div>
         </div>
         <div class="kpi-card purple">
@@ -1137,17 +1139,17 @@ body {
       <div class="kpi-row kpi-row-4">
         <div class="kpi-card teal">
           <div class="kpi-label">Trazabilidad Completa</div>
-          <div class="kpi-value" id="traz-kpi-1">8<span class="kpi-unit">/10</span></div>
+          <div class="kpi-value"><span id="traz-kpi-1">8</span><span class="kpi-unit">/10</span></div>
           <div class="kpi-sub">2 lotes pendientes en TK</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Cargas con Lote Vinculado</div>
-          <div class="kpi-value" id="traz-kpi-2">8<span class="kpi-unit">/8</span></div>
+          <div class="kpi-value"><span id="traz-kpi-2">8</span><span class="kpi-unit">/8</span></div>
           <div class="kpi-sub">100% integridad relacional</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Tiempo Prod. → Despacho</div>
-          <div class="kpi-value" id="traz-kpi-3">1.8<span class="kpi-unit">días</span></div>
+          <div class="kpi-value"><span id="traz-kpi-3">1.8</span><span class="kpi-unit"> días</span></div>
           <div class="kpi-sub">Promedio · Rango: 0–6 días</div>
         </div>
         <div class="kpi-card purple">
@@ -1237,16 +1239,28 @@ body {
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <div class="panel">
-            <div class="panel-header"><div class="panel-title">Distribución por Zona</div></div>
-            <div class="panel-body bar-chart" id="zonas-barras">
-              <div style="color:var(--text3);font-size:12px">Cargando...</div>
+            <div class="panel-header">
+              <div class="panel-title">Evolución Semanal</div>
+              <div style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text3)">L por zona</div>
+            </div>
+            <div class="panel-body" style="padding:0">
+              <table class="data-table" id="zonas-semanal-tabla">
+                <thead id="zonas-semanal-head">
+                  <tr><th>Zona</th><th>Total L</th><th>Total kg</th></tr>
+                </thead>
+                <tbody id="zonas-semanal-body">
+                  <tr><td colspan="3" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div class="panel">
-            <div class="panel-header"><div class="panel-title">Total Despachado</div></div>
-            <div class="panel-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px">
-              <div style="font-family:Rajdhani,sans-serif;font-size:40px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</div>
-              <div style="font-size:11px;color:var(--text3);margin-top:4px" id="zonas-total-sub">litros totales</div>
+            <div class="panel-header"><div class="panel-title">Resumen Total</div></div>
+            <div class="panel-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px">
+              <div style="font-family:Rajdhani,sans-serif;font-size:36px;font-weight:700;color:var(--teal)" id="zonas-total-val">—</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:2px">litros totales</div>
+              <div style="font-family:Rajdhani,sans-serif;font-size:24px;font-weight:700;color:var(--yellow);margin-top:8px" id="zonas-total-kg">—</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:2px" id="zonas-total-sub">kg totales</div>
             </div>
           </div>
         </div>
@@ -1447,12 +1461,24 @@ async function loadData() {
 
     if (invRf1) {
       setText('inv-kpi-rf1', invRf1.stock_kg.toLocaleString('es-CL'));
+      // Desglose por bodega RF1
+      const bodRf1 = document.getElementById('inv-rf1-bodegas');
+      if (bodRf1 && invRf1.por_bodega) {
+        bodRf1.innerHTML = Object.entries(invRf1.por_bodega)
+          .map(([b,kg]) => b + ': ' + kg.toLocaleString('es-CL') + ' kg').join(' · ');
+      }
       setText('inv-kpi-rf1-sub', 'Mín: ' + invRf1.minimo_kg.toLocaleString('es-CL') + ' kg · ' + invRf1.autonomia_dias + ' días');
       const badgeRf1 = document.getElementById('inv-badge-rf1');
       if (badgeRf1) { badgeRf1.textContent = invRf1.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeRf1.className = invRf1.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
     }
     if (invZerosi) {
       setText('inv-kpi-zerosi', invZerosi.stock_kg.toLocaleString('es-CL'));
+      // Desglose por bodega ZEROSI
+      const bodZ = document.getElementById('inv-zerosi-bodegas');
+      if (bodZ && invZerosi.por_bodega) {
+        bodZ.innerHTML = Object.entries(invZerosi.por_bodega)
+          .map(([b,kg]) => b + ': ' + kg.toLocaleString('es-CL') + ' kg').join(' · ');
+      }
       setText('inv-kpi-zerosi-sub', 'Mín: ' + invZerosi.minimo_kg.toLocaleString('es-CL') + ' kg · ' + invZerosi.autonomia_dias + ' días');
       const badgeZ = document.getElementById('inv-badge-zerosi');
       if (badgeZ) { badgeZ.textContent = invZerosi.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeZ.className = invZerosi.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
@@ -1542,14 +1568,36 @@ async function loadData() {
 
     // Trazabilidad KPIs
     setText('traz-kpi-1', traz.lotes_completos + '/' + traz.lotes_total);
-    setText('traz-kpi-2', traz.lotes_completos + '/8');
+    setText('traz-kpi-2', (traz.cargas_vinculadas || traz.lotes_completos) + '/' + (traz.total_cargas || traz.lotes_total));
     setText('traz-kpi-3', traz.tiempo_promedio_dias);
     setText('traz-kpi-4', traz.responsables.length);
 
     // Zonas — renderizado dinámico
     const zonas = data.zonas.por_zona;
     const totalZonasL2 = zonas.reduce((s,z) => s + z.litros, 0);
-    setText('zonas-total-val', totalZonasL2.toLocaleString('es-CL') + ' L');
+    setText('zonas-total-val', totalZonasL2.toLocaleString('es-CL'));
+    const totalKgZ = zonas.reduce((s,z) => s + (z.kg||0), 0);
+    setText('zonas-total-kg', totalKgZ.toLocaleString('es-CL'));
+    setText('zonas-total-sub', zonas.length + ' zonas · ' + totalKgZ.toLocaleString('es-CL') + ' kg');
+
+    // Tabla semanal
+    const semanas = data.zonas.semanas || [];
+    const semanHead = document.getElementById('zonas-semanal-head');
+    const semanBody = document.getElementById('zonas-semanal-body');
+    if (semanHead && semanas.length > 0) {
+      semanHead.innerHTML = '<tr><th>Zona</th>' + semanas.map(s => '<th>' + s + '</th>').join('') + '<th>Total L</th><th>Total kg</th></tr>';
+    }
+    if (semanBody && zonas.length > 0) {
+      semanBody.innerHTML = zonas.map(z => {
+        const cols = semanas.map(s => {
+          const v = z.semanas && z.semanas[s];
+          return '<td class="mono" style="font-size:10px">' + (v ? v.litros.toLocaleString('es-CL') + ' L' : '—') + '</td>';
+        }).join('');
+        return '<tr><td style="font-size:10px;color:var(--text)">' + z.zona.slice(0,20) + '</td>' + cols +
+          '<td class="mono" style="color:var(--teal)">' + z.litros.toLocaleString('es-CL') + '</td>' +
+          '<td class="mono" style="color:var(--yellow)">' + (z.kg||0).toLocaleString('es-CL') + '</td></tr>';
+      }).join('');
+    }
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
     setText('zona-kpi-1', totalZonasL2.toLocaleString('es-CL'));
     const totalKgZonas = zonas.reduce((s,z) => s + (z.kg||0), 0);
