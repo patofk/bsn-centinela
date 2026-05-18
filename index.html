@@ -1212,12 +1212,12 @@ body {
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Litros S19 (sem. 19)</div>
-          <div class="kpi-value" id="zona-kpi-3">—<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="zona-kpi-3">—</span><span class="kpi-unit"> L</span></div>
           <div class="kpi-sub">semana anterior</div>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">Litros S20 (en curso)</div>
-          <div class="kpi-value" id="zona-kpi-4">—<span class="kpi-unit">L</span></div>
+          <div class="kpi-value"><span id="zona-kpi-4">—</span><span class="kpi-unit"> L</span></div>
           <div class="kpi-sub">semana actual</div>
         </div>
       </div>
@@ -1696,8 +1696,7 @@ async function loadData() {
     setText('zona-kpi-3', s19Total > 0 ? s19Total.toLocaleString('es-CL') : car.total_litros.toLocaleString('es-CL'));
     setText('zona-kpi-4', s20Total > 0 ? s20Total.toLocaleString('es-CL') : '—');
     const totalZonas = zonas.reduce((s,z) => s + z.total, 0);
-    setText('zonas-total-val', totalZonas.toLocaleString('es-CL') + ' L');
-    setText('zonas-total-sub', zonas.length + ' zonas atendidas');
+
 
     const colores = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
     
