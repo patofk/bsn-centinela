@@ -1580,11 +1580,7 @@ async function loadData() {
 
     // Zonas — renderizado dinámico
     const zonas = data.zonas.por_zona;
-    const totalZonasL2 = zonas.reduce((s,z) => s + z.litros, 0);
-    setText('zonas-total-val', totalZonasL2.toLocaleString('es-CL'));
-    const totalKgZ = zonas.reduce((s,z) => s + (z.kg||0), 0);
-    setText('zonas-total-kg', totalKgZ.toLocaleString('es-CL'));
-    setText('zonas-total-sub', zonas.length + ' zonas · ' + totalKgZ.toLocaleString('es-CL') + ' kg');
+    // Totales calculados al final del script con totalZonasLitros
 
     // Gráfico diario RF1 vs ZEROSI
     const diarioDias = data.zonas.dias || [];
@@ -1642,7 +1638,7 @@ async function loadData() {
       }).join('');
     }
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
-    setText('zona-kpi-1', totalZonasL2.toLocaleString('es-CL'));
+    // zona-kpi-1 moved below
     const totalKgZonas = zonas.reduce((s,z) => s + (z.kg||0), 0);
 
     const zonasBody = document.getElementById('zonas-lista');
@@ -1667,7 +1663,7 @@ async function loadData() {
       }).join('');
     }
     const totalZonasL = zonas.reduce((s,z) => s + z.total, 0);
-    setText('zona-kpi-1', totalZonasL.toLocaleString('es-CL'));
+    // zona-kpi-1 moved below (L)
     setText('zona-kpi-2', zonas.length);
     setText('zona-kpi-2-sub', zonas.length + ' zonas atendidas');
     // S19 y S20 calculados desde los datos
@@ -1676,7 +1672,7 @@ async function loadData() {
     setText('zona-kpi-3', s19Total > 0 ? s19Total.toLocaleString('es-CL') : car.total_litros.toLocaleString('es-CL'));
     setText('zona-kpi-4', s20Total > 0 ? s20Total.toLocaleString('es-CL') : '—');
     const totalZonas = zonas.reduce((s,z) => s + z.total, 0);
-    setText('zonas-total-val', totalZonas.toLocaleString('es-CL') + ' L');
+    // zonas-total-val moved below
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
 
     const coloresK = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
@@ -1696,6 +1692,98 @@ async function loadData() {
     }
 
         // zonas-barras eliminado
+
+
+    // ── RESUMEN: Barras Producción por Producto ──
+    const resProdEl = document.getElementById('resumen-barras-producto');
+    if (resProdEl) {
+      const porProdRes = {};
+      p.lotes.forEach(l => {
+        const k = l.producto && l.producto.includes('RF1') ? 'RF1' : 'ZEROSI';
+        if (!porProdRes[k]) porProdRes[k] = {litros:0, lotes:0};
+        porProdRes[k].litros += l.litros;
+        porProdRes[k].lotes++;
+      });
+      const maxLRes = Math.max(...Object.values(porProdRes).map(x=>x.litros), 1);
+      resProdEl.innerHTML = Object.entries(porProdRes).map(([prod, d]) => {
+        const pct = Math.round(d.litros/maxLRes*100);
+        const col = prod==='RF1' ? 'var(--blue)' : 'var(--teal)';
+        return '<div class="bar-row">' +
+          '<div class="bar-label">' + prod + ' (' + d.lotes + ' lotes)</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+          '<div class="bar-val">' + d.litros.toLocaleString('es-CL') + ' L</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ── RESUMEN: Barras Despacho por Camión ──
+    const resCamEl = document.getElementById('resumen-barras-camion');
+    if (resCamEl && car.por_camion.length > 0) {
+      const maxCam = Math.max(...car.por_camion.map(c=>c.litros), 1);
+      resCamEl.innerHTML = car.por_camion.map(c => {
+        const pct = Math.round(c.litros/maxCam*100);
+        const col = coloresCamion[c.camion] || 'var(--blue)';
+        return '<div class="bar-row">' +
+          '<div class="bar-label">🚛 Camión N°' + c.camion + ' (' + c.cargas + ' c.)</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+          '<div class="bar-val">' + c.litros.toLocaleString('es-CL') + ' L</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ── PRODUCCION: Barras por Producto ──
+    const prodProdEl = document.getElementById('prod-barras-producto');
+    if (prodProdEl) {
+      const porProdP = {};
+      p.lotes.forEach(l => {
+        const k = l.producto && l.producto.includes('RF1') ? 'RF1' : 'ZEROSI';
+        if (!porProdP[k]) porProdP[k] = {litros:0, lotes:0};
+        porProdP[k].litros += l.litros;
+        porProdP[k].lotes++;
+      });
+      const maxLP = Math.max(...Object.values(porProdP).map(x=>x.litros), 1);
+      prodProdEl.innerHTML = Object.entries(porProdP).map(([prod, d]) => {
+        const pct = Math.round(d.litros/maxLP*100);
+        const col = prod==='RF1' ? 'var(--blue)' : 'var(--teal)';
+        return '<div class="bar-row">' +
+          '<div class="bar-label">' + prod + ' (' + d.lotes + ' lotes)</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+          '<div class="bar-val">' + d.litros.toLocaleString('es-CL') + ' L</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ── PRODUCCION: Barras por Supervisor ──
+    const prodSupEl = document.getElementById('prod-barras-supervisor');
+    if (prodSupEl) {
+      const porSup = {};
+      p.lotes.forEach(l => {
+        const k = l.supervisor || 'Sin supervisor';
+        if (!porSup[k]) porSup[k] = {lotes:0, litros:0};
+        porSup[k].lotes++;
+        porSup[k].litros += l.litros;
+      });
+      const maxSup = Math.max(...Object.values(porSup).map(x=>x.lotes), 1);
+      const colSup = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)'];
+      prodSupEl.innerHTML = Object.entries(porSup).map(([sup, d], i) => {
+        const pct = Math.round(d.lotes/maxSup*100);
+        return '<div class="bar-row">' +
+          '<div class="bar-label">' + sup.split(' ')[sup.split(' ').length-1] + '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + colSup[i%colSup.length] + '"></div></div>' +
+          '<div class="bar-val">' + d.lotes + ' lotes</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ── ZONAS: Total Despachado (zona-kpi-1) corregido ──
+    const totalZonasLitros = zonas.reduce((s,z) => s + (z.litros||0), 0);
+    setText('zona-kpi-1', totalZonasLitros.toLocaleString('es-CL'));
+    setText('zonas-total-val', totalZonasLitros.toLocaleString('es-CL') + ' L');
+    const totalKgAllZonas = zonas.reduce((s,z) => s + (z.kg||0), 0);
+    setText('zonas-total-kg', totalKgAllZonas.toLocaleString('es-CL') + ' kg');
+    const rf1KgZonas = zonas.reduce((s,z) => s + (z.rf1||0), 0);
+    const zerosiKgZonas = zonas.reduce((s,z) => s + (z.zerosi||0), 0);
+    setText('zonas-total-sub', 'RF1: ' + rf1KgZonas.toLocaleString('es-CL') + ' kg · ZEROSI: ' + zerosiKgZonas.toLocaleString('es-CL') + ' kg');
 
   } catch(e) {
     console.warn('loadData error:', e.message);
