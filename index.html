@@ -645,11 +645,7 @@ body {
     </div>
 
     <!-- ALERT BAR -->
-    <div class="alert-bar" id="alert-bar">
-      <div class="alert-bar-item">⚠️ RF1 bajo mínimo operacional — 180 kg disponibles (mín: 200 kg)</div>
-      <div class="alert-bar-sep"></div>
-      <div class="alert-bar-item">⏳ 16.000 L en TK pendientes de despacho (RF1 + ZEROSI)</div>
-    </div>
+    <div class="alert-bar" id="alert-bar" style="display:none"></div>
 
     <!-- ═══════════════════════════════════════════ -->
     <!-- PÁGINA 1 — RESUMEN EJECUTIVO               -->
@@ -1240,7 +1236,7 @@ body {
             <div class="panel-body" style="padding:0">
               <table class="data-table" id="zonas-semanal-tabla">
                 <thead id="zonas-semanal-head">
-                  <tr><th>Zona</th><th>Total L</th><th>Total kg</th></tr>
+                  <tr><th style="min-width:160px">Zona</th><th>Total L</th><th>Total kg</th></tr>
                 </thead>
                 <tbody id="zonas-semanal-body">
                   <tr><td colspan="3" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
@@ -1352,13 +1348,19 @@ async function loadData() {
     // Alertas
     const alertas = [];
     inv.materia_prima.forEach(x => {
-      if (x.alerta) alertas.push('⚠️ ' + x.producto + ' bajo mínimo — ' + x.stock_kg + ' kg (mín: ' + x.minimo_kg + ' kg)');
+      if (x.alerta) alertas.push('⚠️ ' + x.producto + ' bajo mínimo operacional — ' + x.stock_kg.toLocaleString('es-CL') + ' kg disponibles (mín: ' + x.minimo_kg.toLocaleString('es-CL') + ' kg)');
     });
     const litrajeEnTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
-    if (litrajeEnTk > 0) alertas.push('⏳ ' + litrajeEnTk.toLocaleString('es-CL') + ' L en TK pendientes de despacho');
+    if (litrajeEnTk > 0) {
+      const prodsTk = [...new Set(inv.producto_terminado_tk.map(t=>t.producto))].join(' + ');
+      alertas.push('⏳ ' + litrajeEnTk.toLocaleString('es-CL') + ' L en TK pendientes de despacho (' + prodsTk + ')');
+    }
+    const alertBar = document.getElementById('alert-bar');
     if (alertas.length > 0) {
-      document.getElementById('alert-bar').innerHTML =
-        alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
+      alertBar.style.display = '';
+      alertBar.innerHTML = alertas.map(a => '<div class="alert-bar-item">' + a + '</div>').join('<div class="alert-bar-sep"></div>');
+    } else {
+      alertBar.style.display = 'none';
     }
 
     // Resumen KPIs
@@ -1585,7 +1587,8 @@ async function loadData() {
       if (badgeZ) { badgeZ.textContent = invZerosi.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal'; badgeZ.className = invZerosi.alerta ? 'kpi-badge red' : 'kpi-badge green'; }
       setText('inv-kpi-autonomia', invZerosi.autonomia_dias);
     }
-    setText('inv-kpi-tk', litrajeEnTkInv.toLocaleString('es-CL'));
+    const litrosTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
+    setText('inv-kpi-tk', litrosTk > 0 ? litrosTk.toLocaleString('es-CL') : '0');
     setText('inv-kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
     setText('inv-kpi-salidas', totalSalidas.toLocaleString('es-CL'));
     setText('inv-kpi-salidas-sub', inv.movimientos.filter(m=>m.tipo==='Salida').length + ' movimientos de salida');
@@ -1742,9 +1745,11 @@ async function loadData() {
         const total = d.rf1 + d.zerosi;
         const hRf1 = Math.round((d.rf1/maxVal)*120);
         const hZerosi = Math.round((d.zerosi/maxVal)*120);
-        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0;justify-content:flex-end;height:120px;cursor:pointer;position:relative" title="' + dia.slice(5) + ' — RF1: ' + d.rf1.toLocaleString() + ' kg | ZEROSI: ' + d.zerosi.toLocaleString() + ' kg">' +
-          (hZerosi > 0 ? '<div style="width:100%;height:' + hZerosi + 'px;background:var(--teal);border-radius:3px 3px 0 0;opacity:0.85"></div>' : '') +
-          (hRf1 > 0 ? '<div style="width:100%;height:' + hRf1 + 'px;background:var(--blue);' + (hZerosi > 0 ? '' : 'border-radius:3px 3px 0 0;') + 'opacity:0.9"></div>' : '') +
+        const totalKgLabel = total > 0 ? (total >= 1000 ? Math.round(total/100)/10 + 'k' : total) : '';
+        return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0;justify-content:flex-end;height:140px;cursor:pointer;position:relative">' +
+          (total > 0 ? '<div style="font-size:8px;color:var(--text3);margin-bottom:2px;text-align:center">' + totalKgLabel + '</div>' : '') +
+          (hZerosi > 0 ? '<div style="width:100%;height:' + hZerosi + 'px;background:var(--teal);border-radius:3px 3px 0 0;opacity:0.85" title="ZEROSI: ' + d.zerosi.toLocaleString() + ' kg"></div>' : '') +
+          (hRf1 > 0 ? '<div style="width:100%;height:' + hRf1 + 'px;background:var(--blue);' + (hZerosi > 0 ? '' : 'border-radius:3px 3px 0 0;') + 'opacity:0.9" title="RF1: ' + d.rf1.toLocaleString() + ' kg"></div>' : '') +
           (total === 0 ? '<div style="width:100%;height:3px;background:var(--border);border-radius:2px"></div>' : '') +
           '</div>';
       }).join('');
