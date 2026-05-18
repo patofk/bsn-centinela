@@ -778,11 +778,9 @@ body {
         <!-- Producción por producto -->
         <div class="panel">
           <div class="panel-header"><div class="panel-title">Producción por Producto</div></div>
-          <div class="panel-body bar-chart" id="resumen-barras-producto">
-            <div style="color:var(--text3);font-size:12px">Cargando...</div>
-            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:var(--text3)">
-              <span>RF1: 8 lotes · TK 1 y TK 3</span>
-              <span>ZEROSI: 2 lotes · TK 1 y TK 3</span>
+          <div class="panel-body bar-chart">
+            <div id="resumen-barras-producto">
+              <div style="color:var(--text3);font-size:12px">Cargando...</div>
             </div>
           </div>
         </div>
@@ -1662,7 +1660,7 @@ async function loadData() {
           '</tr>';
       }).join('');
     }
-    const totalZonasL = zonas.reduce((s,z) => s + z.total, 0);
+    const totalZonasL = zonas.reduce((s,z) => s + z.litros, 0);
     // zona-kpi-1 moved below (L)
     setText('zona-kpi-2', zonas.length);
     setText('zona-kpi-2-sub', zonas.length + ' zonas atendidas');
@@ -1671,27 +1669,13 @@ async function loadData() {
     const s20Total = zonas.reduce((s,z) => s + (z.s20||0), 0);
     setText('zona-kpi-3', s19Total > 0 ? s19Total.toLocaleString('es-CL') : car.total_litros.toLocaleString('es-CL'));
     setText('zona-kpi-4', s20Total > 0 ? s20Total.toLocaleString('es-CL') : '—');
-    const totalZonas = zonas.reduce((s,z) => s + z.total, 0);
+    const totalZonas = zonas.reduce((s,z) => s + z.litros, 0);
     // zonas-total-val moved below
     setText('zonas-total-sub', zonas.length + ' zonas atendidas');
 
-    const coloresK = ['var(--blue)','var(--teal)','var(--yellow)','var(--c10)','var(--c8)','var(--green)'];
-    
-    const listaEl = document.getElementById('zonas-lista');
-    if (listaEl && zonas.length > 0) {
-      listaEl.innerHTML = zonas.map((z, i) => {
-        const pct = totalZonas > 0 ? Math.round(z.total/totalZonas*100) : 0;
-        return '<div class="zona-row">' +
-          '<div class="zona-header">' +
-          '<div class="zona-name">' + z.zona + '</div>' +
-          '<div class="zona-total">' + z.total.toLocaleString('es-CL') + ' L · ' + pct + '%</div>' +
-          '</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + coloresK[i % coloresK.length] + '"></div></div>' +
-          '</div>';
-      }).join('');
-    }
 
         // zonas-barras eliminado
+
 
 
     // ── RESUMEN: Barras Producción por Producto ──
@@ -1781,8 +1765,8 @@ async function loadData() {
     setText('zonas-total-val', totalZonasLitros.toLocaleString('es-CL') + ' L');
     const totalKgAllZonas = zonas.reduce((s,z) => s + (z.kg||0), 0);
     setText('zonas-total-kg', totalKgAllZonas.toLocaleString('es-CL') + ' kg');
-    const rf1KgZonas = zonas.reduce((s,z) => s + (z.rf1||0), 0);
-    const zerosiKgZonas = zonas.reduce((s,z) => s + (z.zerosi||0), 0);
+    const rf1KgZonas = zonas.reduce((s,z) => s + (z.kg_rf1||0), 0);
+    const zerosiKgZonas = zonas.reduce((s,z) => s + (z.kg_zerosi||0), 0);
     setText('zonas-total-sub', 'RF1: ' + rf1KgZonas.toLocaleString('es-CL') + ' kg · ZEROSI: ' + zerosiKgZonas.toLocaleString('es-CL') + ' kg');
 
   } catch(e) {
