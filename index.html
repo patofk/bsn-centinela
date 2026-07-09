@@ -837,25 +837,17 @@ body {
       </div>
 
       <div class="grid-2">
-        <!-- Evolución semanal ZeroSi -->
-        <div class="panel">
+        <!-- Evolución semanal apilada ZeroSi + RF1 -->
+        <div class="panel" style="grid-column:1/-1">
           <div class="panel-header">
-            <div class="panel-title">ZeroSi — Producción semanal (kg)</div>
-          </div>
-          <div class="panel-body" style="padding:14px 16px 12px">
-            <div id="chart-zerosi-semanal" style="width:100%;height:150px">
-              <div style="color:var(--text3);font-size:12px">Cargando...</div>
+            <div class="panel-title">Producción semanal — kg acumulados</div>
+            <div style="display:flex;gap:12px">
+              <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:10px;height:10px;background:var(--blue);border-radius:2px;opacity:0.85"></span>RF1</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:10px;height:10px;background:var(--teal);border-radius:2px;opacity:0.85"></span>ZeroSi</span>
             </div>
           </div>
-        </div>
-
-        <!-- Evolución semanal RF1 -->
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">RF1 — Producción semanal (kg)</div>
-          </div>
-          <div class="panel-body" style="padding:14px 16px 12px">
-            <div id="chart-rf1-semanal" style="width:100%;height:150px">
+          <div class="panel-body" style="padding:16px 20px 14px">
+            <div id="chart-semanal-apilado" style="width:100%;height:160px">
               <div style="color:var(--text3);font-size:12px">Cargando...</div>
             </div>
           </div>
@@ -1822,9 +1814,8 @@ async function loadData() {
 
 
 
-    // ── RESUMEN: Gráficos semanales ZeroSi y RF1 ──
-    renderSemanalChart('chart-zerosi-semanal', p.lotes, 'ZEROSI', 'var(--teal)');
-    renderSemanalChart('chart-rf1-semanal',    p.lotes, 'RF1',    'var(--blue)');
+    // ── RESUMEN: Gráfico semanal apilado ZeroSi + RF1 ──
+    renderSemanalApilado('chart-semanal-apilado', p.lotes);
 
     // ── PRODUCCION: Barras por Producto ──
     const prodProdEl = document.getElementById('prod-barras-producto');
@@ -1891,61 +1882,80 @@ async function loadData() {
   }
 }
 
-// ── GRÁFICO EVOLUCIÓN SEMANAL POR PRODUCTO ──
-function renderSemanalChart(elId, lotes, producto, color) {
+// ── GRÁFICO SEMANAL APILADO RF1 + ZeroSi ──
+function renderSemanalApilado(elId, lotes) {
   const el = document.getElementById(elId);
   if (!el) return;
 
   const porSemana = {};
   lotes.forEach(l => {
     if (!l.fecha) return;
-    const esProducto = producto === 'RF1'
-      ? l.producto && l.producto.toUpperCase().includes('RF1')
-      : l.producto && !l.producto.toUpperCase().includes('RF1');
-    if (!esProducto) return;
     const sem = semanaISOclient(normalizarFecha(l.fecha));
     if (!sem) return;
-    if (!porSemana[sem]) porSemana[sem] = { kg: 0, lotes: 0 };
-    porSemana[sem].kg += l.kg || 0;
-    porSemana[sem].lotes++;
+    if (!porSemana[sem]) porSemana[sem] = { rf1: 0, zerosi: 0 };
+    if (l.producto && l.producto.toUpperCase().includes('RF1'))
+      porSemana[sem].rf1 += l.kg || 0;
+    else
+      porSemana[sem].zerosi += l.kg || 0;
   });
 
   const semanas = Object.keys(porSemana).sort();
   if (semanas.length === 0) {
-    el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:20px 0">Sin datos</div>';
+    el.innerHTML = '<div style="color:var(--text3);font-size:12px">Sin datos</div>';
     return;
   }
 
-  const maxKg = Math.max(...semanas.map(s => porSemana[s].kg), 1);
-  const H = 100;
+  const maxTotal = Math.max(...semanas.map(s => porSemana[s].rf1 + porSemana[s].zerosi), 1);
+  const H = 110;
   const cs = getComputedStyle(document.documentElement);
-  const cMain  = cs.getPropertyValue(color.replace('var(','').replace(')','').trim()).trim() || '#1a6cf0';
+  const cBlue  = cs.getPropertyValue('--blue').trim()  || '#1a6cf0';
+  const cTeal  = cs.getPropertyValue('--teal').trim()  || '#009e84';
   const cText3 = cs.getPropertyValue('--text3').trim() || '#8a93a8';
-  const totalKg = semanas.reduce((s,w) => s + porSemana[w].kg, 0);
 
-  let html = `<div style="display:flex;align-items:flex-end;gap:3px;height:${H}px">`;
+  const totalRf1    = semanas.reduce((s,w) => s + porSemana[w].rf1,    0);
+  const totalZerosi = semanas.reduce((s,w) => s + porSemana[w].zerosi, 0);
+  const totalGlobal = totalRf1 + totalZerosi;
+
+  // Barras apiladas
+  let html = `<div style="display:flex;align-items:flex-end;gap:4px;height:${H}px">`;
   semanas.forEach(sem => {
     const d = porSemana[sem];
-    const hKg = Math.max(3, Math.round((d.kg / maxKg) * H));
-    const kgLabel = d.kg >= 1000 ? (Math.round(d.kg/100)/10) + 'k' : d.kg;
-    html += `<div style="flex:1;min-width:24px;display:flex;flex-direction:column;align-items:center;height:${H}px;justify-content:flex-end">
+    const total = d.rf1 + d.zerosi;
+    const hTotal  = Math.max(3, Math.round((total  / maxTotal) * H));
+    const hRf1    = total > 0 ? Math.round((d.rf1    / total) * hTotal) : 0;
+    const hZerosi = hTotal - hRf1;
+    const kgLabel = total >= 1000 ? (Math.round(total/100)/10) + 'k' : total;
+
+    html += `<div style="flex:1;min-width:20px;display:flex;flex-direction:column;align-items:center;height:${H}px;justify-content:flex-end">
       <div style="font-size:8px;color:${cText3};margin-bottom:2px;line-height:11px">${kgLabel}</div>
-      <div style="width:80%;height:${hKg}px;background:${cMain};opacity:0.85;border-radius:3px 3px 0 0;transition:height 0.4s"></div>
+      <div style="width:80%;display:flex;flex-direction:column;border-radius:3px 3px 0 0;overflow:hidden">
+        ${hZerosi > 0 ? `<div style="height:${hZerosi}px;background:${cTeal};opacity:0.85"></div>` : ''}
+        ${hRf1 > 0    ? `<div style="height:${hRf1}px;background:${cBlue};opacity:0.85"></div>` : ''}
+      </div>
     </div>`;
   });
   html += '</div>';
 
   // Labels semana
-  html += `<div style="display:flex;gap:3px;margin-top:5px">`;
+  html += `<div style="display:flex;gap:4px;margin-top:6px">`;
   semanas.forEach(sem => {
-    const short = sem.split('-')[0];
-    html += `<div style="flex:1;min-width:24px;text-align:center;font-size:8.5px;color:${cText3};white-space:nowrap">${short}</div>`;
+    html += `<div style="flex:1;min-width:20px;text-align:center;font-size:8.5px;color:${cText3};white-space:nowrap">${sem.split('-')[0]}</div>`;
   });
   html += '</div>';
 
-  // Totales al pie
-  html += `<div style="display:flex;gap:16px;margin-top:10px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.07)">
-    <span style="font-size:10px;color:${cText3}">Total: <b style="color:var(--text)">${totalKg.toLocaleString('es-CL')} kg</b></span>
+  // Pie con totales por producto
+  html += `<div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:0.5px solid rgba(0,0,0,0.07)">
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:${cText3}">
+      <span style="display:inline-block;width:8px;height:8px;background:${cBlue};border-radius:2px;opacity:0.85"></span>
+      RF1: <b style="color:var(--text)">${totalRf1.toLocaleString('es-CL')} kg</b>
+    </span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:${cText3}">
+      <span style="display:inline-block;width:8px;height:8px;background:${cTeal};border-radius:2px;opacity:0.85"></span>
+      ZeroSi: <b style="color:var(--text)">${totalZerosi.toLocaleString('es-CL')} kg</b>
+    </span>
+    <span style="font-size:10px;color:${cText3}">
+      Total: <b style="color:var(--text)">${totalGlobal.toLocaleString('es-CL')} kg</b>
+    </span>
     <span style="font-size:10px;color:${cText3}">${semanas.length} semanas</span>
   </div>`;
 
