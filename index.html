@@ -740,28 +740,29 @@ body {
     <div class="content active" id="page-resumen">
       <div class="kpi-row kpi-row-4" style="margin-bottom:14px">
         <div class="kpi-card teal">
+          <div class="kpi-label">Total Despachado</div>
+          <div class="kpi-value"><span id="kpi-desp-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-secondary" id="kpi-desp-kg">— L</div>
+          <div class="kpi-sub" id="kpi-cargas-sub">— cargas</div>
+        </div>
+        <div class="kpi-card">
           <div class="kpi-label">Total Producido</div>
           <div class="kpi-value"><span id="kpi-prod-val">—</span><span class="kpi-unit"> kg</span></div>
           <div class="kpi-secondary" id="kpi-prod-kg">— L</div>
           <div class="kpi-sub" id="kpi-lotes-sub">— lotes · Mayo 2026</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Total Despachado</div>
-          <div class="kpi-value"><span id="kpi-desp-val">—</span><span class="kpi-unit"> kg</span></div>
-          <div class="kpi-secondary" id="kpi-desp-kg">— L</div>
-          <div class="kpi-sub" id="kpi-cargas-sub">— cargas completadas</div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">ZeroSi en TK</div>
+          <div class="kpi-value"><span id="kpi-zerosi-tk-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-secondary" id="kpi-zerosi-tk-lts">— L</div>
+          <div class="kpi-sub" id="kpi-zerosi-tk-sub">— lotes en TK</div>
         </div>
-        <div class="kpi-card red">
-          <div class="kpi-label">Stock RF1</div>
-          <div class="kpi-value"><span id="kpi-rf1-val">—</span><span class="kpi-unit"> kg</span></div>
-          <div class="kpi-sub" id="kpi-rf1-sub">Mínimo: — kg · — días</div>
-          <span class="kpi-badge red" id="kpi-rf1-badge">⚠ BAJO MÍNIMO</span>
-        </div>
-        <div class="kpi-card yellow">
-          <div class="kpi-label">En TK (pendiente)</div>
-          <div class="kpi-value"><span id="kpi-tk-val">—</span><span class="kpi-unit"> kg</span></div>
-          <div class="kpi-secondary" id="kpi-tk-lts">— L</div>
-          <div class="kpi-sub" id="kpi-tk-sub">— lotes en TK</div>
+        <div class="kpi-card" id="kpi-card-rf1">
+          <div class="kpi-label">RF1 en TK</div>
+          <div class="kpi-value"><span id="kpi-rf1-tk-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-secondary" id="kpi-rf1-tk-lts">— L</div>
+          <div class="kpi-sub" id="kpi-rf1-tk-sub">— lotes en TK</div>
+          <span class="kpi-badge" id="kpi-rf1-tk-badge" style="display:none"></span>
         </div>
       </div>
 
@@ -769,65 +770,18 @@ body {
         <!-- Producción vs Despacho -->
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">Producción vs Despacho — Mayo 2026</div>
-            <div class="panel-tag">diario</div>
-          </div>
-          <div class="panel-body">
-            <div style="display:flex;gap:12px;margin-bottom:10px">
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--blue);border-radius:2px"></div>Producción RF1</div>
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--teal);border-radius:2px"></div>Producción ZEROSI</div>
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)"><div style="width:10px;height:10px;background:var(--yellow);border-radius:2px"></div>Despacho</div>
+            <div class="panel-title">Producción vs Despacho — kg diario</div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="display:flex;gap:10px">
+                <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--blue);border-radius:2px;opacity:0.85"></span>RF1</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--teal);border-radius:2px;opacity:0.85"></span>ZeroSi</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--yellow);border-radius:2px;opacity:0.85"></span>Despacho</span>
+              </div>
             </div>
-            <div class="daily-chart">
-              <div class="daily-bar-wrap">
-                <div class="daily-val">16k</div>
-                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
-                  <div class="daily-bar" style="height:60%;flex:1"></div>
-                  <div class="daily-bar" style="height:60%;flex:1;background:var(--yellow)"></div>
-                </div>
-                <div class="daily-label">06/05</div>
-              </div>
-              <div class="daily-bar-wrap">
-                <div class="daily-val">16k</div>
-                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
-                  <div class="daily-bar" style="height:60%;flex:1"></div>
-                  <div class="daily-bar" style="height:60%;flex:1;background:var(--yellow)"></div>
-                </div>
-                <div class="daily-label">07/05</div>
-              </div>
-              <div class="daily-bar-wrap">
-                <div class="daily-val">8k</div>
-                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
-                  <div class="daily-bar" style="height:30%;flex:1"></div>
-                  <div class="daily-bar" style="height:30%;flex:1;background:var(--yellow)"></div>
-                </div>
-                <div class="daily-label">08/05</div>
-              </div>
-              <div class="daily-bar-wrap">
-                <div class="daily-val">16k</div>
-                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
-                  <div class="daily-bar" style="height:30%;flex:1"></div>
-                  <div class="daily-bar zerosi" style="height:30%;flex:1"></div>
-                  <div class="daily-bar" style="height:60%;flex:1;background:var(--yellow)"></div>
-                </div>
-                <div class="daily-label">09/05</div>
-              </div>
-              <div class="daily-bar-wrap">
-                <div class="daily-val">8k</div>
-                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
-                  <div class="daily-bar" style="height:30%;flex:1"></div>
-                  <div class="daily-bar" style="height:30%;flex:1;background:var(--yellow)"></div>
-                </div>
-                <div class="daily-label">10/05</div>
-              </div>
-              <div class="daily-bar-wrap">
-                <div class="daily-val">16k</div>
-                <div style="display:flex;width:100%;gap:2px;align-items:flex-end;height:60px">
-                  <div class="daily-bar" style="height:30%;flex:1"></div>
-                  <div class="daily-bar zerosi" style="height:30%;flex:1"></div>
-                </div>
-                <div class="daily-label">11/05</div>
-              </div>
+          </div>
+          <div class="panel-body" style="padding:16px 16px 8px">
+            <div id="chart-prod-desp" style="width:100%;height:140px;position:relative">
+              <div style="color:var(--text3);font-size:12px">Cargando...</div>
             </div>
           </div>
         </div>
@@ -837,53 +791,79 @@ body {
           <div class="panel-header">
             <div class="panel-title">Estado Operacional</div>
           </div>
-          <div class="panel-body">
-            <div class="semaforo-grid">
+          <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+
+            <!-- Línea 1: Stock en bodega -->
+            <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);padding:0 2px">Stock bodega</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
               <div class="semaforo-item">
-                <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Trazabilidad<br><b style="color:var(--text)" id="sem-traz">8/10 lotes</b></div>
+                <div class="semaforo-dot" id="dot-zerosi-mp"></div>
+                <div class="semaforo-text">ZeroSi MP<br><b id="sem-zerosi">—</b></div>
               </div>
               <div class="semaforo-item">
-                <div class="semaforo-dot red"></div>
-                <div class="semaforo-text">Stock RF1<br><b style="color:var(--red)" id="sem-rf1">BAJO MÍNIMO</b></div>
-              </div>
-              <div class="semaforo-item">
-                <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Stock ZEROSI<br><b style="color:var(--text)" id="sem-zerosi">8.6 días</b></div>
-              </div>
-              <div class="semaforo-item">
-                <div class="semaforo-dot yellow"></div>
-                <div class="semaforo-text">Despacho<br><b style="color:var(--yellow)" id="sem-desp">16k L en TK</b></div>
-              </div>
-              <div class="semaforo-item">
-                <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Camiones<br><b style="color:var(--text)" id="sem-camiones">3 activos</b></div>
-              </div>
-              <div class="semaforo-item">
-                <div class="semaforo-dot green"></div>
-                <div class="semaforo-text">Rendimiento<br><b style="color:var(--text)" id="sem-rend">37.1 kg/L</b></div>
+                <div class="semaforo-dot" id="dot-rf1-mp"></div>
+                <div class="semaforo-text">RF1 MP<br><b id="sem-rf1">—</b></div>
               </div>
             </div>
+
+            <!-- Línea 2: Stock en TK -->
+            <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);padding:2px 2px 0">Stock en TK</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div class="semaforo-item">
+                <div class="semaforo-dot" id="dot-zerosi-tk"></div>
+                <div class="semaforo-text">ZeroSi TK<br><b id="sem-zerosi-tk">—</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot" id="dot-rf1-tk"></div>
+                <div class="semaforo-text">RF1 TK<br><b id="sem-rf1-tk">—</b></div>
+              </div>
+            </div>
+
+            <!-- Línea 3: Control -->
+            <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);padding:2px 2px 0">Control</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div class="semaforo-item">
+                <div class="semaforo-dot" id="dot-traz"></div>
+                <div class="semaforo-text">Trazabilidad<br><b id="sem-traz">—</b></div>
+              </div>
+              <div class="semaforo-item">
+                <div class="semaforo-dot green"></div>
+                <div class="semaforo-text">Rendimiento<br><b id="sem-rend">—</b></div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
       <div class="grid-2">
-        <!-- Producción por producto -->
+        <!-- Evolución semanal ZeroSi -->
         <div class="panel">
-          <div class="panel-header"><div class="panel-title">Producción por Producto</div></div>
-          <div class="panel-body bar-chart">
-            <div id="resumen-barras-producto">
+          <div class="panel-header">
+            <div class="panel-title">ZeroSi — Producción semanal</div>
+            <div style="display:flex;gap:8px">
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--teal);border-radius:2px;opacity:0.85"></span>kg</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--teal);border-radius:2px;opacity:0.3"></span>L</span>
+            </div>
+          </div>
+          <div class="panel-body" style="padding:14px 16px 8px">
+            <div id="chart-zerosi-semanal" style="width:100%;height:130px">
               <div style="color:var(--text3);font-size:12px">Cargando...</div>
             </div>
           </div>
         </div>
 
-        <!-- Despacho por camión -->
+        <!-- Evolución semanal RF1 -->
         <div class="panel">
-          <div class="panel-header"><div class="panel-title">Despacho por Camión</div></div>
-          <div class="panel-body bar-chart">
-            <div id="resumen-barras-camion">
+          <div class="panel-header">
+            <div class="panel-title">RF1 — Producción semanal</div>
+            <div style="display:flex;gap:8px">
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--blue);border-radius:2px;opacity:0.85"></span>kg</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3)"><span style="display:inline-block;width:8px;height:8px;background:var(--blue);border-radius:2px;opacity:0.3"></span>L</span>
+            </div>
+          </div>
+          <div class="panel-body" style="padding:14px 16px 8px">
+            <div id="chart-rf1-semanal" style="width:100%;height:130px">
               <div style="color:var(--text3);font-size:12px">Cargando...</div>
             </div>
           </div>
@@ -1409,7 +1389,7 @@ async function loadData() {
     // Frescura de datos
     const updTime = new Date(data.meta.ultima_actualizacion);
     const ahoraMs = Date.now();
-    const diffMin = Math.round((ahoraMs - updTime.getTime()) / 60000);
+    const diffMin = Math.abs(Math.round((ahoraMs - updTime.getTime()) / 60000));
     const freshEl = document.getElementById('freshness-badge');
     if (freshEl) {
       freshEl.textContent = 'Datos: hace ' + (diffMin < 60 ? diffMin + ' min' : Math.round(diffMin/60) + 'h');
@@ -1441,33 +1421,74 @@ async function loadData() {
     const litrajeEnTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
 
     // Resumen KPIs — kg principal, litros secundario
-    setText('kpi-prod-val', p.total_kg.toLocaleString('es-CL'));
-    setText('kpi-prod-kg', p.total_litros.toLocaleString('es-CL') + ' L');
     setText('kpi-desp-val', car.total_kg ? car.total_kg.toLocaleString('es-CL') : '—');
     setText('kpi-desp-kg', car.total_litros.toLocaleString('es-CL') + ' L');
-    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
     setText('kpi-cargas-sub', car.cargas.length + ' cargas');
-    setText('kpi-tk-val', kgEnTk > 0 ? kgEnTk.toLocaleString('es-CL') : litrajeEnTk.toLocaleString('es-CL'));
-    setText('kpi-tk-lts', litrajeEnTk.toLocaleString('es-CL') + ' L');
-    setText('kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
+    setText('kpi-prod-val', p.total_kg.toLocaleString('es-CL'));
+    setText('kpi-prod-kg', p.total_litros.toLocaleString('es-CL') + ' L');
+    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
 
-    if (rf1) {
-      setText('kpi-rf1-val', rf1.stock_kg.toLocaleString('es-CL'));
-      setText('kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg.toLocaleString('es-CL') + ' kg · ' + rf1.autonomia_dias + ' días');
-      const badgeRf1Res = document.getElementById('kpi-rf1-badge');
-      if (badgeRf1Res) {
-        badgeRf1Res.textContent = rf1.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal';
-        badgeRf1Res.className = rf1.alerta ? 'kpi-badge red' : 'kpi-badge green';
-      }
+    // ZeroSi en TK
+    const zerosiTk = inv.producto_terminado_tk.filter(t => t.producto && t.producto.toUpperCase().includes('ZEROSI'));
+    const zerosiTkKg = zerosiTk.reduce((s,t) => { const l = p.lotes.find(x=>x.id===t.lote); return s+(l?l.kg:0); }, 0);
+    const zerosiTkLts = zerosiTk.reduce((s,t) => s+t.litros, 0);
+    setText('kpi-zerosi-tk-val', zerosiTkKg > 0 ? zerosiTkKg.toLocaleString('es-CL') : zerosiTkLts.toLocaleString('es-CL'));
+    setText('kpi-zerosi-tk-lts', zerosiTkLts.toLocaleString('es-CL') + ' L');
+    setText('kpi-zerosi-tk-sub', zerosiTk.length + ' lote' + (zerosiTk.length !== 1 ? 's' : '') + ' en TK');
+
+    // RF1 en TK
+    const rf1Tk = inv.producto_terminado_tk.filter(t => t.producto && t.producto.toUpperCase().includes('RF1'));
+    const rf1TkKg = rf1Tk.reduce((s,t) => { const l = p.lotes.find(x=>x.id===t.lote); return s+(l?l.kg:0); }, 0);
+    const rf1TkLts = rf1Tk.reduce((s,t) => s+t.litros, 0);
+    setText('kpi-rf1-tk-val', rf1TkKg > 0 ? rf1TkKg.toLocaleString('es-CL') : rf1TkLts.toLocaleString('es-CL'));
+    setText('kpi-rf1-tk-lts', rf1TkLts.toLocaleString('es-CL') + ' L');
+    setText('kpi-rf1-tk-sub', rf1Tk.length + ' lote' + (rf1Tk.length !== 1 ? 's' : '') + ' en TK');
+    // Color card RF1 según stock de materia prima
+    const cardRf1 = document.getElementById('kpi-card-rf1');
+    const badgeRf1Tk = document.getElementById('kpi-rf1-tk-badge');
+    if (rf1 && rf1.alerta && cardRf1) {
+      cardRf1.style.setProperty('--accent', 'var(--red)');
+      if (badgeRf1Tk) { badgeRf1Tk.textContent = '⚠ Stock MP bajo mínimo'; badgeRf1Tk.className = 'kpi-badge red'; badgeRf1Tk.style.display = 'inline-block'; }
+    } else if (cardRf1) {
+      cardRf1.style.setProperty('--accent', 'var(--blue)');
     }
-    if (zerosi) setText('kpi-zerosi-val', zerosi.stock_kg.toLocaleString('es-CL'));
 
-    // Semáforo
-    setText('sem-traz', traz.lotes_completos + '/' + traz.lotes_total + ' lotes');
-    setText('sem-rf1', rf1 ? (rf1.alerta ? 'BAJO MÍNIMO' : rf1.stock_kg + ' kg') : '—');
-    setText('sem-zerosi', zerosi ? zerosi.autonomia_dias + ' días' : '—');
-    setText('sem-desp', litrajeEnTk > 0 ? litrajeEnTk.toLocaleString('es-CL') + ' L en TK' : 'Al día');
-    setText('sem-camiones', car.por_camion.length + ' activos');
+    // Gráfico dinámico producción vs despacho
+    renderChartProdDesp(p.lotes, car.cargas);
+
+    // Semáforo — Línea 1: Stock bodega (materia prima)
+    function setSem(dotId, textId, valor, alerta) {
+      const dot = document.getElementById(dotId);
+      const txt = document.getElementById(textId);
+      if (dot) dot.className = 'semaforo-dot ' + (alerta === 'red' ? 'red' : alerta === 'yellow' ? 'yellow' : 'green');
+      if (txt) { txt.textContent = valor; txt.style.color = alerta === 'red' ? 'var(--red)' : alerta === 'yellow' ? 'var(--yellow)' : 'var(--text)'; }
+    }
+
+    // Bodega MP
+    setSem('dot-zerosi-mp', 'sem-zerosi',
+      zerosi ? zerosi.stock_kg.toLocaleString('es-CL') + ' kg · ' + zerosi.autonomia_dias + ' días' : '—',
+      zerosi && zerosi.alerta ? 'red' : 'green');
+    setSem('dot-rf1-mp', 'sem-rf1',
+      rf1 ? rf1.stock_kg.toLocaleString('es-CL') + ' kg · ' + rf1.autonomia_dias + ' días' : '—',
+      rf1 && rf1.alerta ? 'red' : 'green');
+
+    // TK producto terminado
+    const zerosiTkSem = inv.producto_terminado_tk.filter(t => t.producto && t.producto.toUpperCase().includes('ZEROSI'));
+    const rf1TkSem    = inv.producto_terminado_tk.filter(t => t.producto && t.producto.toUpperCase().includes('RF1'));
+    const zerosiTkLtsSem = zerosiTkSem.reduce((s,t) => s+t.litros, 0);
+    const rf1TkLtsSem    = rf1TkSem.reduce((s,t) => s+t.litros, 0);
+    setSem('dot-zerosi-tk', 'sem-zerosi-tk',
+      zerosiTkSem.length > 0 ? zerosiTkLtsSem.toLocaleString('es-CL') + ' L · ' + zerosiTkSem.length + ' lotes' : 'Sin stock',
+      zerosiTkSem.length === 0 ? 'yellow' : 'green');
+    setSem('dot-rf1-tk', 'sem-rf1-tk',
+      rf1TkSem.length > 0 ? rf1TkLtsSem.toLocaleString('es-CL') + ' L · ' + rf1TkSem.length + ' lotes' : 'Sin stock',
+      rf1TkSem.length === 0 ? 'yellow' : 'green');
+
+    // Control
+    const trazPct = traz.lotes_total > 0 ? Math.round(traz.lotes_completos / traz.lotes_total * 100) : 0;
+    setSem('dot-traz', 'sem-traz',
+      traz.lotes_completos + '/' + traz.lotes_total + ' lotes (' + trazPct + '%)',
+      trazPct >= 90 ? 'green' : trazPct >= 70 ? 'yellow' : 'red');
     setText('sem-rend', p.rendimiento_promedio + ' kg/L');
 
     // Producción — tabla con paginación y filtro período
@@ -1809,42 +1830,9 @@ async function loadData() {
 
 
 
-    // ── RESUMEN: Barras Producción por Producto ──
-    const resProdEl = document.getElementById('resumen-barras-producto');
-    if (resProdEl) {
-      const porProdRes = {};
-      p.lotes.forEach(l => {
-        const k = l.producto && l.producto.includes('RF1') ? 'RF1' : 'ZEROSI';
-        if (!porProdRes[k]) porProdRes[k] = {litros:0, lotes:0};
-        porProdRes[k].litros += l.litros;
-        porProdRes[k].lotes++;
-      });
-      const maxLRes = Math.max(...Object.values(porProdRes).map(x=>x.litros), 1);
-      resProdEl.innerHTML = Object.entries(porProdRes).map(([prod, d]) => {
-        const pct = Math.round(d.litros/maxLRes*100);
-        const col = prod==='RF1' ? 'var(--blue)' : 'var(--teal)';
-        return '<div class="bar-row">' +
-          '<div class="bar-label">' + prod + ' (' + d.lotes + ' lotes)</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
-          '<div class="bar-val">' + d.litros.toLocaleString('es-CL') + ' L</div>' +
-        '</div>';
-      }).join('');
-    }
-
-    // ── RESUMEN: Barras Despacho por Camión ──
-    const resCamEl = document.getElementById('resumen-barras-camion');
-    if (resCamEl && car.por_camion.length > 0) {
-      const maxCam = Math.max(...car.por_camion.map(c=>c.litros), 1);
-      resCamEl.innerHTML = car.por_camion.map(c => {
-        const pct = Math.round(c.litros/maxCam*100);
-        const col = coloresCamion[c.camion] || 'var(--blue)';
-        return '<div class="bar-row">' +
-          '<div class="bar-label">🚛 Camión N°' + c.camion + ' (' + c.cargas + ' c.)</div>' +
-          '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
-          '<div class="bar-val">' + c.litros.toLocaleString('es-CL') + ' L</div>' +
-        '</div>';
-      }).join('');
-    }
+    // ── RESUMEN: Gráficos semanales ZeroSi y RF1 ──
+    renderSemanalChart('chart-zerosi-semanal', p.lotes, 'ZEROSI', 'var(--teal)');
+    renderSemanalChart('chart-rf1-semanal',    p.lotes, 'RF1',    'var(--blue)');
 
     // ── PRODUCCION: Barras por Producto ──
     const prodProdEl = document.getElementById('prod-barras-producto');
@@ -1909,6 +1897,162 @@ async function loadData() {
     }
     document.getElementById('last-update').textContent = 'Error: ' + e.message;
   }
+}
+
+// ── GRÁFICO EVOLUCIÓN SEMANAL POR PRODUCTO ──
+function renderSemanalChart(elId, lotes, producto, color) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+
+  // Agrupar por semana ISO
+  const porSemana = {};
+  lotes.forEach(l => {
+    if (!l.fecha) return;
+    const esProducto = producto === 'RF1'
+      ? l.producto && l.producto.toUpperCase().includes('RF1')
+      : l.producto && !l.producto.toUpperCase().includes('RF1');
+    if (!esProducto) return;
+    const sem = semanaISOclient(l.fecha);
+    if (!sem) return;
+    if (!porSemana[sem]) porSemana[sem] = { kg: 0, litros: 0, lotes: 0 };
+    porSemana[sem].kg     += l.kg     || 0;
+    porSemana[sem].litros += l.litros || 0;
+    porSemana[sem].lotes++;
+  });
+
+  const semanas = Object.keys(porSemana).sort();
+  if (semanas.length === 0) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:20px 0">Sin datos</div>';
+    return;
+  }
+
+  const maxKg  = Math.max(...semanas.map(s => porSemana[s].kg), 1);
+  const maxLts = Math.max(...semanas.map(s => porSemana[s].litros), 1);
+  const H = 100;
+  const cs = getComputedStyle(document.documentElement);
+  const cMain  = cs.getPropertyValue(color.replace('var(','').replace(')','').trim()).trim() || '#1a6cf0';
+  const cText3 = cs.getPropertyValue('--text3').trim() || '#8a93a8';
+
+  // Total acumulado
+  const totalKg  = semanas.reduce((s,w) => s + porSemana[w].kg, 0);
+  const totalLts = semanas.reduce((s,w) => s + porSemana[w].litros, 0);
+
+  let html = `<div style="display:flex;align-items:flex-end;gap:3px;height:${H}px;overflow-x:auto">`;
+
+  semanas.forEach(sem => {
+    const d = porSemana[sem];
+    const hKg  = Math.max(3, Math.round((d.kg  / maxKg)  * H));
+    const hLts = Math.max(3, Math.round((d.litros / maxLts) * H));
+    const label = sem.replace('-20', '\n').replace('S','S');
+    const kgLabel = d.kg >= 1000 ? (Math.round(d.kg/100)/10) + 'k' : d.kg;
+
+    html += `<div style="flex:1;min-width:32px;display:flex;flex-direction:column;align-items:center;gap:0">
+      <div style="font-size:8px;color:${cText3};margin-bottom:2px;height:11px;line-height:11px;text-align:center">${kgLabel}</div>
+      <div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:${H}px">
+        <div style="flex:1;height:${hKg}px;background:${cMain};opacity:0.85;border-radius:3px 3px 0 0;transition:height 0.4s"></div>
+        <div style="flex:1;height:${hLts}px;background:${cMain};opacity:0.28;border-radius:3px 3px 0 0;transition:height 0.4s"></div>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+
+  // Labels de semana debajo
+  html += `<div style="display:flex;gap:3px;margin-top:4px">`;
+  semanas.forEach(sem => {
+    const short = sem.split('-')[0]; // "S19"
+    html += `<div style="flex:1;min-width:32px;text-align:center;font-size:8px;color:${cText3}">${short}</div>`;
+  });
+  html += '</div>';
+
+  // Totales al pie
+  html += `<div style="display:flex;gap:16px;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.07)">
+    <span style="font-size:10px;color:${cText3}">Total: <b style="color:var(--text)">${totalKg.toLocaleString('es-CL')} kg</b></span>
+    <span style="font-size:10px;color:${cText3}"><b style="color:var(--text)">${totalLts.toLocaleString('es-CL')} L</b></span>
+    <span style="font-size:10px;color:${cText3}">${semanas.length} semanas</span>
+  </div>`;
+
+  el.innerHTML = html;
+}
+
+function semanaISOclient(fechaStr) {
+  if (!fechaStr) return null;
+  const d = new Date(fechaStr + 'T12:00:00');
+  if (isNaN(d)) return null;
+  const jan4 = new Date(d.getFullYear(), 0, 4);
+  const startOfWeek = new Date(jan4);
+  startOfWeek.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7));
+  const diff = d - startOfWeek;
+  const week = Math.floor(diff / (7 * 86400000)) + 1;
+  return 'S' + week + '-' + d.getFullYear();
+}
+
+// ── GRÁFICO PRODUCCIÓN VS DESPACHO ──
+function renderChartProdDesp(lotes, cargas) {
+  const el = document.getElementById('chart-prod-desp');
+  if (!el) return;
+
+  // Agrupar producción por día y producto
+  const porDia = {};
+  lotes.forEach(l => {
+    if (!l.fecha) return;
+    if (!porDia[l.fecha]) porDia[l.fecha] = { rf1: 0, zerosi: 0, desp: 0 };
+    if (l.producto && l.producto.toUpperCase().includes('RF1')) porDia[l.fecha].rf1 += l.kg || 0;
+    else porDia[l.fecha].zerosi += l.kg || 0;
+  });
+
+  // Agrupar despacho por día (kg del lote vinculado)
+  cargas.forEach(c => {
+    if (!c.fecha) return;
+    if (!porDia[c.fecha]) porDia[c.fecha] = { rf1: 0, zerosi: 0, desp: 0 };
+    porDia[c.fecha].desp += c.kg || c.litros || 0;
+  });
+
+  const dias = Object.keys(porDia).sort();
+  if (dias.length === 0) { el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:20px">Sin datos</div>'; return; }
+
+  // Máximo para escalar
+  const maxVal = Math.max(...dias.map(d => (porDia[d].rf1 + porDia[d].zerosi)), ...dias.map(d => porDia[d].desp), 1);
+  const H = 110; // altura barras px
+  const colW = Math.max(20, Math.floor((el.offsetWidth || 500) / dias.length) - 4);
+  const gap = 4;
+
+  // Colores CSS resueltos
+  const cs = getComputedStyle(document.documentElement);
+  const cBlue   = cs.getPropertyValue('--blue').trim()   || '#1a6cf0';
+  const cTeal   = cs.getPropertyValue('--teal').trim()   || '#009e84';
+  const cYellow = cs.getPropertyValue('--yellow').trim() || '#d4870a';
+  const cText3  = cs.getPropertyValue('--text3').trim()  || '#8a93a8';
+
+  let html = `<div style="display:flex;align-items:flex-end;gap:${gap}px;height:${H}px;overflow-x:auto;padding-bottom:2px">`;
+
+  dias.forEach(dia => {
+    const d = porDia[dia];
+    const prod = d.rf1 + d.zerosi;
+    const hRf1    = Math.round((d.rf1 / maxVal) * H);
+    const hZerosi = Math.round((d.zerosi / maxVal) * H);
+    const hDesp   = Math.round((d.desp / maxVal) * H);
+    const label   = dia.slice(5).replace('-', '/');
+    const valLabel = prod > 0 ? (prod >= 1000 ? Math.round(prod/100)/10 + 'k' : prod) : '';
+
+    html += `<div style="flex:1;min-width:28px;display:flex;flex-direction:column;align-items:center;gap:0">
+      <div style="font-size:9px;color:${cText3};margin-bottom:3px;height:12px;line-height:12px">${valLabel}</div>
+      <div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:${H}px">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:${H}px">
+          ${hZerosi > 0 ? `<div style="width:100%;height:${hZerosi}px;background:${cTeal};opacity:0.85;border-radius:3px 3px 0 0"></div>` : ''}
+          ${hRf1 > 0    ? `<div style="width:100%;height:${hRf1}px;background:${cBlue};opacity:0.9;${hZerosi > 0 ? '' : 'border-radius:3px 3px 0 0;'}"></div>` : ''}
+          ${prod === 0  ? `<div style="width:100%;height:3px;background:rgba(0,0,0,0.06);border-radius:2px"></div>` : ''}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:${H}px">
+          ${hDesp > 0 ? `<div style="width:100%;height:${hDesp}px;background:${cYellow};opacity:0.85;border-radius:3px 3px 0 0"></div>` : `<div style="width:100%;height:3px;background:rgba(0,0,0,0.06);border-radius:2px"></div>`}
+        </div>
+      </div>
+      <div style="font-size:9px;color:${cText3};margin-top:5px;white-space:nowrap">${label}</div>
+    </div>`;
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
 }
 
 // ── UTILIDADES DE FECHA ──
