@@ -7,30 +7,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #05080f;
-  --bg2: #0b1120;
-  --bg3: #101828;
-  --sidebar-w: 220px;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
+  --bg: #f2f4f7;
+  --bg2: #ffffff;
+  --bg3: #f7f8fa;
+  --sidebar-w: 212px;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.11);
   --blue: #1a6cf0;
-  --blue-light: #4d8ff5;
-  --teal: #00c9a7;
-  --teal-dim: rgba(0,201,167,0.15);
-  --yellow: #f5a623;
-  --yellow-dim: rgba(245,166,35,0.15);
-  --red: #f05151;
-  --red-dim: rgba(240,81,81,0.15);
-  --green: #22c55e;
-  --green-dim: rgba(34,197,94,0.12);
-  --text: #e8eaf0;
-  --text2: #8b93a8;
-  --text3: #555f75;
-  --rf1: #4d8ff5;
-  --zerosi: #00c9a7;
-  --c7: #f5a623;
-  --c8: #a78bfa;
-  --c10: #f472b6;
+  --blue-light: #3a7ef5;
+  --teal: #009e84;
+  --teal-dim: rgba(0,158,132,0.10);
+  --yellow: #d4870a;
+  --yellow-dim: rgba(212,135,10,0.10);
+  --red: #d93636;
+  --red-dim: rgba(217,54,54,0.10);
+  --green: #1a9e45;
+  --green-dim: rgba(26,158,69,0.10);
+  --text: #0f1520;
+  --text2: #4a5570;
+  --text3: #8a93a8;
+  --rf1: #1a6cf0;
+  --zerosi: #009e84;
+  --c7: #d4870a;
+  --c8: #6c47d4;
+  --c10: #c0368a;
+  --radius-card: 12px;
+  --radius-sm: 8px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -107,30 +109,31 @@ body {
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: 8px;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.12s;
   position: relative;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
-.nav-item:hover { background: rgba(255,255,255,0.04); }
+.nav-item:hover { background: rgba(255,255,255,0.035); }
 
 .nav-item.active {
-  background: rgba(26,108,240,0.12);
+  background: rgba(32,112,240,0.10);
 }
 
 .nav-item.active::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 6px;
-  bottom: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 18px;
   width: 3px;
-  background: var(--teal);
-  border-radius: 2px;
+  background: var(--blue);
+  border-radius: 0 2px 2px 0;
 }
 
 .nav-icon {
@@ -177,7 +180,7 @@ body {
   display: inline-block;
   width: 6px;
   height: 6px;
-  background: var(--teal);
+  background: var(--green);
   border-radius: 50%;
   margin-right: 5px;
   animation: pulse 2s infinite;
@@ -239,23 +242,50 @@ body {
   line-height: 1.5;
 }
 
-/* ALERT BAR */
-.alert-bar { display:none !important; height:0 !important; padding:0 !important; }
+/* ALERT BAR — HIG style */
+.alert-bar {
+  display: none;
+  background: rgba(232,69,69,0.07);
+  border-left: 3px solid var(--red);
+  padding: 9px 20px;
+  font-size: 11.5px;
+  color: var(--text2);
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+.alert-bar.visible { display: flex; }
 
 .alert-bar-item {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--red);
   font-weight: 500;
 }
 
 .alert-bar-sep {
   width: 1px;
-  height: 14px;
-  background: rgba(240,81,81,0.3);
+  height: 12px;
+  background: rgba(232,69,69,0.25);
+  margin: 0 4px;
 }
+
+/* Indicador de frescura de datos */
+.freshness-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text3);
+  border: 0.5px solid var(--border2);
+  white-space: nowrap;
+}
+.freshness-badge.ok    { color: var(--teal);   border-color: rgba(0,201,167,0.3); }
+.freshness-badge.warn  { color: var(--yellow);  border-color: rgba(245,166,35,0.3); }
+.freshness-badge.stale { color: var(--red);     border-color: rgba(232,69,69,0.3); }
 
 /* CONTENT */
 .content {
@@ -284,8 +314,8 @@ body {
 
 .kpi-card {
   background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   position: relative;
   overflow: hidden;
@@ -294,9 +324,11 @@ body {
 .kpi-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
+  top: 0; left: 0;
+  width: 3px;
+  bottom: 0;
   background: var(--accent, var(--blue));
+  border-radius: 0 2px 2px 0;
 }
 
 .kpi-card.teal { --accent: var(--teal); }
@@ -308,32 +340,42 @@ body {
 
 .kpi-label {
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: var(--text2);
-  margin-bottom: 6px;
+  color: var(--text3);
+  margin-bottom: 8px;
 }
 
 .kpi-value {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 34px;
+  font-weight: 600;
   color: var(--text);
   line-height: 1;
+  letter-spacing: -0.5px;
 }
 
 .kpi-unit {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--text2);
-  margin-left: 3px;
+  margin-left: 2px;
+  letter-spacing: 0;
 }
 
 .kpi-sub {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--text3);
-  margin-top: 4px;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.kpi-secondary {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 3px;
+  font-weight: 400;
 }
 
 .kpi-badge {
@@ -359,8 +401,8 @@ body {
 /* ── PANEL ── */
 .panel {
   background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
 
@@ -368,16 +410,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--border);
+  padding: 11px 16px;
+  border-bottom: 0.5px solid var(--border);
 }
 
 .panel-title {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
   color: var(--text);
 }
 
@@ -406,16 +447,17 @@ body {
   text-align: left;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
+  background: var(--bg3);
 }
 
 .data-table td {
   padding: 9px 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
   color: var(--text2);
   white-space: nowrap;
 }
 
-.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+.data-table tr:hover td { background: rgba(0,0,0,0.02); }
 .data-table tr:last-child td { border-bottom: none; }
 
 .data-table td.mono {
@@ -434,14 +476,14 @@ body {
   letter-spacing: 0.3px;
 }
 
-.chip.rf1 { background: rgba(77,143,245,0.15); color: var(--rf1); }
-.chip.zerosi { background: rgba(0,201,167,0.15); color: var(--zerosi); }
+.chip.rf1 { background: rgba(26,108,240,0.10); color: var(--rf1); }
+.chip.zerosi { background: rgba(0,158,132,0.10); color: var(--zerosi); }
 .chip.ok { background: var(--teal-dim); color: var(--teal); }
 .chip.warn { background: var(--yellow-dim); color: var(--yellow); }
 .chip.red { background: var(--red-dim); color: var(--red); }
-.chip.c7 { background: rgba(245,166,35,0.15); color: var(--c7); }
-.chip.c8 { background: rgba(167,139,250,0.15); color: var(--c8); }
-.chip.c10 { background: rgba(244,114,182,0.15); color: var(--c10); }
+.chip.c7 { background: rgba(212,135,10,0.12); color: var(--c7); }
+.chip.c8 { background: rgba(108,71,212,0.12); color: var(--c8); }
+.chip.c10 { background: rgba(192,54,138,0.12); color: var(--c10); }
 
 /* ── BAR CHART ── */
 .bar-chart { padding: 4px 0; }
@@ -452,14 +494,14 @@ body {
   margin-bottom: 8px;
 }
 .bar-label { font-size: 11px; color: var(--text2); width: 120px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.bar-track { flex: 1; height: 8px; background: rgba(0,0,0,0.07); border-radius: 4px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
 .bar-val { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); width: 60px; text-align: right; flex-shrink: 0; }
 
 /* ── GAUGE ── */
 .gauge-wrap { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
 .gauge-title { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
-.gauge-track { width: 100%; height: 10px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; position: relative; }
+.gauge-track { width: 100%; height: 10px; background: rgba(0,0,0,0.08); border-radius: 5px; overflow: hidden; position: relative; }
 .gauge-fill { height: 100%; border-radius: 5px; }
 .gauge-min-line { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--red); border-radius: 1px; }
 .gauge-labels { display: flex; justify-content: space-between; margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); }
@@ -469,7 +511,7 @@ body {
 /* ── TK CARD ── */
 .tk-card {
   background: var(--bg3);
-  border: 1px solid var(--border2);
+  border: 0.5px solid var(--border2);
   border-radius: 10px;
   padding: 16px;
 }
@@ -491,7 +533,7 @@ body {
 .tk-level {
   width: 100%;
   height: 12px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.07);
   border-radius: 6px;
   overflow: hidden;
   margin: 8px 0;
@@ -514,7 +556,7 @@ body {
   flex: 1;
   text-align: center;
   background: var(--bg3);
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border2);
   border-radius: 8px;
   padding: 10px 6px;
 }
@@ -531,7 +573,7 @@ body {
   padding: 9px 12px;
   background: var(--bg3);
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 0.5px solid var(--border2);
 }
 .semaforo-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .semaforo-dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
@@ -558,10 +600,62 @@ body {
 /* ── DAILY CHART ── */
 .daily-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 4px; }
 .daily-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
-.daily-bar { width: 100%; background: var(--blue); border-radius: 3px 3px 0 0; min-height: 4px; transition: height 0.4s ease; }
+.daily-bar { width: 100%; background: var(--blue); border-radius: 3px 3px 0 0; min-height: 4px; transition: height 0.4s ease; opacity: 0.85; }
 .daily-bar.zerosi { background: var(--teal); }
 .daily-label { font-size: 9px; color: var(--text3); margin-top: 4px; }
 .daily-val { font-size: 9px; color: var(--text2); }
+
+/* ── PAGINACIÓN ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-top: 0.5px solid var(--border);
+  background: var(--bg2);
+}
+.pagination-info {
+  font-size: 11px;
+  color: var(--text3);
+}
+.pagination-btns {
+  display: flex;
+  gap: 6px;
+}
+.pagination-btn {
+  background: var(--bg3);
+  border: 0.5px solid var(--border2);
+  color: var(--text2);
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.pagination-btn:hover:not(:disabled) { background: rgba(255,255,255,0.07); color: var(--text); }
+.pagination-btn:disabled { opacity: 0.3; cursor: default; }
+
+/* ── FILTRO PERÍODO ── */
+.period-filter {
+  display: flex;
+  gap: 4px;
+}
+.period-btn {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border2);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.period-btn.active, .period-btn:hover {
+  background: rgba(32,112,240,0.15);
+  color: var(--blue-light);
+  border-color: rgba(32,112,240,0.3);
+}
 
 /* Scrollbar hide for TV */
 @media (min-width: 1400px) {
@@ -631,13 +725,14 @@ body {
     <div class="topbar">
       <div class="topbar-title" id="page-title">Resumen Ejecutivo</div>
       <div class="topbar-right">
+        <span class="freshness-badge" id="freshness-badge">Sin datos</span>
         <div class="topbar-date" id="top-date"></div>
         <div class="topbar-time" id="top-time">--:--:--</div>
       </div>
     </div>
 
     <!-- ALERT BAR -->
-    <div class="alert-bar" id="alert-bar" style="display:none"></div>
+    <div class="alert-bar" id="alert-bar"></div>
 
     <!-- ═══════════════════════════════════════════ -->
     <!-- PÁGINA 1 — RESUMEN EJECUTIVO               -->
@@ -646,28 +741,27 @@ body {
       <div class="kpi-row kpi-row-4" style="margin-bottom:14px">
         <div class="kpi-card teal">
           <div class="kpi-label">Total Producido</div>
-          <div class="kpi-value"><span id="kpi-prod-val">80.000</span><span class="kpi-unit"> L</span></div>
-          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="kpi-prod-kg">— kg</div>
-          <div class="kpi-sub" id="kpi-lotes-sub">10 lotes · Mayo 2026</div>
+          <div class="kpi-value"><span id="kpi-prod-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-secondary" id="kpi-prod-kg">— L</div>
+          <div class="kpi-sub" id="kpi-lotes-sub">— lotes · Mayo 2026</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Total Despachado</div>
-          <div class="kpi-value"><span id="kpi-desp-val">64.000</span><span class="kpi-unit"> L</span></div>
-          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="kpi-desp-kg">— kg</div>
-          <div class="kpi-sub" id="kpi-cargas-sub">8 cargas completadas</div>
-          <span class="kpi-badge teal">80% despacho</span>
+          <div class="kpi-value"><span id="kpi-desp-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-secondary" id="kpi-desp-kg">— L</div>
+          <div class="kpi-sub" id="kpi-cargas-sub">— cargas completadas</div>
         </div>
         <div class="kpi-card red">
           <div class="kpi-label">Stock RF1</div>
-          <div class="kpi-value"><span id="kpi-rf1-val">180</span><span class="kpi-unit"> kg</span></div>
-          <div class="kpi-sub" id="kpi-rf1-sub">Mínimo: 200 kg · 3.2 días</div>
-          <span class="kpi-badge red">⚠ BAJO MÍNIMO</span>
+          <div class="kpi-value"><span id="kpi-rf1-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-sub" id="kpi-rf1-sub">Mínimo: — kg · — días</div>
+          <span class="kpi-badge red" id="kpi-rf1-badge">⚠ BAJO MÍNIMO</span>
         </div>
         <div class="kpi-card yellow">
           <div class="kpi-label">En TK (pendiente)</div>
-          <div class="kpi-value"><span id="kpi-tk-val">16.000</span><span class="kpi-unit"> L</span></div>
-          <div class="kpi-sub" id="kpi-tk-sub">RF1 TK3 · ZEROSI TK3</div>
-          <span class="kpi-badge yellow">Disponible</span>
+          <div class="kpi-value"><span id="kpi-tk-val">—</span><span class="kpi-unit"> kg</span></div>
+          <div class="kpi-secondary" id="kpi-tk-lts">— L</div>
+          <div class="kpi-sub" id="kpi-tk-sub">— lotes en TK</div>
         </div>
       </div>
 
@@ -801,33 +895,24 @@ body {
     <!-- PÁGINA 2 — PRODUCCIÓN                       -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="content" id="page-produccion">
-      <div class="kpi-row kpi-row-5">
-        <div class="kpi-card teal">
-          <div class="kpi-label">Total Producido</div>
-          <div class="kpi-value"><span id="prod-kpi-1">80.000</span><span class="kpi-unit"> L</span></div>
-          <div style="font-size:11px;color:var(--teal);margin-top:2px" id="prod-kpi-1-kg">— kg</div>
-          <div class="kpi-sub" id="prod-kpi-1-sub">— lotes completos</div>
+      <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px">
+        <div class="kpi-card" style="--accent:var(--blue)">
+          <div class="kpi-label">RF1 — Producido</div>
+          <div class="kpi-value"><span id="prod-kpi-rf1-kg">—</span><span class="kpi-unit"> kg</span></div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px"><span id="prod-kpi-rf1-lts">—</span> L</div>
+          <div class="kpi-sub" id="prod-kpi-rf1-sub">— lotes</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Materia Prima Usada</div>
-          <div class="kpi-value"><span id="prod-kpi-2">2.155</span><span class="kpi-unit"> kg</span></div>
-          <div class="kpi-sub">RF1 + ZEROSI combinado</div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">ZeroSi — Producido</div>
+          <div class="kpi-value"><span id="prod-kpi-zerosi-kg">—</span><span class="kpi-unit"> kg</span></div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px"><span id="prod-kpi-zerosi-lts">—</span> L</div>
+          <div class="kpi-sub" id="prod-kpi-zerosi-sub">— lotes</div>
         </div>
         <div class="kpi-card green">
-          <div class="kpi-label">Rendimiento Promedio</div>
-          <div class="kpi-value"><span id="prod-kpi-3">37,1</span><span class="kpi-unit"> kg/L</span></div>
-          <div class="kpi-sub">Estable en el período</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Duración Promedio</div>
-          <div class="kpi-value"><span id="prod-kpi-4">47</span><span class="kpi-unit"> min</span></div>
-          <div class="kpi-sub" id="prod-kpi-4-sub">Rango: — min</div>
-        </div>
-        <div class="kpi-card yellow">
-          <div class="kpi-label">Lotes sin Despachar</div>
-          <div class="kpi-value" id="prod-kpi-5">2</div>
-          <div class="kpi-sub">En TK — pendientes</div>
-          <span class="kpi-badge yellow">⏳ En espera</span>
+          <div class="kpi-label">Total Producido</div>
+          <div class="kpi-value"><span id="prod-kpi-total-kg">—</span><span class="kpi-unit"> kg</span></div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px"><span id="prod-kpi-total-lts">—</span> L</div>
+          <div class="kpi-sub" id="prod-kpi-total-sub">— lotes · Mayo 2026</div>
         </div>
       </div>
 
@@ -835,7 +920,14 @@ body {
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title">Registro de Lotes de Producción</div>
-            <div class="panel-tag" id="prod-panel-tag">— lotes · Mayo 2026</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="period-filter">
+                <button class="period-btn active" onclick="setProdPeriod(7,this)">7 días</button>
+                <button class="period-btn" onclick="setProdPeriod(30,this)">30 días</button>
+                <button class="period-btn" onclick="setProdPeriod(0,this)">Todo</button>
+              </div>
+              <div class="panel-tag" id="prod-panel-tag">—</div>
+            </div>
           </div>
           <div class="panel-body" style="padding:0">
             <table class="data-table">
@@ -846,16 +938,22 @@ body {
                   <th>Producto</th>
                   <th>Supervisor</th>
                   <th>TK Destino</th>
+                  <th>Kg</th>
                   <th>Litros</th>
-                  <th>Kg usados</th>
-                  <th>Duración</th>
                   <th>Estado</th>
                 </tr>
               </thead>
               <tbody id="prod-tabla-body">
-                <tr><td colspan="9" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
+                <tr><td colspan="8" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info" id="prod-pag-info">—</span>
+            <div class="pagination-btns">
+              <button class="pagination-btn" id="prod-prev" onclick="prodPage(-1)">← Anterior</button>
+              <button class="pagination-btn" id="prod-next" onclick="prodPage(1)">Siguiente →</button>
+            </div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -1019,16 +1117,33 @@ body {
 
       <div class="grid-7-3">
         <div class="panel">
-          <div class="panel-header"><div class="panel-title">Registro de Cargas</div><div class="panel-tag" id="car-panel-tag">— cargas · Mayo 2026</div></div>
+          <div class="panel-header">
+            <div class="panel-title">Registro de Cargas</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="period-filter">
+                <button class="period-btn active" onclick="setCarPeriod(7,this)">7 días</button>
+                <button class="period-btn" onclick="setCarPeriod(30,this)">30 días</button>
+                <button class="period-btn" onclick="setCarPeriod(0,this)">Todo</button>
+              </div>
+              <div class="panel-tag" id="car-panel-tag">—</div>
+            </div>
+          </div>
           <div class="panel-body" style="padding:0">
             <table class="data-table">
               <thead>
-                <tr><th>ID Carga</th><th>Fecha</th><th>Hora</th><th>Prod.</th><th>TK</th><th>Camión</th><th>Operador</th><th>Litros</th><th>Agua</th><th>Durac.</th><th>Destino</th></tr>
+                <tr><th>ID Carga</th><th>Fecha</th><th>Hora</th><th>Prod.</th><th>TK</th><th>Camión</th><th>Operador</th><th>Kg</th><th>Litros</th><th>Destino</th></tr>
               </thead>
               <tbody id="cargas-tabla-body">
-                <tr><td colspan="11" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
+                <tr><td colspan="10" style="text-align:center;color:var(--text3)">Cargando...</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info" id="car-pag-info">—</span>
+            <div class="pagination-btns">
+              <button class="pagination-btn" id="car-prev" onclick="carPage(-1)">← Anterior</button>
+              <button class="pagination-btn" id="car-next" onclick="carPage(1)">Siguiente →</button>
+            </div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -1274,9 +1389,9 @@ function setText(id, val) {
 async function loadData() {
   try {
     const res = await fetch('/api/datos?t=' + Date.now());
-    if (!res.ok) throw new Error('API ' + res.status);
+    if (!res.ok) throw new Error('API respondió ' + res.status);
     const data = await res.json();
-    if (!data || !data.produccion) return;
+    if (!data || !data.produccion) throw new Error('Sin datos de producción');
 
     const p = data.produccion;
     const inv = data.inventario;
@@ -1291,24 +1406,59 @@ async function loadData() {
       'Actualizado: ' + upd.getDate() + '/' + (upd.getMonth()+1) + ' ' + hh + ':' + mm;
 
     // Alertas
-    // Alertas desactivadas
-    const litrajeEnTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
+    // Frescura de datos
+    const updTime = new Date(data.meta.ultima_actualizacion);
+    const ahoraMs = Date.now();
+    const diffMin = Math.round((ahoraMs - updTime.getTime()) / 60000);
+    const freshEl = document.getElementById('freshness-badge');
+    if (freshEl) {
+      freshEl.textContent = 'Datos: hace ' + (diffMin < 60 ? diffMin + ' min' : Math.round(diffMin/60) + 'h');
+      freshEl.className = 'freshness-badge ' + (diffMin < 240 ? 'ok' : diffMin < 1440 ? 'warn' : 'stale');
+    }
 
-    // Resumen KPIs
-    setText('kpi-prod-val', p.total_litros.toLocaleString('es-CL'));
-    setText('kpi-prod-kg', p.total_kg.toLocaleString('es-CL') + ' kg');
-    setText('kpi-desp-kg', car.total_kg ? car.total_kg.toLocaleString('es-CL') + ' kg' : '—');
-    setText('kpi-desp-val', car.total_litros.toLocaleString('es-CL'));
-    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
-    setText('kpi-cargas-sub', car.cargas.length + ' cargas completadas');
-    setText('kpi-tk-val', litrajeEnTk.toLocaleString('es-CL'));
-    setText('kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
-
+    // Alerta HIG — stock RF1
     const rf1 = inv.materia_prima.find(x => x.producto && x.producto.includes('RF1'));
     const zerosi = inv.materia_prima.find(x => x.producto && (x.producto.includes('ZEROSI') || x.producto.includes('ZeroSi')));
+    const alertBar = document.getElementById('alert-bar');
+    if (alertBar) {
+      const alertas = [];
+      if (rf1 && rf1.alerta) alertas.push('⚠ RF1 bajo mínimo · ' + rf1.stock_kg.toLocaleString('es-CL') + ' kg disponibles (' + rf1.autonomia_dias + ' días)');
+      if (zerosi && zerosi.alerta) alertas.push('⚠ ZeroSi bajo mínimo · ' + zerosi.stock_kg.toLocaleString('es-CL') + ' kg disponibles');
+      if (alertas.length > 0) {
+        alertBar.className = 'alert-bar visible';
+        alertBar.innerHTML = alertas.map(a => '<span class="alert-bar-item">' + a + '</span>').join('<span class="alert-bar-sep"></span>');
+      } else {
+        alertBar.className = 'alert-bar';
+        alertBar.innerHTML = '';
+      }
+    }
+
+    // TK en kg (suma de kg de lotes en TK)
+    const kgEnTk = inv.producto_terminado_tk.reduce((s,t) => {
+      const lote = p.lotes.find(l => l.id === t.lote);
+      return s + (lote ? lote.kg : 0);
+    }, 0);
+    const litrajeEnTk = inv.producto_terminado_tk.reduce((s,t) => s + t.litros, 0);
+
+    // Resumen KPIs — kg principal, litros secundario
+    setText('kpi-prod-val', p.total_kg.toLocaleString('es-CL'));
+    setText('kpi-prod-kg', p.total_litros.toLocaleString('es-CL') + ' L');
+    setText('kpi-desp-val', car.total_kg ? car.total_kg.toLocaleString('es-CL') : '—');
+    setText('kpi-desp-kg', car.total_litros.toLocaleString('es-CL') + ' L');
+    setText('kpi-lotes-sub', p.lotes_total + ' lotes · Mayo 2026');
+    setText('kpi-cargas-sub', car.cargas.length + ' cargas');
+    setText('kpi-tk-val', kgEnTk > 0 ? kgEnTk.toLocaleString('es-CL') : litrajeEnTk.toLocaleString('es-CL'));
+    setText('kpi-tk-lts', litrajeEnTk.toLocaleString('es-CL') + ' L');
+    setText('kpi-tk-sub', inv.producto_terminado_tk.length + ' lotes en TK');
+
     if (rf1) {
       setText('kpi-rf1-val', rf1.stock_kg.toLocaleString('es-CL'));
-      setText('kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg + ' kg · ' + rf1.autonomia_dias + ' días');
+      setText('kpi-rf1-sub', 'Mín: ' + rf1.minimo_kg.toLocaleString('es-CL') + ' kg · ' + rf1.autonomia_dias + ' días');
+      const badgeRf1Res = document.getElementById('kpi-rf1-badge');
+      if (badgeRf1Res) {
+        badgeRf1Res.textContent = rf1.alerta ? '⚠ BAJO MÍNIMO' : '✓ Normal';
+        badgeRf1Res.className = rf1.alerta ? 'kpi-badge red' : 'kpi-badge green';
+      }
     }
     if (zerosi) setText('kpi-zerosi-val', zerosi.stock_kg.toLocaleString('es-CL'));
 
@@ -1320,61 +1470,42 @@ async function loadData() {
     setText('sem-camiones', car.por_camion.length + ' activos');
     setText('sem-rend', p.rendimiento_promedio + ' kg/L');
 
-    // Producción — tabla dinámica
-    const prodBody = document.getElementById('prod-tabla-body');
-    if (prodBody && p.lotes.length > 0) {
-      prodBody.innerHTML = p.lotes.map(l => {
-        const fecha = l.fecha ? l.fecha.slice(5).replace('-','/') : '—';
-        const prod = l.producto && l.producto.includes('RF1') ?
-          '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
-        const estado = l.estado === 'Despachado' ?
-          '<span class="chip ok">✓ Despachado</span>' :
-          '<span class="chip warn">⏳ En TK</span>';
-        const rowStyle = l.estado === 'En TK' ? ' style="opacity:0.7;background:rgba(245,166,35,0.04)"' : '';
-        return '<tr' + rowStyle + '>' +
-          '<td class="mono" style="font-size:10px">' + l.id + '</td>' +
-          '<td>' + fecha + '</td>' +
-          '<td>' + prod + '</td>' +
-          '<td>' + l.supervisor + '</td>' +
-          '<td>' + l.tk + '</td>' +
-          '<td>' + l.litros.toLocaleString('es-CL') + ' L</td>' +
-          '<td>' + l.kg.toLocaleString('es-CL') + ' kg</td>' +
-          '<td>—</td>' +
-          '<td>' + estado + '</td>' +
-          '</tr>';
-      }).join('');
-    }
+    // Producción — tabla con paginación y filtro período
+    window._prodLotes = p.lotes;
+    window._prodPeriodDias = 7;
+    window._prodPageIdx = 0;
+    renderProdTabla();
 
-    // Producción KPIs
-    setText('prod-kpi-1', p.total_litros.toLocaleString('es-CL'));
-    setText('prod-kpi-1-kg', p.total_kg.toLocaleString('es-CL') + ' kg');
-    setText('prod-kpi-2', p.total_kg.toLocaleString('es-CL'));
-    setText('prod-kpi-3', p.rendimiento_promedio);
-    setText('prod-kpi-4', p.duracion_promedio_min);
-    setText('prod-kpi-5', p.lotes_pendientes);
+    // Producción KPIs — por producto
+    const porProdKpi = {};
+    p.lotes.forEach(l => {
+      const k = l.producto && l.producto.toUpperCase().includes('RF1') ? 'RF1' : 'ZEROSI';
+      if (!porProdKpi[k]) porProdKpi[k] = { kg: 0, litros: 0, lotes: 0 };
+      porProdKpi[k].kg     += l.kg     || 0;
+      porProdKpi[k].litros += l.litros || 0;
+      porProdKpi[k].lotes++;
+    });
+    const rf1p    = porProdKpi['RF1']    || { kg: 0, litros: 0, lotes: 0 };
+    const zerosip = porProdKpi['ZEROSI'] || { kg: 0, litros: 0, lotes: 0 };
+    const totalKgP = rf1p.kg     + zerosip.kg;
+    const totalLtP = rf1p.litros + zerosip.litros;
+    setText('prod-kpi-rf1-kg',    rf1p.kg.toLocaleString('es-CL'));
+    setText('prod-kpi-rf1-lts',   rf1p.litros.toLocaleString('es-CL'));
+    setText('prod-kpi-rf1-sub',   rf1p.lotes + ' lote' + (rf1p.lotes !== 1 ? 's' : ''));
+    setText('prod-kpi-zerosi-kg',  zerosip.kg.toLocaleString('es-CL'));
+    setText('prod-kpi-zerosi-lts', zerosip.litros.toLocaleString('es-CL'));
+    setText('prod-kpi-zerosi-sub', zerosip.lotes + ' lote' + (zerosip.lotes !== 1 ? 's' : ''));
+    setText('prod-kpi-total-kg',  totalKgP.toLocaleString('es-CL'));
+    setText('prod-kpi-total-lts', totalLtP.toLocaleString('es-CL'));
+    setText('prod-kpi-total-sub', p.lotes_total + ' lotes · Mayo 2026');
 
-    // Cargas — tabla dinámica
+    // Cargas — tabla con paginación y filtro período
     const coloresCamion = {'7':'var(--c7)','8':'var(--c8)','10':'var(--c10)'};
-    const cargasBody = document.getElementById('cargas-tabla-body');
-    if (cargasBody && car.cargas.length > 0) {
-      cargasBody.innerHTML = car.cargas.map(c => {
-        const fecha = c.fecha ? c.fecha.slice(5).replace('-','/') : '—';
-        const prod = c.producto && c.producto.includes('RF1') ?
-          '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
-        const colorC = coloresCamion[c.camion] || 'var(--blue)';
-        return '<tr>' +
-          '<td class="mono" style="font-size:9px">' + c.id.slice(0,12) + '...</td>' +
-          '<td>' + fecha + '</td><td>' + (c.hora||'—') + '</td><td>' + prod + '</td>' +
-          '<td>' + c.tk + '</td>' +
-          '<td><span class="chip" style="background:rgba(255,255,255,0.1);color:' + colorC + '">N°' + c.camion + '</span></td>' +
-          '<td>' + c.operador + '</td>' +
-          '<td>' + c.litros.toLocaleString('es-CL') + '</td>' +
-          '<td>' + c.agua.toLocaleString('es-CL') + '</td>' +
-          '<td>—</td>' +
-          '<td style="font-size:10px;color:var(--text3)">' + (c.destino||'—').slice(0,20) + '</td>' +
-          '</tr>';
-      }).join('');
-    }
+    window._carCargas = car.cargas;
+    window._carColores = coloresCamion;
+    window._carPeriodDias = 7;
+    window._carPageIdx = 0;
+    renderCarTabla();
 
     // Barras camión
     const barrasCamion = document.getElementById('cargas-barras-camion');
@@ -1406,7 +1537,7 @@ async function loadData() {
     setText('traz-panel-tag', traz.lotes_total + ' lotes');
 
     // kpi-subs dinámicos
-    setText('prod-kpi-1-sub', p.lotes_despachados + ' lotes completos');
+    // prod-kpi-1-sub eliminado (reemplazado por prod-kpi-total-sub)
     setText('car-kpi-1-sub', car.cargas.length + ' cargas completadas');
     const ratioAgua = car.total_litros > 0 ? Math.round(car.agua_total/car.total_litros*10)/10 : 0;
     setText('car-kpi-2-sub', ratioAgua + ' L agua/L producto');
@@ -1771,8 +1902,155 @@ async function loadData() {
 
   } catch(e) {
     console.warn('loadData error:', e.message);
-    document.getElementById('last-update').textContent = 'Sin conexión';
+    const freshEl = document.getElementById('freshness-badge');
+    if (freshEl) {
+      freshEl.textContent = '⚠ Sin conexión · ' + e.message;
+      freshEl.className = 'freshness-badge stale';
+    }
+    document.getElementById('last-update').textContent = 'Error: ' + e.message;
   }
+}
+
+// ── UTILIDADES DE FECHA ──
+function diasAtras(dias) {
+  if (!dias) return null;
+  const d = new Date();
+  d.setDate(d.getDate() - dias);
+  return d.toISOString().slice(0,10);
+}
+function filtrarPorPeriodo(items, dias, campoFecha) {
+  if (!dias) return items;
+  const desde = diasAtras(dias);
+  return items.filter(i => {
+    const f = i[campoFecha];
+    return f && f >= desde;
+  });
+}
+
+// ── TABLA PRODUCCIÓN ──
+const PROD_PAGE_SIZE = 8;
+window._prodLotes = [];
+window._prodPeriodDias = 7;
+window._prodPageIdx = 0;
+
+function renderProdTabla() {
+  const filtrados = filtrarPorPeriodo(window._prodLotes || [], window._prodPeriodDias, 'fecha');
+  const total = filtrados.length;
+  const pages = Math.max(1, Math.ceil(total / PROD_PAGE_SIZE));
+  window._prodPageIdx = Math.min(window._prodPageIdx, pages - 1);
+  const desde = window._prodPageIdx * PROD_PAGE_SIZE;
+  const pagina = filtrados.slice(desde, desde + PROD_PAGE_SIZE);
+
+  const body = document.getElementById('prod-tabla-body');
+  if (!body) return;
+  if (pagina.length === 0) {
+    body.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">Sin registros en el período</td></tr>';
+  } else {
+    body.innerHTML = pagina.map(l => {
+      const fecha = l.fecha ? l.fecha.slice(5).replace('-','/') : '—';
+      const prod = l.producto && l.producto.includes('RF1') ?
+        '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
+      const estado = l.estado === 'Despachado' ?
+        '<span class="chip ok">✓ Despachado</span>' :
+        '<span class="chip warn">⏳ En TK</span>';
+      return '<tr>' +
+        '<td class="mono" style="font-size:10px">' + l.id + '</td>' +
+        '<td>' + fecha + '</td>' +
+        '<td>' + prod + '</td>' +
+        '<td>' + (l.supervisor||'—') + '</td>' +
+        '<td>' + (l.tk||'—') + '</td>' +
+        '<td><b>' + l.kg.toLocaleString('es-CL') + '</b> kg</td>' +
+        '<td>' + l.litros.toLocaleString('es-CL') + ' L</td>' +
+        '<td>' + estado + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  const info = document.getElementById('prod-pag-info');
+  if (info) info.textContent = (desde+1) + '–' + Math.min(desde+PROD_PAGE_SIZE, total) + ' de ' + total + ' lotes';
+  const prev = document.getElementById('prod-prev');
+  const next = document.getElementById('prod-next');
+  if (prev) prev.disabled = window._prodPageIdx === 0;
+  if (next) next.disabled = window._prodPageIdx >= pages - 1;
+  const tag = document.getElementById('prod-panel-tag');
+  if (tag) tag.textContent = total + ' lote' + (total !== 1 ? 's' : '') + (window._prodPeriodDias ? ' · últ. ' + window._prodPeriodDias + ' días' : ' · total');
+}
+
+function prodPage(dir) {
+  window._prodPageIdx = Math.max(0, window._prodPageIdx + dir);
+  renderProdTabla();
+}
+
+function setProdPeriod(dias, btn) {
+  window._prodPeriodDias = dias;
+  window._prodPageIdx = 0;
+  document.querySelectorAll('#page-produccion .period-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderProdTabla();
+}
+
+// ── TABLA CARGAS ──
+const CAR_PAGE_SIZE = 8;
+window._carCargas = [];
+window._carColores = {};
+window._carPeriodDias = 7;
+window._carPageIdx = 0;
+
+function renderCarTabla() {
+  const filtrados = filtrarPorPeriodo(window._carCargas || [], window._carPeriodDias, 'fecha');
+  const total = filtrados.length;
+  const pages = Math.max(1, Math.ceil(total / CAR_PAGE_SIZE));
+  window._carPageIdx = Math.min(window._carPageIdx, pages - 1);
+  const desde = window._carPageIdx * CAR_PAGE_SIZE;
+  const pagina = filtrados.slice(desde, desde + CAR_PAGE_SIZE);
+  const colores = window._carColores || {};
+
+  const body = document.getElementById('cargas-tabla-body');
+  if (!body) return;
+  if (pagina.length === 0) {
+    body.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:20px">Sin registros en el período</td></tr>';
+  } else {
+    body.innerHTML = pagina.map(c => {
+      const fecha = c.fecha ? c.fecha.slice(5).replace('-','/') : '—';
+      const prod = c.producto && c.producto.includes('RF1') ?
+        '<span class="chip rf1">RF1</span>' : '<span class="chip zerosi">ZEROSI</span>';
+      const colorC = colores[c.camion] || 'var(--blue)';
+      return '<tr>' +
+        '<td class="mono" style="font-size:9px">' + (c.id||'').slice(0,10) + '…</td>' +
+        '<td>' + fecha + '</td>' +
+        '<td>' + (c.hora||'—') + '</td>' +
+        '<td>' + prod + '</td>' +
+        '<td>' + (c.tk||'—') + '</td>' +
+        '<td><span class="chip" style="background:rgba(255,255,255,0.08);color:' + colorC + '">N°' + c.camion + '</span></td>' +
+        '<td>' + (c.operador||'—') + '</td>' +
+        '<td><b>' + (c.kg||0).toLocaleString('es-CL') + '</b> kg</td>' +
+        '<td>' + c.litros.toLocaleString('es-CL') + ' L</td>' +
+        '<td style="font-size:10px;color:var(--text3)">' + (c.destino||'—').slice(0,18) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  const info = document.getElementById('car-pag-info');
+  if (info) info.textContent = (desde+1) + '–' + Math.min(desde+CAR_PAGE_SIZE, total) + ' de ' + total + ' cargas';
+  const prev = document.getElementById('car-prev');
+  const next = document.getElementById('car-next');
+  if (prev) prev.disabled = window._carPageIdx === 0;
+  if (next) next.disabled = window._carPageIdx >= pages - 1;
+  const tag = document.getElementById('car-panel-tag');
+  if (tag) tag.textContent = total + ' carga' + (total !== 1 ? 's' : '') + (window._carPeriodDias ? ' · últ. ' + window._carPeriodDias + ' días' : ' · total');
+}
+
+function carPage(dir) {
+  window._carPageIdx = Math.max(0, window._carPageIdx + dir);
+  renderCarTabla();
+}
+
+function setCarPeriod(dias, btn) {
+  window._carPeriodDias = dias;
+  window._carPageIdx = 0;
+  document.querySelectorAll('#page-cargas .period-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderCarTabla();
 }
 
 setInterval(updateClock, 1000);
