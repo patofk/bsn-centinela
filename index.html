@@ -1940,16 +1940,16 @@ function renderSemanalApilado(elId, lotes) {
     html += `<div style="flex:1;min-width:20px;display:flex;flex-direction:column;align-items:center;height:${H}px;justify-content:flex-end;cursor:pointer;position:relative"
       onmouseenter="(function(e){
         var t=document.getElementById('${tooltipId}');
-        t.innerHTML='<div style=\\'font-weight:600;margin-bottom:5px;color:#0f1520\\'>${sem}</div><div style=\\'display:flex;align-items:center;gap:6px;margin-bottom:3px\\'><span style=\\'display:inline-block;width:8px;height:8px;background:${cBlue};border-radius:2px\\'></span><span style=\\'color:#4a5570\\'>RF1:</span> <b>${rf1Fmt} kg</b></div><div style=\\'display:flex;align-items:center;gap:6px;margin-bottom:3px\\'><span style=\\'display:inline-block;width:8px;height:8px;background:${cTeal};border-radius:2px\\'></span><span style=\\'color:#4a5570\\'>ZeroSi:</span> <b>${zerosFmt} kg</b></div><div style=\\'border-top:0.5px solid rgba(0,0,0,0.08);margin-top:4px;padding-top:4px;color:#4a5570\\'>Total: <b>${totalFmt} kg</b></div>';
+        t.innerHTML='<div style=\\'font-weight:600;margin-bottom:6px;color:#0f1520\\'>${sem}</div><div style=\\'display:flex;align-items:center;gap:6px;margin-bottom:4px\\'><span style=\\'display:inline-block;width:8px;height:8px;background:${cBlue};border-radius:2px\\'></span><span style=\\'color:#4a5570\\'>RF1:</span>&nbsp;<b>${rf1Fmt} kg</b></div><div style=\\'display:flex;align-items:center;gap:6px;margin-bottom:4px\\'><span style=\\'display:inline-block;width:8px;height:8px;background:${cTeal};border-radius:2px\\'></span><span style=\\'color:#4a5570\\'>ZeroSi:</span>&nbsp;<b>${zerosFmt} kg</b></div><div style=\\'border-top:0.5px solid rgba(0,0,0,0.08);margin-top:5px;padding-top:5px;color:#4a5570\\'>Total:&nbsp;<b>${totalFmt} kg</b></div>';
         t.style.display='block';
         var par=document.getElementById('${elId}').getBoundingClientRect();
         var rect=e.currentTarget.getBoundingClientRect();
-        var tw=150;var th=90;
+        var tw=180;
         var left=rect.left-par.left+rect.width/2-tw/2;
         left=Math.max(4,Math.min(left,par.width-tw-4));
-        var top=rect.top-par.top-th-8;
-        if(top<0){top=rect.top-par.top+rect.height+6;}
-        t.style.left=left+'px';t.style.top=top+'px';
+        t.style.left=left+'px';
+        t.style.top='4px';
+        t.style.width=tw+'px';
       })(event)"
       onmouseleave="document.getElementById('${tooltipId}').style.display='none'">
       <div style="font-size:8px;color:${cText3};margin-bottom:2px;line-height:11px">${kgLabel}</div>
