@@ -1977,7 +1977,13 @@ function renderSemanalChart(elId, lotes, producto, color) {
 
 function semanaISOclient(fechaStr) {
   if (!fechaStr) return null;
-  const d = new Date(fechaStr + 'T12:00:00');
+  let iso = fechaStr;
+  // Detectar formato DD-MM-YYYY y convertir a YYYY-MM-DD
+  if (/^\d{2}-\d{2}-\d{4}$/.test(fechaStr)) {
+    const [d, m, y] = fechaStr.split('-');
+    iso = `${y}-${m}-${d}`;
+  }
+  const d = new Date(iso + 'T12:00:00');
   if (isNaN(d)) return null;
   const jan4 = new Date(d.getFullYear(), 0, 4);
   const startOfWeek = new Date(jan4);
@@ -1995,17 +2001,17 @@ function renderChartProdDesp(lotes, cargas) {
   // Agrupar producción por día y producto
   const porDia = {};
   lotes.forEach(l => {
-    if (!l.fecha) return;
-    if (!porDia[l.fecha]) porDia[l.fecha] = { rf1: 0, zerosi: 0, desp: 0 };
-    if (l.producto && l.producto.toUpperCase().includes('RF1')) porDia[l.fecha].rf1 += l.kg || 0;
-    else porDia[l.fecha].zerosi += l.kg || 0;
+    if (!normalizarFecha(l.fecha)) return;
+    if (!porDia[normalizarFecha(l.fecha)]) porDia[normalizarFecha(l.fecha)] = { rf1: 0, zerosi: 0, desp: 0 };
+    if (l.producto && l.producto.toUpperCase().includes('RF1')) porDia[normalizarFecha(l.fecha)].rf1 += l.kg || 0;
+    else porDia[normalizarFecha(l.fecha)].zerosi += l.kg || 0;
   });
 
   // Agrupar despacho por día (kg del lote vinculado)
   cargas.forEach(c => {
-    if (!c.fecha) return;
-    if (!porDia[c.fecha]) porDia[c.fecha] = { rf1: 0, zerosi: 0, desp: 0 };
-    porDia[c.fecha].desp += c.kg || c.litros || 0;
+    if (!normalizarFecha(c.fecha)) return;
+    if (!porDia[normalizarFecha(c.fecha)]) porDia[normalizarFecha(c.fecha)] = { rf1: 0, zerosi: 0, desp: 0 };
+    porDia[normalizarFecha(c.fecha)].desp += c.kg || c.litros || 0;
   });
 
   const dias = Object.keys(porDia).sort();
@@ -2056,17 +2062,28 @@ function renderChartProdDesp(lotes, cargas) {
 }
 
 // ── UTILIDADES DE FECHA ──
+function normalizarFecha(fechaStr) {
+  if (!fechaStr) return '';
+  // DD-MM-YYYY → YYYY-MM-DD
+  if (/^\d{2}-\d{2}-\d{4}$/.test(fechaStr)) {
+    const [d, m, y] = fechaStr.split('-');
+    return `${y}-${m}-${d}`;
+  }
+  return fechaStr;
+}
+
 function diasAtras(dias) {
   if (!dias) return null;
   const d = new Date();
   d.setDate(d.getDate() - dias);
   return d.toISOString().slice(0,10);
 }
+
 function filtrarPorPeriodo(items, dias, campoFecha) {
   if (!dias) return items;
   const desde = diasAtras(dias);
   return items.filter(i => {
-    const f = i[campoFecha];
+    const f = normalizarFecha(i[campoFecha]);
     return f && f >= desde;
   });
 }
